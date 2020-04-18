@@ -66,7 +66,7 @@ export default {
       error: false,
   }),
   methods:{
-    async loginSubmit () {
+    loginSubmit: function () {
       try {
         var self = this;
         self.error = false
@@ -76,10 +76,9 @@ export default {
             password: self.password
           })
           .then(function (response){
-            console.log(response)
             self.$store.commit('setUserData', response.data.user)
             self.$store.commit('logIn')
-            window.location.href = '/dashboard'
+            window.location.assign('/dashboard')
           })
           .catch(function (error){ 
             // on login promise failure
@@ -89,9 +88,6 @@ export default {
         self.error = true
       }
     },
-    viewSignup() {
-      window.location.href = '/signUp'
-    }
   },
 }
 </script>

@@ -1,22 +1,27 @@
 import Vue from 'vue'
 import Vuetify from 'vuetify'
 import Vuex from 'vuex'
-import { shallowMount, createLocalVue } from '@vue/test-utils'
+import { mount, createLocalVue } from '@vue/test-utils'
+import axios from 'axios'
 
-import mockAxios from 'axios'
+Vue.use(Vuetify) //Needed to prevent vuetify issues within testing, do not remove
 jest.mock("axios")
+delete window.location
+window.location = { assign: jest.fn() }
 
 import FormLogin from '@/components/FormLogin.vue'
 
-Vue.use(Vuetify)
 const localVue = createLocalVue()
-localVue.use([Vuetify, Vuex])
+localVue.use(Vuex)
+
+const mutations = {
+  setUserData: jest.fn(),
+  logIn: jest.fn()
+}
+
+const store = new Vuex.Store({ mutations })
 
 describe('FormLogin', () => {
-  beforeEach(() => {
-   
-  })
-
   test('has a login Submit method', () => {
     expect(typeof FormLogin.methods.loginSubmit).toBe('function')
   })
@@ -27,13 +32,26 @@ describe('FormLogin', () => {
     expect(defaultData.show).toBe(false)
   })
 
-  test('loginSubmit method returns nothing', async () => {
-    expect(FormLogin.methods.loginSubmit).toBeDefined()
-    
-    const data = undefined
-    mockAxios.get.mockResolvedValue(data)
-    
-    const result = await FormLogin.methods.loginSubmit()
-    expect(result).toEqual(data)
+  test('commits a setUserData mutation when the login button is clicked', async () => {
+    const wrapper = mount(FormLogin, { store, localVue })
+
+    const testData = {"approved": true,"check_in": false,"coach_id": 1,
+      "email": "test@email.com", "first_name": "test","id": 1, "last_name": "person",
+      "role": "COACH", "verified": true
+    }
+
+    axios.post.mockResolvedValue({
+      data : testData
+    })
+
+    wrapper.setData({ email: 'test@email.com' })
+    wrapper.setData({ password: 'password' })
+
+    wrapper.vm.loginSubmit()
+
+    await wrapper.vm.$nextTick()
+
+    expect(mutations.setUserData).toHaveBeenCalled()
+    expect(mutations.logIn).toHaveBeenCalled()
   })
 })
