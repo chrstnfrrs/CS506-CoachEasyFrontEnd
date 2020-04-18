@@ -17,7 +17,8 @@ module.exports = {
   collectCoverageFrom: [
     '<rootDir>/components/**/*.vue',
     '<rootDir>/pages/**/*.vue',
+    '<rootDir>/store/*.js',
   ],
-  // coverageReporters: ["text-summary", "text"]
-  coverageReporters: []
+  coverageReporters: ["text-summary", "text", "html"]
+  // coverageReporters: []
 }
