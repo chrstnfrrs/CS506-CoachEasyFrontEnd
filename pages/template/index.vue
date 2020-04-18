@@ -14,9 +14,10 @@
       <MessageError :error="error" :message="errorMessage" />
     </div>
     <div v-if="!loading && status">
-      <HeadingPage @updateStatus="setStatus()" @sendRequest="request()" message="Exit" status="Create"/>
+      <HeadingPage v-if="creatable" @updateStatus="setStatus()" @sendRequest="request()" message="Exit" status="Create"/>
+      <HeadingPage v-if="!creatable" @updateStatus="setStatus()" @sendRequest="request()" message="Exit"/>
       <SpacerSmall />
-      <FormCreateTemplate :shouldCreate="submitTemplate" />
+      <FormCreateTemplate @creatable="isCreatable()" @notCreatable="isNotCreatable()" :shouldCreate="submitTemplate" />
     </div>
   </div> 
 
@@ -56,6 +57,7 @@ export default {
       errorMessage: '',
       templateList: [],
       user: {},
+      creatable: false,
 
     }
   },
@@ -149,6 +151,16 @@ export default {
     setNoEdit: function() {
       this.$store.commit('noEdit');
     },
+    setCreatable: function() {
+      console.log("creatable is changing");
+      this.creatable = false;
+    },
+    isCreatable: function() {
+      this.creatable = true;
+    },
+    isNotCreatable: function() {
+      this.creatable = false;
+    }
   },
   mounted() {
     this.getUserTemplate();

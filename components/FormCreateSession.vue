@@ -2,15 +2,18 @@
   <div class="formContainer">
     <div class="formCreateHeading">
       <v-text-field
-        label="Name"
+        :class="{ 'custom-place-holder': !creatable }"
+        label="Session Name"
         v-model="sessionName"
-        @input="updateSession">   
+        @input="updateSession"
+        :placeholder="placeHolderText"
+        required>   
       </v-text-field>
       <p v-if="deleteStatus" class="buttonDelete errorBackground"><v-icon dark>mdi-delete</v-icon></p>
-      <ButtonAddForm @newExerciseForm="addExcerciseForm()" type="Exercise" v-if="exerciseCount===0"/>
+      <ButtonAddForm @newExerciseForm="addExcerciseForm()" type="Exercise" v-if="exerciseCount===0 && sessionName.length > 0"/>
     </div>
     <div v-if="!creating">
-      <FormCreateExercise  v-for="i in exerciseCount" :key="i" :session="session"/>
+      <FormCreateExercise v-for="i in exerciseCount" :key="i" :session="session"/>
     </div>
     <ButtonAddForm @newExerciseForm="addExcerciseForm()" type="Exercise" v-if="exerciseCount!==0"/>
   </div>
@@ -36,6 +39,8 @@ export default {
       order: 0,
       creating: true,
       deleteStatus: false,
+      creatable: true,
+      placeHolderText: "Name",
     }
   },
   methods: {
@@ -49,13 +54,21 @@ export default {
         this.session = {
           name: this.sessionName,
           order: this.$props.template.sessions.length + 1,
-            coach_exercises: [],
+          coach_exercises: [],
         }
         this.$props.template.sessions.push(this.session);
         this.index = this.$props.template.sessions.length - 1;
         this.creating = false;
     },
     updateSession: function() {
+      if (this.sessionName.length < 1) {
+        this.creatable = false;
+        this.$emit('notCreatable');
+      } else {
+        this.creatable = true;
+        this.placeHolderText = "Session Name required to create template.";
+        this.$emit('creatable');
+      }
       if (this.creating) {
         this.createSession();
       } else {
@@ -68,4 +81,8 @@ export default {
 </script>
 
 <style lang="scss">
+
+.custom-place-holder .v-text-field placeholder {
+  color: red!important;
+}
 </style>

@@ -3,15 +3,18 @@
     {{shouldCreate}}
     <div class="formCreateHeading">
       <v-text-field
-        label="Name"
+        :class="{ 'custom-place-holder': !creatable }"
+        label="Template Name"
         v-model="templateName"
-        required>
+        required
+        @input="updateTemplate"
+        :placeholder="placeholderText">
       </v-text-field>
       <button @click="createTemplate">
         <ButtonAddForm @newForm="addForm()" type="Session" v-if="getNameLength() && sessionCount===0"/>
       </button>
     </div>
-    <FormCreateSession v-if="!creating" @newForm="addForm()" v-for="i in sessionCount" :key="i" :template="template"  />
+    <FormCreateSession v-if="!creating" @creatable="isCreatable()" @notCreatable="isNotCreatable()" @newForm="addForm()" v-for="i in sessionCount" :key="i" :template="template"  />
     <SpacerExtraSmall />
     <ButtonAddForm @newForm="addForm()" type="Session" v-if="sessionCount!==0"/>
   </div>
@@ -32,6 +35,8 @@ export default {
       templateName: '',
       template: {},
       creating: true,
+      creatable: true,
+      placeholderText: "Name"
     }
   },
   components:{
@@ -42,8 +47,6 @@ export default {
   methods:{
     addForm: function(){
       this.sessionCount++;
-      console.log("Added session");
-      console.log(this.template);
     },
     createTemplate: function() {
       this.template.name = this.templateName,
@@ -52,6 +55,22 @@ export default {
     getNameLength: function() {
       return this.templateName.length > 0;
     },
+    isNotCreatable: function() {
+      this.$emit('notCreatable');
+    },
+    isCreatable: function() {
+      this.$emit('creatable');
+    },
+    updateTemplate: function() {
+      if (this.templateName.length < 1 || this.sessionCount < 1) {
+        this.placeholderText = "Template name and at least one session required to create."
+        this.creatable = false;
+        this.isNotCreatable();
+      } else {
+        this.creatable = true;
+        this.isCreatable();
+      }
+    }
 
   },
   mounted() {
@@ -61,4 +80,7 @@ export default {
 </script>
 
 <style lang="scss">
+.custom-place-holder input::placeholder {
+  color: red!important;
+}
 </style>

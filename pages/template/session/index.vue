@@ -45,6 +45,7 @@ export default {
       errorMessage: '',
       sessionList: [],
       user: {},
+      creatable: false,
     }
   },
   methods: {
