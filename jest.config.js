@@ -18,5 +18,6 @@ module.exports = {
     '<rootDir>/components/**/*.vue',
     '<rootDir>/pages/**/*.vue',
   ],
-  coverageReporters: ["text-summary", "text"]
+  // coverageReporters: ["text-summary", "text"]
+  coverageReporters: []
 }

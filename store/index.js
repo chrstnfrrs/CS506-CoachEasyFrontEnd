@@ -22,7 +22,6 @@ export const mutations = {
     return state.edit = false;
   },
   setUserData (state, data) {
-    console.log(data)
     return state.userData = data;
   },
 }
