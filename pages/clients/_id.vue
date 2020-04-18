@@ -1,7 +1,7 @@
 <template>
   <div class="pageContent">
-    <Loading :loading="this.loading" />
-    <MessageError :error="error" :message="errorMessage"/>
+    <Loading v-if="loading"/>
+    <MessageError v-if="error" :message="errorMessage"/>
     <ProfileUser v-if="!loading && !error" :user="client"/>
   </div>
 </template>

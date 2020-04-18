@@ -48,11 +48,11 @@ export default {
     SpacerSmall
   },
   props: {
-    u: Object
+    user: Object
   },
   data() {
     return {
-      user: this.u,
+      user: this.user,
       firstName: '',
       lastName: '',
       email: '',

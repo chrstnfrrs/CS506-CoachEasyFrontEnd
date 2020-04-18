@@ -1,6 +1,6 @@
 <template>
   <div class="pageContent" >
-    <Loading v-if="loading" :loading="this.loading"/>
+    <Loading v-if="loading" />
     <div v-if="!loading && !status">
       <HeadingPage @updateStatus="setStatus()" @sendRequest="request()" message="New" :status="deleteMessage"/>
       <SpacerSmall />
@@ -11,7 +11,7 @@
         type="template"
         :items="template"
         @sendDelete="deleteTemplate(template.id)"/>
-      <MessageError :error="error" :message="errorMessage" />
+      <MessageError v-if="error" :message="errorMessage" />
     </div>
     <div v-if="!loading && status">
       <HeadingPage @updateStatus="setStatus()" @sendRequest="request()" message="Exit" status="Create"/>
@@ -96,9 +96,6 @@ export default {
     },
     setDelete: function(){
       this.deleteStatus = !this.deleteStatus
-    },
-    deleteRequest: function(){
-      console.log('deleting')
     },
     setStatus: function(){
       this.submitTemplate = 

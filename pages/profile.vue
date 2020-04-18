@@ -1,6 +1,6 @@
 <template>
   <div class="pageContent">
-    <Loading :loading="this.loading" />
+    <Loading v-if="loading" />
     <div v-if="!loading">
       <HeadingProfile :name="this.user.first_name"/>
       <SpacerSmall />
@@ -11,7 +11,7 @@
         :coach="this.user.role==='COACH'" />
       <FormEditProfile
         v-if="edit"
-        :u="this.user" />
+        :user="this.user" />
       <SpacerSmall />
     </div>
     <MessageRedirect link='/changePassword' message='Change Password?' />
@@ -23,12 +23,12 @@ import axios from 'axios'
 axios.defaults.withCredentials = true;
 const url = 'https://coach-easy-deploy.herokuapp.com';
 
-
 import HeadingProfile from '~/components/HeadingProfile'
 import ProfileUser from '~/components/ProfileUser'
 import FormEditProfile from '~/components/FormEditProfile'
 import SpacerSmall from '~/components/SpacerSmall'
 import Loading from '~/components/Loading'
+
 export default {
   components: {
     HeadingProfile,
@@ -43,7 +43,6 @@ export default {
       error: false,
       loading: true,
       loadingFailed: false,
-      myId: null,
     }
   },
   methods: {
@@ -68,10 +67,5 @@ export default {
 </script>
 
 <style lang="scss">
-  .profileHeading{
-    width: 100%;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-  }
+
 </style>

@@ -1,7 +1,7 @@
 <template>
 <div class="pageContent" >
-  <Loading v-if="loading" :loading="this.loading"/>
-  <MessageError v-if="error" :error="this.error" :message="errorMessage"/>
+  <Loading v-if="loading"/>
+  <MessageError v-if="error" :message="errorMessage"/>
   <div v-if="!loading && !error">
     <div
       v-for="(clients, clientType) in clientList"
