@@ -25,12 +25,7 @@
       @click:append="show3 = !show3"
       outlined
     ></v-text-field>
-    <button 
-      @click='changePassword'
-      class="submitBtn"
-    >
-      <MessageButton message='Save'/>
-    </button>
+    <ButtonFormSubmit message='Save' @submit="changePassword()" />
 </div>
 </template>
 
@@ -39,12 +34,12 @@ import axios from 'axios'
 axios.defaults.withCredentials = true;
 const url = 'https://coach-easy-deploy.herokuapp.com';
 
-import MessageButton from '~/components/MessageButton'
+import ButtonFormSubmit from '~/components/ButtonFormSubmit'
 import MessageError from '~/components/MessageError'
 
 export default {
   components:{
-    MessageButton,
+    ButtonFormSubmit,
     MessageError
   },
   data() {

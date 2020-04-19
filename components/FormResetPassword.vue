@@ -26,24 +26,21 @@
       ></v-text-field>
     </v-form>
     <MessageError v-if="error" :message="errorMessage" />
-    <button 
-      @click='resetPassword'
-      class="submitBtn"
-    >
-      <MessageButton message='Continue'/>
-    </button>
+    <ButtonFormSubmit message='Continue' @submit="resetPassword()" />
   </div>
 </template>
 
 <script>
-import MessageButton from '~/components/MessageButton'
+import ButtonFormSubmit from '~/components/ButtonFormSubmit'
 import MessageError from '~/components/MessageError'
+
 import axios from 'axios'
 axios.defaults.withCredentials = true;
 const url = 'https://coach-easy-deploy.herokuapp.com';
+
 export default {
   components: {
-    MessageButton,
+    ButtonFormSubmit,
     MessageError
   },
   data: () => ({

@@ -20,7 +20,6 @@
 import Loading from '~/components/Loading'
 import ListItem from '~/components/ListItem'
 import MessageError from '~/components/MessageError'
-import MessageButton from '~/components/MessageButton'
 import HeadingUserAuth from '~/components/HeadingUserAuth'
 import draggable from 'vuedraggable'
 import FormCreateSession from '~/components/FormCreateSession'
@@ -36,7 +35,6 @@ export default {
     Loading,
     ListItem,
     MessageError,
-    MessageButton,
     HeadingUserAuth,
     draggable,
     FormCreateSession,

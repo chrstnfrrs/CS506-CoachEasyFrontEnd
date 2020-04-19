@@ -21,12 +21,7 @@
       v-model="email"
       outlined
     ></v-text-field>
-    <button 
-      @click='editProfile'
-      class="submitBtn"
-    >
-      <MessageButton message='Save'/>
-    </button>
+    <ButtonFormSubmit message='Save' @submit="editProfile()" />
   </div>
 </template>
 
@@ -34,17 +29,19 @@
 import axios from 'axios'
 axios.defaults.withCredentials = true;
 const url = 'https://coach-easy-deploy.herokuapp.com';
+
+import ButtonFormSubmit from '~/components/ButtonFormSubmit'
 import Loading from '~/components/Loading'
 import MessageSuccess from '~/components/MessageSuccess'
 import MessageError from '~/components/MessageError'
-import MessageButton from '~/components/MessageButton'
 import SpacerSmall from '~/components/SpacerSmall'
+
 export default {
   components:{
+    ButtonFormSubmit,
     Loading,
     MessageSuccess,
     MessageError,
-    MessageButton,
     SpacerSmall
   },
   props: {

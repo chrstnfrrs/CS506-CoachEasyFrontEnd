@@ -43,27 +43,24 @@
       <MessageRedirect link="/login" message="Already a member? Log in" />
       <SpacerExtraSmall />
     </v-form>
-    <button 
-      @click='signUp'
-      class="submitBtn"
-    >
-      <MessageButton message='Sign Up'/>
-    </button>
+    <ButtonFormSubmit message='Sign Up' @submit="signUp()" />
     <MessageError v-if="error" :message="errorMessage" />
   </div>
 </template>
 
 <script>
-import MessageButton from '~/components/MessageButton'
+import ButtonFormSubmit from '~/components/ButtonFormSubmit'
 import MessageError from '~/components/MessageError'
 import MessageRedirect from '~/components/MessageRedirect'
 import SpacerExtraSmall from '~/components/SpacerExtraSmall'
+
 import axios from 'axios';
 axios.defaults.withCredentials = true;
 const url = 'https://coach-easy-deploy.herokuapp.com';
+
 export default {
   components: {
-    MessageButton,
+    ButtonFormSubmit,
     MessageError,
     MessageRedirect,
     SpacerExtraSmall

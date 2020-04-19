@@ -26,17 +26,12 @@
       <MessageRedirect link="/signup" message="Not registered? Sign Up" />
     </v-form>
     <MessageError v-if="error" :message="errorMessage" />
-    <button
-      @click='loginSubmit'
-      class="submitBtn"
-    >
-      <MessageButton message='Log In'/>
-    </button>
+    <ButtonFormSubmit message='Log In' @submit="loginSubmit()" />
   </div>
 </template>
 
 <script>
-import MessageButton from '~/components/MessageButton'
+import ButtonFormSubmit from '~/components/ButtonFormSubmit'
 import MessageError from '~/components/MessageError'
 import MessageRedirect from '~/components/MessageRedirect'
 import SpacerExtraSmall from '~/components/SpacerExtraSmall'
@@ -47,7 +42,7 @@ const url = 'https://coach-easy-deploy.herokuapp.com';
 
 export default {
   components: {
-    MessageButton,
+    ButtonFormSubmit,
     MessageError,
     MessageRedirect,
     SpacerExtraSmall

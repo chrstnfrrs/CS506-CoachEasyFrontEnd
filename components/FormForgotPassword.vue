@@ -12,23 +12,18 @@
         @keyup.enter="forgotPassword()"
       ></v-text-field>
     </v-form>
-    <button 
-      @click='forgotPassword'
-      class="submitBtn"
-    >
-      <MessageButton message='Continue'/>
-    </button>
+    <ButtonFormSubmit message='Continue' @submit="forgotPassword()" />
   </div>
 </template>
 
 <script>
-import MessageButton from '~/components/MessageButton'
+import ButtonFormSubmit from '~/components/ButtonFormSubmit'
 import MessageError from '~/components/MessageError'
 import axios from 'axios'
 axios.defaults.withCredentials = true;
 export default {
   components: {
-    MessageButton,
+    ButtonFormSubmit,
     MessageError
   },
   data: () => ({
