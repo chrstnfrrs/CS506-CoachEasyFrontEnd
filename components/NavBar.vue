@@ -10,16 +10,17 @@
       <nuxt-link to="/signUp" class="navLink">Sign Up</nuxt-link>
     </div>
     <div v-if="loggedIn" class="navCol">
+      <p class="userName"> {{getUserName}} </p>
+      <span class="navSpacer"></span>
       <v-menu v-model="showMenu" absolute offset-y style="max-width: 40px">
         <template v-slot:activator="{ on }">
-          <span class="navIcon" v-on="on"><MdPersonIcon w="40px" h="40px"/></span>    
+          <span class="navIcon" v-on="on"> <MdPersonIcon w="40px" h="40px"/> </span>    
         </template>
-
         <v-list>
           <v-list-item class='navLink'>
             <nuxt-link class="navLink" to="/profile">View Profile</nuxt-link>
           </v-list-item>
-         <v-list-item class='navLink'>
+         <v-list-item class="navLink">
           <span class="navLink" @click="logOut()">Log Out</span>
          </v-list-item>
         </v-list>
@@ -42,7 +43,8 @@ export default {
     items: [
       { title: 'View Profile', icon: 'mdi-account', action: 'logOut' },
       { title: 'Log Out', icon: 'mdi-flag', action: 'logOut()' },
-    ]
+    ],
+    userName: ''
   }),
   computed: {
     loggedIn: function(){
@@ -53,6 +55,12 @@ export default {
         return this.$store.state.userData.role;
       }
       return 'none'
+    },
+    getUserName: function(){
+      if(this.$store.state.userData){
+        return this.$store.state.userData.first_name;
+      }
+      return ''
     }
   },
   methods: {
@@ -101,6 +109,10 @@ export default {
     }
     .navIcon{
       fill: $text;
+      cursor: pointer;
+    }
+    .userName{
+      cursor: default;
     }
   }
 </style>
