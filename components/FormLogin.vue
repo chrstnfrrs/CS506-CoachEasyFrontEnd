@@ -1,6 +1,7 @@
 <template>
   <div>
     <MessageError v-if="error" :message="errorMessage" />
+    <Loading v-if="loading" />
     <v-form class="userForm">
       <v-text-field
         class="userInput"
@@ -32,6 +33,7 @@
 
 <script>
 import ButtonFormSubmit from '~/components/ButtonFormSubmit'
+import Loading from '~/components/Loading'
 import MessageError from '~/components/MessageError'
 import MessageRedirect from '~/components/MessageRedirect'
 import SpacerExtraSmall from '~/components/SpacerExtraSmall'
@@ -43,6 +45,7 @@ const url = 'https://coach-easy-deploy.herokuapp.com';
 export default {
   components: {
     ButtonFormSubmit,
+    Loading,
     MessageError,
     MessageRedirect,
     SpacerExtraSmall
@@ -59,11 +62,13 @@ export default {
       ],
       errorMessage: 'Failed to Submit Form',
       error: false,
+      loading: false
   }),
   methods:{
     loginSubmit: function () {
       try {
         var self = this;
+        self.loading = true;
         axios.post(`${url}/auth/login`, {
             email: self.email,
             password: self.password
@@ -76,11 +81,12 @@ export default {
           })
           .catch(function (error){ 
             // on login promise failure
+            self.loading = false;
             self.errorMessage = self.getErrorMessage(error)
             self.error = true
-            console.log(self.error)
           })
       } catch (error){
+        self.loading = false;
         self.error = true
       }
     },
