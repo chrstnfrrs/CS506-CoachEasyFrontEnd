@@ -19,8 +19,10 @@
 <script>
 import ButtonFormSubmit from '~/components/ButtonFormSubmit'
 import MessageError from '~/components/MessageError'
+
 import axios from 'axios'
 axios.defaults.withCredentials = true;
+
 export default {
   components: {
     ButtonFormSubmit,
@@ -41,15 +43,36 @@ export default {
         self.error = false
         await this.$axios.get(`https://coach-easy-deploy.herokuapp.com/forgotPassword?email=${this.email}`)
         .then(function (response){
-          window.location.href = '/'
+          window.location.assign('/')
         })
         .catch(function (error){
           //if the forget password request fails
+          self.errorMessage = self.getErrorMessage(error)
           self.error = true
         })
       } catch (error) {
-        error = true
+        self.error = true
       }
+    },
+    getErrorMessage: function(error) { 
+      //error is the response from the server
+      //during an erroneous axios request
+      let status = error.response.status
+      let errorMessage = ''
+      switch (status){
+        case 400:
+          errorMessage = 'An account with that email could not be found.'
+          break;
+
+        case 406:
+          errorMessage = "Improper email format. Please check that your email is in the form example@email.com"
+          break;
+
+        default:
+          errorMessage = "Uh oh, something unexpected happened. Please try again."
+          break;
+      }
+      return errorMessage;
     },
   },
 }

@@ -1,7 +1,7 @@
 <template>
   <div>
+    <MessageError v-if="error" :message="errorMessage" />
     <v-form class="userForm">
-      <MessageError v-if="error" :message="errorMessage" />
       <v-text-field
         class="userInput"
         label="Email"
@@ -82,7 +82,6 @@ export default {
           })
       } catch (error){
         self.error = true
-        console.log("error2")
       }
     },
     getErrorMessage: function(error) { 

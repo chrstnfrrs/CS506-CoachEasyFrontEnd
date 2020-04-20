@@ -66,17 +66,42 @@ export default {
           oldPassword: this.oldPassword
         })
         .then(function (response) {
-          window.location.href = '/profile'
+          window.location.assign('/profile')
         })
         .catch(function (error) {
           //axios promise failed
-          self.error = true;
+          self.errorMessage = self.getErrorMessage(error)
+          self.error = true
         });
       } else {
         this.error = true;
-        errorMessage = 'New password and password confirmation do not match'
+        this.errorMessage = 'New password and password confirmation do not match'
       }
     }
   },
+  getErrorMessage: function(error) { 
+      //error is the response from the server
+      //during an erroneous axios request
+      let status = error.response.status
+      let errorMessage = ''
+      switch (status){
+        case 400:
+          errorMessage = 'Incorrect password.'
+          break;
+
+        case 406:
+          errorMessage = "Improper email format. Please check that your email is in the form example@email.com"
+          break;
+
+        case 500:
+          errorMessage = "Uh oh, something unexpected happened. Please try again."
+          break;
+
+        default:
+          errorMessage = "Uh oh, something unexpected happened. Please try again."
+          break;
+      }
+      return errorMessage;
+    },
 }
 </script>

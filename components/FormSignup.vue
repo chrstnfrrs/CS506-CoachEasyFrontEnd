@@ -1,5 +1,6 @@
 <template>
   <div>
+    <MessageError v-if="error" :message="errorMessage" />
     <v-form class="userForm">
       <v-text-field
         class="userInput"
@@ -44,7 +45,6 @@
       <SpacerExtraSmall />
     </v-form>
     <ButtonFormSubmit message='Sign Up' @submit="signUp()" />
-    <MessageError v-if="error" :message="errorMessage" />
   </div>
 </template>
 
@@ -108,21 +108,55 @@ export default {
             .then(function (response){
               self.$store.commit('setUserData', response.data.user)
               self.$store.commit('logIn')
-              window.location.href = '/dashboard'
+              window.location.assign('/dashboard')
             })
             .catch(function (error){
               //if the login request fails
+              self.errorMessage = self.getErrorMessage(error)
               self.error = true
             })
           })
           .catch(function (error) {
             //if the signup request fails
-            self.error = true
+              self.errorMessage = self.getErrorMessage(error)
+              self.error = true
           }); 
         } catch (error) {
           //if the try fails
           self.error = true
         }
+    },
+    getErrorMessage: function(error) { 
+      //error is the response from the server
+      //during an erroneous axios request
+      let status = error.response.status
+      let errorMessage = ''
+      switch (status){
+        case 400:
+          errorMessage = 'An issue with your account role has been detected. Please contact us to get help with signing up.'
+          break;
+
+        case 404:
+          errorMessage = 'Invalid email or password entered';
+          break;
+
+        case 406:
+          errorMessage = "Improper email format. Please check that your email is in the form example@email.com"
+          break;
+
+        case 409:
+          errorMessage = 'An account with that email already exists. Did you mean to login?'
+          break;
+
+        case 500:
+          errorMessage = "Uh oh, something unexpected happened. Please try again."
+          break;
+
+        default:
+          errorMessage = "Uh oh, something unexpected happened. Please try again."
+          break;
+      }
+      return errorMessage;
     },
   }
 }
