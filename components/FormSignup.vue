@@ -100,7 +100,6 @@ export default {
             role: "CLIENT"
           })
           .then(function (response) {
-            console.log(response)
             axios.post(`${url}/auth/login`, {
               email: self.email,
               password: self.password
