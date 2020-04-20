@@ -62,6 +62,7 @@ export default {
       this.$emit('creatable');
     },
     updateTemplate: function() {
+      this.template.name = this.templateName;
       if (this.templateName.length < 1 || this.sessionCount < 1) {
         this.placeholderText = "Template name and at least one session required to create."
         this.creatable = false;

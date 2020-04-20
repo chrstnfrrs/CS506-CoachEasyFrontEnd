@@ -7,10 +7,11 @@
       :key="session.id"
       :deleteStatus="truthVar"
       type="session"
-      :items="session" />
+      :items="session"
+      @sendDelete="deleteObject(session.id)" />
     </draggable>
-    <FormCreateSession v-for="i in sessionCount" :key="i"/>
-    <FormCreateExercise v-for="i in exerciseCount" :key="i" solo="true"/>
+    <FormCreateSession :template="template" v-for="i in sessionCount" :key="i"/>
+    <FormCreateExercise :session="session" v-for="i in exerciseCount" :key="i" />
     <ButtonAddForm v-if="isTemplate()" @newForm="addSessionForm()" type="Session"/>
     <ButtonAddForm v-if="!isTemplate()" @newExerciseForm="addExerciseForm()" type="Exercise"/>
   </div>
@@ -56,14 +57,20 @@ export default {
       items: {},
       sessionList: [],
       sessionCount: 0,
-      exerciseCount: 0
+      exerciseCount: 0,
+      template: {},
+      session: {},
     }
   },
   methods: {
     isTemplate: function(){
-      if(this.$router.currentRoute.name === 'template-id')
+      if(this.$router.currentRoute.name === 'template-id') {
+        this.template = this.$props.templateList;
         return true;
-      return false
+      } else {
+        this.session = this.$props.templateList;
+        return false
+      }
     },
     addSessionForm: function(){
       this.sessionCount++;
@@ -72,6 +79,8 @@ export default {
       this.exerciseCount++;
     },
     updateSessionList: function () {
+
+      this.session = this.$props
       if(this.isTemplate()){
         this.sessionList = this.templateList.sessions;
       } else {
@@ -88,13 +97,32 @@ export default {
     },
     updateReorderKey: function() {
       this.reorderKey += 1;
+    },
+    deleteObject: function(id) {
+      if (this.isTemplate()) {
+        this.deleteSession(id);
+      } else {
+        this.deleteExercise(id);
+      }
+    },
+    deleteSession: function(sessionId) {
+      let sessionIndex = this.templateList.sessions.map(function(e) { return e.id}).indexOf(sessionId);
+      if (sessionIndex > -1) {
+        this.templateList.sessions.splice(sessionIndex, 1);
+      }
+    },
+    deleteExercise: function(exerciseId) {
+      let exerciseIndex = this.templateList.coach_exercises.map(function(e) { return e.id}).indexOf(exerciseId);
+      if (exerciseIndex > -1) {
+        this.templateList.coach_exercises.splice(exerciseIndex, 1);
+      }
     }
   },
+
   mounted() {
     this.updateSessionList();
   },
 }
 </script>
 
-<style lang="scss">
   

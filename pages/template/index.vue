@@ -14,8 +14,7 @@
       <MessageError :error="error" :message="errorMessage" />
     </div>
     <div v-if="!loading && status">
-      <HeadingPage v-if="creatable" @updateStatus="setStatus()" @sendRequest="request()" message="Exit" status="Create"/>
-      <HeadingPage v-if="!creatable" @updateStatus="setStatus()" @sendRequest="request()" message="Exit"/>
+      <HeadingPage @updateStatus="setStatus()" @sendRequest="request()" :active="creatable" message="Exit" status="Create"/>
       <SpacerSmall />
       <FormCreateTemplate @creatable="isCreatable()" @notCreatable="isNotCreatable()" :shouldCreate="submitTemplate" />
     </div>
@@ -134,7 +133,6 @@ export default {
         }); 
     },
     deleteTemplate: function(template_id) {
-      try {
         axios.put(`${url}/coach/template/delete`, 
         {
           "coach_template_id": template_id
@@ -142,11 +140,9 @@ export default {
           console.log(response);
           this.updateTemplateList();
         }).catch(error => {
-          console.log(error);
+          this.error = true;
         })
-      } catch (error) {
-        this.error = true;
-      }
+
     },
     setNoEdit: function() {
       this.$store.commit('noEdit');

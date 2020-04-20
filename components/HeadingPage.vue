@@ -3,8 +3,9 @@
     <h1 class="headingPage" v-if="this.name">{{this.name}}</h1>
     <h1 class="headingPage" v-if="!this.name">{{this.$router.currentRoute.name}}</h1>
     <div v-if="this.role==='COACH'">
-      <ButtonHeading @sendRequest="save()" v-if="this.status==='Create' || this.status==='Edit' || this.status==='Done' || this.status==='Save'" :message="this.status"/>
-      <ButtonHeading @setStatus="updateStatus()" v-if="hasButton() && this.message" :message="this.message"/>
+      <ButtonHeading @sendRequest="save()" v-if="this.status==='Edit' || this.status==='Done' || this.status==='Save'" active :message="this.status"/>
+      <ButtonHeading @sendRequest="save()" v-if="this.status==='Create'" :active="active" :message="this.status"/>
+      <ButtonHeading @setStatus="updateStatus()" v-if="hasButton() && this.message" active :message="this.message"/>
     </div>
   </div>
 </template>
@@ -15,7 +16,8 @@ export default {
   props:{
     name: String,
     message: String,
-    status: String
+    status: String,
+    active: Boolean
   },
   components: {
     ButtonHeading

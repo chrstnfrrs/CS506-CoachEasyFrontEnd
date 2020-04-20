@@ -52,13 +52,12 @@ export default {
       errorMessage: 'Failed to Load Template',
       templateList: {},
       user: {},
+      sessionCountBefore: 0,
     }
   },
   methods: {
-    testMethod: function(){
-      console.log(this.$route)
-    },
     saveRequest: function(){
+      this.addNewSessions();
       this.setEdit();
     },
     setEdit: function(){
@@ -80,6 +79,7 @@ export default {
           self.templateList = result.data;
           self.loading = false;
           self.error = false;
+          self.sessionCountBefore = self.templateList.sessions.length;
         }).catch(error => {
           self.error = true;
           self.loading = false;
@@ -87,6 +87,33 @@ export default {
     },
     setNoEdit: function() {
       this.$store.commit('noEdit');
+    },
+    addNewSessions: function() {
+      // create new sessions so that they can be updated in the template
+      if (this.sessionCountBefore != this.templateList.sessions.length) {
+        for (let i = this.sessionCountBefore; i < this.templateList.sessions.length; i++) {
+          axios.post(`${url}/coach/session`, {
+            coach_template_id: this.templateList.id,
+            name: this.templateList.sessions[i].name,
+            order: this.templateList.sessions[i].order,
+            coach_exercises: this.templateList.sessions[i].coach_exercises
+          }).then(result => {
+            console.log(result);
+          }).catch(error => {
+            this.error = true;
+          });
+        }
+      }
+
+      // update the template
+      console.log(this.templateList);
+      axios.put(`${url}/coach/template`, this.templateList).then( result => {
+        console.log(result);
+        this.updateTemplateList();
+      }).catch(error => {
+        this.error = true;
+        console.log('error updating template');
+      });
     },
   },
   mounted() {
