@@ -60,7 +60,7 @@ export default {
       passwordRules: [
         v => !!v || 'Password is required',
       ],
-      errorMessage: 'Failed to Submit Form',
+      errorMessage: '',
       error: false,
       loading: false
   }),

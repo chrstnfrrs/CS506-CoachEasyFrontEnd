@@ -19,6 +19,6 @@ module.exports = {
     '<rootDir>/pages/**/*.vue',
     '<rootDir>/store/*.js',
   ],
-  coverageReporters: ["text-summary", "text", "html"]
-  // coverageReporters: []
+  coverageReporters: ["text-summary", "text"]
+  // coverageReporters: ["text-summary"]
 }

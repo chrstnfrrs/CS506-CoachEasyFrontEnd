@@ -11,9 +11,6 @@ window.location = { assign: jest.fn() }
 
 import FormLogin from '@/components/FormLogin.vue'
 
-// const localVue = createLocalVue()
-// localVue.use(Vuex)
-
 describe('FormLogin', () => {
 
   let mutations;
@@ -32,14 +29,13 @@ describe('FormLogin', () => {
     wrapper = mount(FormLogin, { store, localVue })
   })
 
-  test('has a login Submit method', () => {
-    expect(typeof FormLogin.methods.loginSubmit).toBe('function')
-  })
-
   test('sets the correct default data', () => {
     expect(typeof FormLogin.data).toBe('function')
     const defaultData = FormLogin.data()
+    expect(defaultData.email).toBe('')
+    expect(defaultData.password).toBe('')
     expect(defaultData.show).toBe(false)
+    expect(defaultData.loading).toBe(false)
   })
 
   test('commits a setUserData mutation when the login button is clicked', async () => {
@@ -65,12 +61,89 @@ describe('FormLogin', () => {
   })
 
   test('throws an error if login fails', async () => {
-    axios.post.mockRejectedValue(new Error('Login Failed'))
+    const error = {
+      response : {
+        status : 404
+      }
+    }
+
+    axios.post.mockRejectedValue(error)
 
     wrapper.vm.loginSubmit()
 
     await wrapper.vm.$nextTick()
+    await wrapper.vm.$nextTick()
 
+    expect(mutations.setUserData).toHaveBeenCalledTimes(0)
+    expect(mutations.logIn).toHaveBeenCalledTimes(0)
     expect(wrapper.vm.$data.error).toBe(true)
+  })
+
+  test('shows user friendly error message when error 404 occurs', async () => {
+    const error = {
+      response : {
+        status : 404
+      }
+    }
+    
+    axios.post.mockRejectedValue(error)
+
+    wrapper.vm.loginSubmit()
+
+    await wrapper.vm.$nextTick()
+    await wrapper.vm.$nextTick()
+    
+    expect(wrapper.vm.$data.errorMessage).toBeTruthy()
+  })
+
+  test('shows user friendly error message when error 406 occurs', async () => {
+    const error = {
+      response : {
+        status : 406
+      }
+    }
+    
+    axios.post.mockRejectedValue(error)
+
+    wrapper.vm.loginSubmit()
+
+    await wrapper.vm.$nextTick()
+    await wrapper.vm.$nextTick()
+    
+    expect(wrapper.vm.$data.errorMessage).toBeTruthy()
+  })
+
+  test('shows user friendly error message when error 500 occurs', async () => {
+    const error = {
+      response : {
+        status : 500
+      }
+    }
+    
+    axios.post.mockRejectedValue(error)
+
+    wrapper.vm.loginSubmit()
+
+    await wrapper.vm.$nextTick()
+    await wrapper.vm.$nextTick()
+    
+    expect(wrapper.vm.$data.errorMessage).toBeTruthy()
+  })
+
+  test('shows user friendly error message when an unknown error occurs', async () => {
+    const error = {
+      response : {
+        status : 9999
+      }
+    }
+    
+    axios.post.mockRejectedValue(error)
+
+    wrapper.vm.loginSubmit()
+
+    await wrapper.vm.$nextTick()
+    await wrapper.vm.$nextTick()
+    
+    expect(wrapper.vm.$data.errorMessage).toBeTruthy()
   })
 })
