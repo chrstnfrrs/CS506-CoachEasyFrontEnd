@@ -1,6 +1,7 @@
 <template>
   <div>
     <v-form class="userForm">
+      <MessageError v-if="error" :message="errorMessage" />
       <v-text-field
         class="userInput"
         label="Email"
@@ -25,7 +26,6 @@
       <SpacerExtraSmall />
       <MessageRedirect link="/signup" message="Not registered? Sign Up" />
     </v-form>
-    <MessageError v-if="error" :message="errorMessage" />
     <ButtonFormSubmit message='Log In' @submit="loginSubmit()" />
   </div>
 </template>
@@ -64,25 +64,51 @@ export default {
     loginSubmit: function () {
       try {
         var self = this;
-        self.error = false
-        self.errorMessage = ''
         axios.post(`${url}/auth/login`, {
             email: self.email,
             password: self.password
           })
           .then(function (response){
+            self.error = false
             self.$store.commit('setUserData', response.data.user)
             self.$store.commit('logIn')
             window.location.assign('/dashboard')
           })
           .catch(function (error){ 
             // on login promise failure
+            self.errorMessage = self.getErrorMessage(error)
             self.error = true
+            console.log(self.error)
           })
       } catch (error){
         self.error = true
+        console.log("error2")
       }
     },
-  },
+    getErrorMessage: function(error) { 
+      //error is the response from the server
+      //during an erroneous axios request
+      let status = error.response.status
+      let errorMessage = ''
+      switch (status){
+        case 404:
+          errorMessage = 'Invalid email or password entered';
+          break;
+
+        case 406:
+          errorMessage = "Improper email format. Please check that your email is in the form example@email.com"
+          break;
+
+        case 500:
+          errorMessage = "Uh oh, something unexpected happened. Please try again."
+          break;
+
+        default:
+          errorMessage = "Uh oh, something unexpected happened. Please try again."
+          break;
+      }
+      return errorMessage;
+    },
+  }
 }
 </script>
