@@ -48,7 +48,7 @@ export default {
       newPassword: '',
       confirmPassword: '',
       error: false,
-      errorMessage: "Failed to Submit Form",
+      errorMessage: "",
       show1: false,
       show2: false,
       show3: false
@@ -67,6 +67,7 @@ export default {
         })
         .then(function (response) {
           window.location.assign('/profile')
+          self.error = false
         })
         .catch(function (error) {
           //axios promise failed
@@ -77,9 +78,8 @@ export default {
         this.error = true;
         this.errorMessage = 'New password and password confirmation do not match'
       }
-    }
-  },
-  getErrorMessage: function(error) { 
+    },
+    getErrorMessage: function(error) { 
       //error is the response from the server
       //during an erroneous axios request
       let status = error.response.status
@@ -103,5 +103,6 @@ export default {
       }
       return errorMessage;
     },
+  }
 }
 </script>
