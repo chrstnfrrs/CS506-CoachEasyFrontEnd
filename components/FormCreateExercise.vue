@@ -33,7 +33,7 @@
     <div v-if="shouldCreateNew" >
       <FormCreateNewExercise @return="notCreatingNew()" @newExerciseCreated="isCreatingNewExercise" />
     </div>
-    <v-text-field
+    <!-- <v-text-field
       v-if="setsAndReps"
       label="Sets"
       v-model="exercise.sets"
@@ -48,7 +48,7 @@
       type="number"
       :rules="repRules"
       class="formCreateItem smallItem"
-      ></v-text-field>
+      ></v-text-field> -->
   </div>
 </template>
 
@@ -99,8 +99,8 @@ export default {
           exercise_id: this.selectedExercise.id,
           order: this.order,
         }
-        this.$props.session.coach_exercises.push(this.exercise);
         this.index = this.$props.session.coach_exercises.length - 1;
+        this.$props.session.coach_exercises[this.index] = this.exercise;
         this.creating = false;
     },
     // updates exercise on input
@@ -143,7 +143,6 @@ export default {
       this.shouldCreateNew = !this.shouldCreateNew;
     },
     // sets the selected category/exercise to the newly created fields
-    // BUG: for some reason the selected exercise is not being set in v-select, probably because it parses an object list 
     createNewExercise: function(category, exercise) {
       this.getExercises();
       this.selectedCategory = category;
@@ -158,10 +157,14 @@ export default {
     },
     notCreatingNew: function() {
       this.shouldCreateNew = false;
-    }
+    },
   },
   mounted() {
     this.getExercises();
+    if (this.$props.session.coach_exercises.length > 0) {
+      this.selectedCategory = this.$props.session.coach_exercises.find(ex => ex.id === this.$vnode.key).category;
+      this.selectedExercise = this.$props.session.coach_exercises.find(ex => ex.id === this.$vnode.key);
+    }
   },
 }
 </script>

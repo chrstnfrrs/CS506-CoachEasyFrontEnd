@@ -1,5 +1,6 @@
 <template>
   <div>
+    {{ template }}
     <div class="formCreateHeading">
       <v-text-field
         :class="{ 'custom-place-holder': !creatable }"
@@ -13,7 +14,7 @@
         <ButtonAddForm @newForm="addForm()" type="Session" v-if="getNameLength() && sessionCount===0"/>
       </button>
     </div>
-    <FormCreateSession v-if="!creating" @creatable="isCreatable()" @notCreatable="isNotCreatable()" @newForm="addForm()" v-for="i in sessionCount" :key="i" :template="template"  />
+    <FormCreateSession v-if="!creating" @creatable="isCreatable()" @notCreatable="isNotCreatable()" @newForm="addForm()" v-for="session in template.sessions" :key="session.id" :template="template"  />
     <SpacerExtraSmall />
     <ButtonAddForm @newForm="addForm()" type="Session" v-if="sessionCount!==0"/>
   </div>
@@ -46,6 +47,7 @@ export default {
   methods:{
     addForm: function(){
       this.sessionCount++;
+      this.template.sessions.push({});
     },
     createTemplate: function() {
       this.template.name = this.templateName,
