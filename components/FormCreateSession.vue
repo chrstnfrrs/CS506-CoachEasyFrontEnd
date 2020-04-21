@@ -13,11 +13,7 @@
       <ButtonAddForm @newExerciseForm="addExcerciseForm()" type="Exercise" v-if="exerciseCount===0 && sessionName.length > 0"/>
     </div>
     <div v-if="!creating">
-<<<<<<< HEAD
-      <FormCreateExercise v-for="i in exerciseCount" :key="i" :session="session"/>
-=======
       <FormCreateExercise  v-for="i in exerciseCount" :key="i" :session="session" :allContent="setsAndReps"/>
->>>>>>> upstream/iterationThree
     </div>
     <ButtonAddForm @newExerciseForm="addExcerciseForm()" type="Exercise" v-if="exerciseCount!==0"/>
   </div>
