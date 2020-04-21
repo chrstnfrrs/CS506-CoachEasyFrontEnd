@@ -1,6 +1,5 @@
 <template>
   <div>
-    {{shouldCreate}}
     <div class="formCreateHeading">
       <v-text-field
         label="Name"

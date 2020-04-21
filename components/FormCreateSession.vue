@@ -10,7 +10,7 @@
       <ButtonAddForm @newExerciseForm="addExcerciseForm()" type="Exercise" v-if="exerciseCount===0"/>
     </div>
     <div v-if="!creating">
-      <FormCreateExercise  v-for="i in exerciseCount" :key="i" :session="session"/>
+      <FormCreateExercise  v-for="i in exerciseCount" :key="i" :session="session" :allContent="setsAndReps"/>
     </div>
     <ButtonAddForm @newExerciseForm="addExcerciseForm()" type="Exercise" v-if="exerciseCount!==0"/>
   </div>
@@ -25,7 +25,8 @@ export default {
     FormCreateExercise,
   },
   props: {
-    template: Object
+    template: Array,
+    setsAndReps: Boolean
   },
   data() {
     return {
