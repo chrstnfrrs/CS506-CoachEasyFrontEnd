@@ -33,16 +33,16 @@ export default {
     emailRules: [
       v => !!v || 'Email is required',
     ],
-    errorMessage: "Failed to Submit Form",
+    errorMessage: "",
     error: false,
   }),
   methods:{
-    async forgotPassword() {
+    forgotPassword: function() {
       try{
         var self = this;
-        self.error = false
-        await this.$axios.get(`https://coach-easy-deploy.herokuapp.com/forgotPassword?email=${this.email}`)
+        axios.get(`https://coach-easy-deploy.herokuapp.com/forgotPassword?email=${this.email}`)
         .then(function (response){
+          self.error = false
           window.location.assign('/')
         })
         .catch(function (error){
@@ -52,6 +52,7 @@ export default {
         })
       } catch (error) {
         self.error = true
+        self.errorMessage = "Failed to Submit Form"
       }
     },
     getErrorMessage: function(error) { 
