@@ -65,11 +65,11 @@ export default {
         reset_token: self.$route.query.reset_token
       })
       .then(function (response){
-        self.errorMessage = self.getErrorMessage(error)
-        self.error = true
+        self.error = false
         window.location.assign('/login')
       })
       .catch(function (error){
+        self.errorMessage = self.getErrorMessage(error)
         self.error = true
       })
     },
