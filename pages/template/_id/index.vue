@@ -74,7 +74,7 @@ export default {
     updateTemplateList: function() {
         let self = this;
         let route = this.$route.params.id
-        let arg = self.user.role == 'COACH' ? `/coach/template?coach_template_id=${route}` : `/client/template?id=${route}`;
+        let arg = self.user.role == 'COACH' ? `/coach/template?coach_template_id=${route}` : `/client/template?client_template_id=${route}`;
         axios.get(`${url}${arg}`).then(result => {
           self.templateList = result.data;
           self.loading = false;

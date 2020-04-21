@@ -1,8 +1,9 @@
 <template>
-  <div class="formContainer">
+  <div class="embeddedForm">
     <div v-if="!shouldCreateNew" class="formCreateExercise" >
       <!-- Maybe move these v-selects to an ExerciseSelector componenet -->
       <v-select
+        class="listExercises listCategories"
         :items="categoryList"
         label="Choose Category"
         v-model="selectedCategory"
@@ -11,6 +12,7 @@
       >
       </v-select>
       <v-select
+        class="listExercises"
         :items="filteredExerciseList"
         v-model="selectedExercise"
         item-text="name"
@@ -29,7 +31,7 @@
       </button>
     </div>
     <div v-if="shouldCreateNew" >
-      <FormCreateNewExercise @newExerciseCreated="isCreatingNewExercise" />
+      <FormCreateNewExercise @return="notCreatingNew()" @newExerciseCreated="isCreatingNewExercise" />
     </div>
   </div>
 </template>
@@ -118,6 +120,7 @@ export default {
       this.getExercises();
       this.selectedCategory = category;
       this.selectedExercise = exercise;
+      console.log(this.selectedExercise);
       // checks if user already selected a created exercise but then decides to manually enter a new one
       if (!this.creating) {
         this.$props.session.coach_exercises[this.index].exercise_id = this.selectedExercise.id;
@@ -125,14 +128,17 @@ export default {
         this.createExercise();
       }
       this.createdNewExercise = true;
+    },
+    notCreatingNew: function() {
+      this.shouldCreateNew = false;
     }
   },
   mounted() {
     this.getExercises();
   },
-  updated() {
-    this.getExercises();
-  }
+  // updated() {
+  //   this.getExercises();
+  // }
 }
 </script>
 
@@ -166,5 +172,13 @@ export default {
   color: $background !important;
   box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.20);
   cursor: pointer;
+}
+.listCategories{
+  max-width: 200px;
+}
+.listExercises{
+  flex: 1;
+  min-width: 150px;
+  margin-right: 12px;
 }
 </style>
