@@ -70,3 +70,12 @@ path{
   user-select: none;
   opacity: 0.7;
 }
+.dashContents{
+  text-align: center;
+  .subHeading{
+    color: $text !important;
+  }
+  .ion__svg{
+    padding-top: 7px;
+  }
+}

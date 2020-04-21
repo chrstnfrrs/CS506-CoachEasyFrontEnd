@@ -33,6 +33,22 @@
     <div v-if="shouldCreateNew" >
       <FormCreateNewExercise @return="notCreatingNew()" @newExerciseCreated="isCreatingNewExercise" />
     </div>
+    <v-text-field
+      v-if="setsAndReps"
+      label="Sets"
+      v-model="exercise.sets"
+      type="number"
+      class="formCreateItem smallItem"
+      :rules="setRules"
+      ></v-text-field>
+    <v-text-field 
+      v-if="setsAndReps"
+      label="Reps"
+      v-model="exercise.reps"
+      type="number"
+      :rules="repRules"
+      class="formCreateItem smallItem"
+      ></v-text-field>
   </div>
 </template>
 
@@ -48,10 +64,13 @@ export default {
   },
   props: {
     session: Object,
+    allContent: Boolean
   },
   data() {
     return {
       selectedCategory: '',
+      setsAndReps: this.allContent,
+      exerciseName: "",
       selectedExercise: {},
       exercise: {},
       index: 0,
@@ -61,6 +80,15 @@ export default {
       categoryList: [],
       shouldCreateNew: false,
       createdNewExercise: false,
+      setRules: [
+        value => value >= 0 || 'sets cannot be negative',
+      ],
+      repRules: [
+        value => value >= 0 || 'reps cannot be negative',
+      ],
+      weightRules: [
+        value => value >= 0 || 'Weight cannot be negative',
+      ],
     }
   },
   methods: {
