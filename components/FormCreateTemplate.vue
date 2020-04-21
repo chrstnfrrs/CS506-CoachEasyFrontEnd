@@ -63,6 +63,9 @@ export default {
     updateTemplate: function() {
       this.template.name = this.templateName;
       if (this.templateName.length < 1 || this.sessionCount < 1) {
+        // if the template name is blank or we do not have a session then display the error message in the placeholder text
+        // not ideal because it won't display if we have a template name but no session
+        // Naaz will refactor this to display an error message below the text field 
         this.placeholderText = "Template name and at least one session required to create."
         this.creatable = false;
         this.isNotCreatable();

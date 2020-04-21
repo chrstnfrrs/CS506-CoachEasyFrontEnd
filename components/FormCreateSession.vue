@@ -67,6 +67,8 @@ export default {
         this.$emit('notCreatable');
       } else {
         this.creatable = true;
+        // if sessionName has no value change the placeholder text to display the error message
+        // Naaz will refactor this to display an error message below the text field instead
         this.placeHolderText = "Session Name required to create template.";
         this.$emit('creatable');
       }

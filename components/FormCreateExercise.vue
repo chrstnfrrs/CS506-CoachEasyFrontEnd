@@ -148,7 +148,6 @@ export default {
       this.getExercises();
       this.selectedCategory = category;
       this.selectedExercise = exercise;
-      console.log(this.selectedExercise);
       // checks if user already selected a created exercise but then decides to manually enter a new one
       if (!this.creating) {
         this.$props.session.coach_exercises[this.index].exercise_id = this.selectedExercise.id;
@@ -164,9 +163,6 @@ export default {
   mounted() {
     this.getExercises();
   },
-  // updated() {
-  //   this.getExercises();
-  // }
 }
 </script>
 
