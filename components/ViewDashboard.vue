@@ -20,7 +20,7 @@ export default {
   data() {
     return {
       coachList: ["clients", "template"],
-      clientList: ["template"],
+      clientList: ["nextSession", "trainingPlan", "trainingHistory"],
       cardList: [],
     }
   },

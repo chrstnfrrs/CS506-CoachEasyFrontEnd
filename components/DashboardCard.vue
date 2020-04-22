@@ -1,5 +1,6 @@
 <template>
   <div>
+    <CardNextSession v-if="type==='nextSession'" :cardType="type" />
     <nuxt-link :to="`/${type}`">
       <v-card 
       class="dashCard">
@@ -23,6 +24,7 @@
 <script>
 import MdPeopleIcon from 'vue-ionicons/dist/md-people.vue'
 import MdFolderIcon from 'vue-ionicons/dist/md-folder.vue'
+import CardNextSession from '~/components/CardNextSession'
 export default {
   props:{
     type: String,
@@ -30,6 +32,7 @@ export default {
   components:{
     MdPeopleIcon,
     MdFolderIcon,
+    CardNextSession
   }
 }
 </script>
@@ -59,15 +62,6 @@ export default {
       path{
         fill: $primary;
       }
-    }
-  }
-  .dashContents{
-    text-align: center;
-    .subHeading{
-      color: $text !important;
-    }
-    .ion__svg{
-      padding-top: 7px;
     }
   }
 </style>

@@ -58,3 +58,13 @@ path{
   margin: 16px 0px;
   padding: 8px;
 }
+
+.dashContents{
+  text-align: center;
+  .subHeading{
+    color: $text !important;
+  }
+  .ion__svg{
+    padding-top: 7px;
+  }
+}

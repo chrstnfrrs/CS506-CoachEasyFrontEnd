@@ -1,14 +1,31 @@
 <template>
   <div class="formCreateExercise" >
     <v-select
-      v-bind:items="exerciseList"
+      :items="exerciseList"
       v-model="selectedExercise"
       item-text="name"
       label="Choose Exercise"
+      class="formCreateItem"
       return-object
       @change="updateExercise"
     >
     </v-select>
+    <v-text-field
+      v-if="setsAndReps"
+      label="Sets"
+      v-model="exercise.sets"
+      type="number"
+      class="formCreateItem smallItem"
+      :rules="setRules"
+      ></v-text-field>
+    <v-text-field 
+      v-if="setsAndReps"
+      label="Reps"
+      v-model="exercise.reps"
+      type="number"
+      :rules="repRules"
+      class="formCreateItem smallItem"
+      ></v-text-field>
   </div>
 </template>
 
@@ -22,15 +39,26 @@ export default {
   },
   props: {
     session: Object,
+    allContent: Boolean
   },
   data() {
     return {
+      setsAndReps: this.allContent,
       exerciseName: "",
       selectedExercise: {},
       exercise: {},
       index: 0,
       creating: true,
       exerciseList: [],
+      setRules: [
+        value => value >= 0 || 'sets cannot be negative',
+      ],
+      repRules: [
+        value => value >= 0 || 'reps cannot be negative',
+      ],
+      weightRules: [
+        value => value >= 0 || 'Weight cannot be negative',
+      ],
     }
   },
   methods: {
