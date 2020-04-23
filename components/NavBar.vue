@@ -14,7 +14,7 @@
       <span class="navSpacer"></span>
       <v-menu v-model="showMenu" absolute offset-y style="max-width: 40px">
         <template v-slot:activator="{ on }">
-          <span class="navIcon" v-on="on"> <MdPersonIcon w="40px" h="40px"/> </span>    
+          <span class="navIcon" v-on="on"> <MdPersonIcon w="40px" h="40px"/> </span>
         </template>
         <v-list>
           <v-list-item class='navLink'>
@@ -34,17 +34,15 @@ import axios from 'axios'
 axios.defaults.withCredentials = true;
 const url = 'https://coach-easy-deploy.herokuapp.com';
 import MdPersonIcon from 'vue-ionicons/dist/md-person.vue'
+
 export default {
   components: {
     MdPersonIcon
   },
   data: () => ({
     showMenu: false,
-    items: [
-      { title: 'View Profile', icon: 'mdi-account', action: 'logOut' },
-      { title: 'Log Out', icon: 'mdi-flag', action: 'logOut()' },
-    ],
-    userName: ''
+    userName: '',
+    error: false
   }),
   computed: {
     loggedIn: function(){
@@ -69,14 +67,15 @@ export default {
       axios.get(`${url}/auth/logout`)
       .then(function (response){
         self.$store.commit('logOut')
-        window.location.href = '/'
+        self.error = false
+        window.location.assign('/')
       })
       .catch(function (error){
         if(error.response.status===400){
           self.$store.commit('logOut')
-          console.log('not logged in');
+          self.error = true
         } else {
-          console.log(error);
+          self.error = true
         }
       })
     },

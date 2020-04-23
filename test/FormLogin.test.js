@@ -39,7 +39,6 @@ describe('FormLogin', () => {
   })
 
   test('commits a setUserData mutation when the login button is clicked', async () => {
-
     const testData = {"approved": true,"check_in": false,"coach_id": 1,
       "email": "test@email.com", "first_name": "test","id": 1, "last_name": "person",
       "role": "COACH", "verified": true
@@ -61,11 +60,7 @@ describe('FormLogin', () => {
   })
 
   test('throws an error if login fails', async () => {
-    const error = {
-      response : {
-        status : 404
-      }
-    }
+    const error = { response : { status : 404 }}
 
     axios.post.mockRejectedValue(error)
 
@@ -80,12 +75,7 @@ describe('FormLogin', () => {
   })
 
   test('shows user friendly error message when error 404 occurs', async () => {
-    const error = {
-      response : {
-        status : 404
-      }
-    }
-    
+    const error = { response : { status : 404 }}
     axios.post.mockRejectedValue(error)
 
     wrapper.vm.loginSubmit()
@@ -97,12 +87,7 @@ describe('FormLogin', () => {
   })
 
   test('shows user friendly error message when error 406 occurs', async () => {
-    const error = {
-      response : {
-        status : 406
-      }
-    }
-    
+    const error = { response : { status : 406 }}
     axios.post.mockRejectedValue(error)
 
     wrapper.vm.loginSubmit()
@@ -114,12 +99,7 @@ describe('FormLogin', () => {
   })
 
   test('shows user friendly error message when error 500 occurs', async () => {
-    const error = {
-      response : {
-        status : 500
-      }
-    }
-    
+    const error = { response : { status : 500 }}    
     axios.post.mockRejectedValue(error)
 
     wrapper.vm.loginSubmit()
@@ -131,12 +111,7 @@ describe('FormLogin', () => {
   })
 
   test('shows user friendly error message when an unknown error occurs', async () => {
-    const error = {
-      response : {
-        status : 9999
-      }
-    }
-    
+    const error = { response : { status : 9999 }}
     axios.post.mockRejectedValue(error)
 
     wrapper.vm.loginSubmit()

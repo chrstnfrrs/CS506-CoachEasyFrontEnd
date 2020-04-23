@@ -1,4 +1,4 @@
-<template>
+ <template>
   <div class="pageContent" >
     <Loading v-if="loading" />
     <div v-if="!loading && !status">

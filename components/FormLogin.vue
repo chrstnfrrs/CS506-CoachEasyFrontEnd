@@ -66,29 +66,24 @@ export default {
   }),
   methods:{
     loginSubmit: function () {
-      try {
-        var self = this;
-        self.loading = true;
-        axios.post(`${url}/auth/login`, {
-            email: self.email,
-            password: self.password
-          })
-          .then(function (response){
-            self.error = false
-            self.$store.commit('setUserData', response.data.user)
-            self.$store.commit('logIn')
-            window.location.assign('/dashboard')
-          })
-          .catch(function (error){ 
-            // on login promise failure
-            self.loading = false;
-            self.errorMessage = self.getErrorMessage(error)
-            self.error = true
-          })
-      } catch (error){
-        self.loading = false;
-        self.error = true
-      }
+      var self = this;
+      self.loading = true;
+      axios.post(`${url}/auth/login`, {
+          email: self.email,
+          password: self.password
+        })
+        .then(function (response){
+          self.error = false
+          self.$store.commit('setUserData', response.data.user)
+          self.$store.commit('logIn')
+          window.location.assign('/dashboard')
+        })
+        .catch(function (error){ 
+          // on login promise failure
+          self.loading = false;
+          self.errorMessage = self.getErrorMessage(error)
+          self.error = true
+        })
     },
     getErrorMessage: function(error) { 
       //error is the response from the server

@@ -87,43 +87,38 @@ export default {
     error: false,
   }),
   methods:{
-    async signUp() {
-      try {
-          var self = this;
-          self.error = false 
-          self.errorMessage = ''
-          axios.post(`${url}/signUp`, {
-            first_name: this.firstName,
-            last_name: this.lastName,
-            email: this.email,
-            password: this.password,
-            role: "CLIENT"
-          })
-          .then(function (response) {
-            axios.post(`${url}/auth/login`, {
-              email: self.email,
-              password: self.password
-            })
-            .then(function (response){
-              self.$store.commit('setUserData', response.data.user)
-              self.$store.commit('logIn')
-              window.location.assign('/dashboard')
-            })
-            .catch(function (error){
-              //if the login request fails
-              self.errorMessage = self.getErrorMessage(error)
-              self.error = true
-            })
-          })
-          .catch(function (error) {
-            //if the signup request fails
-              self.errorMessage = self.getErrorMessage(error)
-              self.error = true
-          }); 
-        } catch (error) {
-          //if the try fails
+    signUp: function() {
+      var self = this;
+      self.error = false 
+      self.errorMessage = ''
+      axios.post(`${url}/signUp`, {
+        first_name: this.firstName,
+        last_name: this.lastName,
+        email: this.email,
+        password: this.password,
+        role: "CLIENT"
+      })
+      .then(function (response) {
+        axios.post(`${url}/auth/login`, {
+          email: self.email,
+          password: self.password
+        })
+        .then(function (response){
+          self.$store.commit('setUserData', response.data.user)
+          self.$store.commit('logIn')
+          window.location.assign('/dashboard')
+        })
+        .catch(function (error){
+          //if the login request fails
+          self.errorMessage = self.getErrorMessage(error)
           self.error = true
-        }
+        })
+      })
+      .catch(function (error) {
+        //if the signup request fails
+          self.errorMessage = self.getErrorMessage(error)
+          self.error = true
+      }); 
     },
     getErrorMessage: function(error) { 
       //error is the response from the server

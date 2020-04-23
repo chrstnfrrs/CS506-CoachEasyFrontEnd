@@ -38,22 +38,17 @@ export default {
   }),
   methods:{
     forgotPassword: function() {
-      try{
-        var self = this;
-        axios.get(`https://coach-easy-deploy.herokuapp.com/forgotPassword?email=${this.email}`)
-        .then(function (response){
-          self.error = false
-          window.location.assign('/')
-        })
-        .catch(function (error){
-          //if the forget password request fails
-          self.errorMessage = self.getErrorMessage(error)
-          self.error = true
-        })
-      } catch (error) {
+      var self = this;
+      axios.get(`https://coach-easy-deploy.herokuapp.com/forgotPassword?email=${this.email}`)
+      .then(function (response){
+        self.error = false
+        window.location.assign('/')
+      })
+      .catch(function (error){
+        //if the forget password request fails
+        self.errorMessage = self.getErrorMessage(error)
         self.error = true
-        self.errorMessage = "Failed to Submit Form"
-      }
+      })
     },
     getErrorMessage: function(error) { 
       //error is the response from the server
