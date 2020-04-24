@@ -35,8 +35,6 @@ axios.defaults.withCredentials = true;
 const url = 'https://coach-easy-deploy.herokuapp.com';
 
 export default {
-  components: {
-  },
   props: {
     session: Object,
     allContent: Boolean
@@ -82,10 +80,8 @@ export default {
     getExercises: function() {
       axios.get(`${url}/exercises`).then(result => {
         this.exerciseList = result.data.exercises;
-        console.log(this.exerciseList);
       }).catch(error => {
         this.error = true;
-        console.log(error)
       });
     }
   },
