@@ -4,7 +4,6 @@
     <MessageError :error="error" :message="errorMessage"/>
     <div v-if="!loading && !error">
       <ProfileUser :user="client"/>
-      {{ submitTemplate }}
       <FormAssignTemplate @assignTemplate="assignTemplate" :shouldCreate="submitTemplate" :templates="templateList"/>
     </div>
   </div>
@@ -40,6 +39,7 @@ export default {
       templateList: undefined,
       selectedTemplate: undefined,
       hasTemplate: false,
+      clientTemplateId: undefined,
     }
   },
   methods: {
@@ -103,9 +103,10 @@ export default {
     },
     updateAssignedTemplate: function(template) {
       axios.put(`${url}/client/template`,{
-        id: this.submitTemplate.id,
+        id: this.clientTemplateId,
         user_id: this.$route.params.id,
         sessions: template.sessions,
+        name: template.name
       }).then(result => {
         console.log(result);
       }).catch(error => {
@@ -118,6 +119,9 @@ export default {
         console.log(templateResult.data);
         if (templateResult.data) {
           this.hasTemplate = true;
+          this.submitTemplate.name = templateResult.data.name;
+          this.submitTemplate.sessions = templateResult.data.sessions;
+          this.clientTemplateId = templateResult.data.id;
         }
       }).catch(error => {
         console.log(error);

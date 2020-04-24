@@ -10,14 +10,13 @@
         required>   
       </v-text-field>
       <p v-if="deleteStatus" class="buttonDelete errorBackground"><v-icon dark>mdi-delete</v-icon></p>
-      <ButtonAddForm @newExerciseForm="addExcerciseForm()" type="Exercise" v-if="exerciseCount===0 && sessionName.length > 0"/>
+      <ButtonAddForm @newExerciseForm="addExcerciseForm()" type="Exercise" v-if="exerciseCount===0 && sessionName.length > 0 && !setsAndReps"/>
     </div>
     <div v-if="!creating">
-      {{ session }}
       <FormCreateExercise  v-if="!setsAndReps" v-for="exercise in session.coach_exercises" :key="exercise.id" :session="session" :allContent="setsAndReps"/>
       <FormAssignExercise  v-if="setsAndReps" v-for="exercise in session.exercises" :key="getExerciseId(exercise)" :session="session" :allContent="setsAndReps"/>
     </div>
-    <ButtonAddForm @newExerciseForm="addExcerciseForm()" type="Exercise" v-if="exerciseCount!==0"/>
+    <ButtonAddForm @newExerciseForm="addExcerciseForm()" type="Exercise" v-if="exerciseCount!==0 && !setsAndReps"/>
   </div>
 </template>
 

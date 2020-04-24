@@ -20,14 +20,14 @@
           required>
         </v-text-field>
         <button @click="createTemplate">
-          <ButtonAddForm @newForm="addForm()" type="Session" v-if="getNameLength() && sessionCount===0"/>
+          <!-- <ButtonAddForm @newForm="addForm()" type="Session" v-if="getNameLength() && sessionCount===0"/> -->
         </button>
       </div>
       <div v-if="!creating">
         <FormCreateSession @newForm="addForm()" v-for="session in sessions" :key="session.id" :template="template" :setsAndReps="assigning"/>
       </div>
       <SpacerExtraSmall />
-      <ButtonAddForm @newForm="addForm()" type="Session" v-if="sessionCount!==0"/>
+      <!-- <ButtonAddForm @newForm="addForm()" type="Session" v-if="sessionCount!==0"/> -->
     </div>
   </div>
 </template>
@@ -62,6 +62,7 @@ export default {
     HeadingPage,
   },
   methods:{
+    // not used because assigning a template is static
     addForm: function(){
       this.sessionCount++;
       this.sessions.push({
@@ -102,6 +103,9 @@ export default {
   },
   mounted() {
     this.template = this.$props.shouldCreate;
+    if (this.$props.shouldCreate.name) {
+      this.templateName = this.$props.shouldCreate.name;
+    }
   }
 }
 </script>

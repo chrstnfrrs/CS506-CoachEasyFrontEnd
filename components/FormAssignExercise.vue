@@ -57,9 +57,9 @@
         @input="updateExercise">
       </v-text-field>
     </div>
-    <div v-if="shouldCreateNew" >
+    <!-- <div v-if="shouldCreateNew" >
       <FormCreateNewExercise @return="notCreatingNew()" @newExerciseCreated="isCreatingNewExercise" />
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -84,7 +84,7 @@ export default {
       exerciseName: "",
       selectedExercise: {},
       exercise: {
-        id: 0,
+        exercise_id: 0,
         sets: 0,
         reps: 0,
         weight: 0,
@@ -100,6 +100,7 @@ export default {
       sets: 0,
       weight: 0,
       updating: false,
+      coachExerciseId: 0,
       setRules: [
         value => value >= 0 || 'sets cannot be negative',
       ],
@@ -115,7 +116,8 @@ export default {
     // creates new exercise and adds it the the template
     createExercise: function() {
       this.exercise = {
-        id: this.selectedExercise.id,
+        id: this.coachExerciseId,
+        exercise_id: this.selectedExercise.id,
         sets: this.sets,
         reps: this.reps,
         weight: this.weight,
@@ -129,7 +131,7 @@ export default {
       if (this.creating) {
         this.createExercise();
       } else { 
-        this.$props.session.exercises[this.index].id = this.selectedExercise.id;
+        this.$props.session.exercises[this.index].exercise_id = this.selectedExercise.id;
         this.$props.session.exercises[this.index].reps = this.reps;
         this.$props.session.exercises[this.index].sets = this.sets;        
         this.$props.session.exercises[this.index].weight = this.weight;
@@ -176,7 +178,7 @@ export default {
       this.selectedExercise = exercise;
       // checks if user already selected a created exercise but then decides to manually enter a new one
       if (!this.creating) {
-        this.$props.session.exercises[this.index].id = this.selectedExercise.id;
+        this.$props.session.exercises[this.index].exercise_id = this.selectedExercise.id;
       } else {
         this.createExercise();
       }
@@ -186,6 +188,7 @@ export default {
       this.shouldCreateNew = false;
     },
     fillFields: function() {
+
       let exerciseId = this.$vnode.key;
       this.index = this.findExerciseIndexInSession(this.$props.session.exercises, exerciseId);
       if (this.index == -1) {
@@ -200,8 +203,13 @@ export default {
         this.filterExerciseList();
         this.selectedExercise = this.exerciseList[selectedExerciseIndex];
 
+      if (this.coachExerciseId == 0) {
+        this.coachExerciseId = this.$props.session.exercises[this.index].id;
+      }
+      console.log(`coachExerciseId: ${this.coachExerciseId}`);
         this.exercise = {
-          id: exerciseId,
+          id: this.coachExerciseId,
+          exercise_id: exerciseId,
           sets: this.sets,
           reps: this.reps,
           weight: this.weight,
