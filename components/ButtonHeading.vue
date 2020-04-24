@@ -15,7 +15,7 @@ export default {
     emitFunction: function(){
       if (!this.active) {
         alert('hello'); // emit to FormCreate
-      } else if( (this.message==="Create" && this.active)|| this.message==="Edit" || this.message==="Done" || this.message==="Save"){
+      } else if( (this.message==="Create" && this.active)|| this.message==="Edit" || this.message==="Done" || this.message==="Save" || this.message==="Assign"){
         this.sendRequest();
       } else {
         this.setStatus();

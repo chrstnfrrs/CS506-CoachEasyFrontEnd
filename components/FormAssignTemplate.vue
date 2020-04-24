@@ -12,6 +12,7 @@
       </v-select>
     </div>
     <div v-if="assigning">
+      <HeadingPage @sendRequest="assignTemplate()" status="Assign" message="Assign" />
       <div class="formCreateHeading">
         <v-text-field
           label="Name"
@@ -35,6 +36,7 @@
 import ButtonAddForm from '~/components/ButtonAddForm'
 import FormCreateSession from '~/components/FormCreateSession'
 import SpacerExtraSmall from '~/components/SpacerExtraSmall'
+import HeadingPage from '~/components/HeadingPage'
 export default {
   props:{
     type: String,
@@ -49,23 +51,23 @@ export default {
       sessions: [],
       template: {},
       creating: true,
-      assigning: false,
+      assigning: true,
       selectedTemplate: 'Select Template',
     }
   },
   components:{
     ButtonAddForm,
     FormCreateSession,
-    SpacerExtraSmall
+    SpacerExtraSmall,
+    HeadingPage,
   },
   methods:{
     addForm: function(){
       this.sessionCount++;
       this.sessions.push({
-
+        id: undefined,
+        exercises: []
       });
-      console.log("Added session");
-      // console.log(this.template);
     },
     createTemplate: function() {
       this.template.name = this.templateName,
@@ -82,7 +84,6 @@ export default {
       });
       this.assigning=true;
       this.template=result[0];
-      console.log('selected template');
       console.log(this.template);
       this.sessions = this.template.sessions;
       if (this.template) {
@@ -95,12 +96,8 @@ export default {
       this.sessionCount = this.template.sessions.length;
       this.createTemplate();
     },
-    createKey: function(i) {
-      if (this.template.sessions[i]){
-        return this.template.sessions[i].id;
-      } else {
-        return i;
-      }
+    assignTemplate: function() {
+      this.$emit('assignTemplate', this.template);
     }
   },
   mounted() {

@@ -13,7 +13,9 @@
       <ButtonAddForm @newExerciseForm="addExcerciseForm()" type="Exercise" v-if="exerciseCount===0 && sessionName.length > 0"/>
     </div>
     <div v-if="!creating">
-      <FormCreateExercise  v-for="exercise in session.coach_exercises" :key="exercise.id" :session="session" :allContent="setsAndReps"/>
+      {{ session }}
+      <FormCreateExercise  v-if="!setsAndReps" v-for="exercise in session.coach_exercises" :key="exercise.id" :session="session" :allContent="setsAndReps"/>
+      <FormAssignExercise  v-if="setsAndReps" v-for="exercise in session.exercises" :key="getExerciseId(exercise)" :session="session" :allContent="setsAndReps"/>
     </div>
     <ButtonAddForm @newExerciseForm="addExcerciseForm()" type="Exercise" v-if="exerciseCount!==0"/>
   </div>
@@ -26,10 +28,12 @@ const url = 'https://coach-easy-deploy.herokuapp.com';
 
 import ButtonAddForm from '~/components/ButtonAddForm'
 import FormCreateExercise from '~/components/FormCreateExercise'
+import FormAssignExercise from '~/components/FormAssignExercise'
 export default {
   components:{
     ButtonAddForm,
     FormCreateExercise,
+    FormAssignExercise
   },
   props: {
     template: Object,
@@ -50,19 +54,33 @@ export default {
   },
   methods: {
     addForm: function(){
-      this.$emit('newForm')
+      this.$emit('newForm');
+      this.creating = true;
     },
     addExcerciseForm: function(){
       this.exerciseCount++;
-      this.session.coach_exercises.push({
-      });
+      if (!this.setsAndReps) {
+        this.session.coach_exercises.push({});
+      } else {
+        console.log(this.session);
+        this.session.exercises.push({});
+      }
     },
     createSession: function() {
+      if (!this.setsAndReps) {
         this.session = {
           name: this.sessionName,
-          order: this.$props.template.sessions.length + 1,
+          order: this.$props.template.sessions.length,
           coach_exercises: [],
+        } 
+      } else {
+        this.session = {
+          name: this.sessionName,
+          id: 777,
+          exercises: [],
         }
+      }
+        
         this.index = this.$props.template.sessions.length - 1;
         this.$props.template.sessions[this.index] = this.session;
         this.creating = false;
@@ -81,30 +99,50 @@ export default {
       }
       if (this.creating) {
         this.createSession();
-      } else {
-        this.$props.template.sessions[this.index].name = this.sessionName;
       }
-
     },
     fillFields: function(session) {
-      this.session = session;
-      this.sessionName = this.session.name;
-      this.index = this.session.order - 1;
-      this.exerciseCount = this.session.coach_exercises.length;
+      this.sessionName = session.name;
+      this.index = session.order - 1;
+      this.session = {
+        id: session.id,
+        exercises: session.coach_exercises
+      };
+
+      this.exerciseCount = this.session.exercises.length;
       this.creating = false;
-      console.log(this.session);
+      this.$props.template.sessions[this.index] = this.session;
     },
     getSessionExercises: function(sessionId) {
-      axios.get(`${url}/coach/session?coach_session_id=${sessionId}`).then(result => {
-        this.fillFields(result.data);
+      console.log(`session id: ${sessionId}`)
+      axios.get(`${url}/coach/session?coach_session_id=${sessionId}`).then(response => {
+        this.fillFields(response.data);
       }).catch(error => {
         this.error = true;
       })
     },
+    getExerciseId: function(exercise) {
+      if (exercise.exercise_id) {
+        return exercise.exercise_id;
+      } else {
+        return exercise.id;
+      }
+    }
   },
   mounted() {
-     if (this.$props.template.sessions.length > 0) {
+    console.log(`setsAndReps: ${this.setsAndReps}`);
+     if (this.setsAndReps) {
+      this.session = {
+        id: 0,
+        exercises: [],
+      }
       this.getSessionExercises(this.$vnode.key);
+    } else {
+      this.session = {
+        name: '',
+        order: 0,
+        coach_exercises: []
+      }
     }
   }
 }

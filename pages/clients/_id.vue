@@ -4,7 +4,8 @@
     <MessageError :error="error" :message="errorMessage"/>
     <div v-if="!loading && !error">
       <ProfileUser :user="client"/>
-      <FormAssignTemplate :shouldCreate="submitTemplate" :templates="templateList"/>
+      {{ submitTemplate }}
+      <FormAssignTemplate @assignTemplate="assignTemplate" :shouldCreate="submitTemplate" :templates="templateList"/>
     </div>
   </div>
 </template>
@@ -36,7 +37,9 @@ export default {
         sessions: []
       },
       user: undefined,
-      templateList: undefined
+      templateList: undefined,
+      selectedTemplate: undefined,
+      hasTemplate: false,
     }
   },
   methods: {
@@ -75,9 +78,55 @@ export default {
           self.loading = false;
         }); 
     },
+    assignTemplate(template) {
+      this.submitTemplate = template;
+      if (!this.hasTemplate) {
+        const Role = {
+          COACH: "COACH",
+          CLIENT: "CLIENT",
+        };
+        Object.freeze(Role);
+        axios.post(`${url}/client/template`, {
+          role: Role.COACH,
+          template_id: this.submitTemplate.id,
+          client_id: this.$route.params.id,
+          sessions: this.submitTemplate.sessions
+        }).then(result => {
+          console.log(result);
+          this.hasTemplate = true;
+        }).catch(error => {
+          console.log(error);
+        });
+      } else {
+        this.updateAssignedTemplate(template);
+      }
+    },
+    updateAssignedTemplate: function(template) {
+      axios.put(`${url}/client/template`,{
+        id: this.submitTemplate.id,
+        user_id: this.$route.params.id,
+        sessions: template.sessions,
+      }).then(result => {
+        console.log(result);
+      }).catch(error => {
+        console.log(error);
+      });
+    },
+    getClientTemplate: function() {
+      axios.get(`${url}/client/template/active?user_id=${this.$route.params.id}`).then(templateResult => {
+        console.log('active template');
+        console.log(templateResult.data);
+        if (templateResult.data) {
+          this.hasTemplate = true;
+        }
+      }).catch(error => {
+        console.log(error);
+      })
+    }
   },
   mounted() {
     this.getUserClientsId();
+    this.getClientTemplate();
   },
 }
 </script>

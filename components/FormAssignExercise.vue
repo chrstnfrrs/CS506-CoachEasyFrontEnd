@@ -29,6 +29,33 @@
       >
         New
       </button>
+      <v-text-field
+        v-if="setsAndReps"
+        label="Sets"
+        v-model="sets"
+        type="number"
+        class="formCreateItem smallItem"
+        :rules="setRules"
+        @input="updateExercise">
+      </v-text-field>
+      <v-text-field 
+        v-if="setsAndReps"
+        label="Reps"
+        v-model="reps"
+        type="number"
+        :rules="repRules"
+        class="formCreateItem smallItem"
+        @input="updateExercise">
+      </v-text-field>
+      <v-text-field 
+        v-if="setsAndReps"
+        label="Weight"
+        v-model="weight"
+        type="number"
+        :rules="repRules"
+        class="formCreateItem smallItem"
+        @input="updateExercise">
+      </v-text-field>
     </div>
     <div v-if="shouldCreateNew" >
       <FormCreateNewExercise @return="notCreatingNew()" @newExerciseCreated="isCreatingNewExercise" />
@@ -53,9 +80,15 @@ export default {
   data() {
     return {
       selectedCategory: '',
+      setsAndReps: this.allContent,
       exerciseName: "",
       selectedExercise: {},
-      exercise: {},
+      exercise: {
+        id: 0,
+        sets: 0,
+        reps: 0,
+        weight: 0,
+      },
       index: 0,
       creating: true,
       filteredExerciseList: [],
@@ -63,28 +96,43 @@ export default {
       categoryList: [],
       shouldCreateNew: false,
       createdNewExercise: false,
+      reps: 0,
+      sets: 0,
+      weight: 0,
+      updating: false,
+      setRules: [
+        value => value >= 0 || 'sets cannot be negative',
+      ],
+      repRules: [
+        value => value >= 0 || 'reps cannot be negative',
+      ],
+      weightRules: [
+        value => value >= 0 || 'Weight cannot be negative',
+      ],
     }
   },
   methods: {
     // creates new exercise and adds it the the template
     createExercise: function() {
-      console.log('creating the exercise');
-      this.order = this.$props.session.coach_exercises.length;
       this.exercise = {
-        exercise_id: this.selectedExercise.id,
-        order: this.order,
+        id: this.selectedExercise.id,
+        sets: this.sets,
+        reps: this.reps,
+        weight: this.weight,
       }
-      this.index = this.$props.session.coach_exercises.length - 1;
-      this.$props.session.coach_exercises[this.index] = this.exercise;
-      console.log(this.$props.session.coach_exercises[this.index]);
+      this.$props.session.exercises[this.index] = this.exercise;
       this.creating = false;
     },
     // updates exercise on input
     updateExercise: function() {
+      this.updating = true;
       if (this.creating) {
         this.createExercise();
-      } else {
-        this.$props.session.coach_exercises[this.index].exercise_id = this.selectedExercise.id;
+      } else { 
+        this.$props.session.exercises[this.index].id = this.selectedExercise.id;
+        this.$props.session.exercises[this.index].reps = this.reps;
+        this.$props.session.exercises[this.index].sets = this.sets;        
+        this.$props.session.exercises[this.index].weight = this.weight;
       }
     },
     // retrives exercises from db
@@ -92,6 +140,9 @@ export default {
       axios.get(`${url}/exercises`).then(result => {
         this.exerciseList = result.data.exercises;
         this.getCategories();
+        if (this.setsAndReps) {
+          this.fillFields();
+        }
       }).catch(error => {
         this.error = true;
         console.log(error)
@@ -125,7 +176,7 @@ export default {
       this.selectedExercise = exercise;
       // checks if user already selected a created exercise but then decides to manually enter a new one
       if (!this.creating) {
-        this.$props.session.coach_exercises[this.index].exercise_id = this.selectedExercise.id;
+        this.$props.session.exercises[this.index].id = this.selectedExercise.id;
       } else {
         this.createExercise();
       }
@@ -134,7 +185,47 @@ export default {
     notCreatingNew: function() {
       this.shouldCreateNew = false;
     },
-    
+    fillFields: function() {
+      let exerciseId = this.$vnode.key;
+      this.index = this.findExerciseIndexInSession(this.$props.session.exercises, exerciseId);
+      if (this.index == -1) {
+        this.index = this.findExerciseIndex(this.$props.session.exercises, exerciseId);
+      }
+      if (this.index == -1) {
+        this.index = this.$props.session.exercises.length - 1;
+      }
+      if (this.index > -1) {
+        let selectedExerciseIndex = this.findExerciseIndex(this.exerciseList, exerciseId);
+        this.selectedCategory = this.exerciseList[selectedExerciseIndex].category;
+        this.filterExerciseList();
+        this.selectedExercise = this.exerciseList[selectedExerciseIndex];
+
+        this.exercise = {
+          id: exerciseId,
+          sets: this.sets,
+          reps: this.reps,
+          weight: this.weight,
+        };
+        this.$props.session.exercises[this.index] = this.exercise;
+        this.creating = false;
+      }
+    },
+    findExerciseIndex: function(arr, value) {
+      for (let i = 0; i < arr.length; i++) {
+        if (arr[i].id === value) {
+          return i;
+        }
+      }
+      return -1;
+    },
+    findExerciseIndexInSession: function(arr, value) {
+      for (let i = 0; i < arr.length; i++) {
+        if (arr[i].exercise_id === value) {
+          return i;
+        }
+      }
+      return -1;
+    }
   },
   mounted() {
     this.getExercises();
