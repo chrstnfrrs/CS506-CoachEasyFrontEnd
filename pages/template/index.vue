@@ -112,6 +112,7 @@ export default {
     getUserTemplate: function(){
       Promise.all([ this.$store.state.userData ]).then( () => {
         this.user = this.$store.state.userData
+        console.log(this.user)
         this.loading = false
         this.updateTemplateList();
       },() => {
@@ -119,7 +120,6 @@ export default {
       })
     },
     updateTemplateList: function() {
-        console.log('Update')
         let self = this;
         let arg = self.user.role == 'COACH' ? '/coach/templates' : `/client/templates?user_id=${self.user.id}`;
         axios.get(`${url}${arg}`).then(result => {

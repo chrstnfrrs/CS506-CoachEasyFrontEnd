@@ -1,7 +1,9 @@
 <template>
   <div>
     <CardNextSession v-if="type==='nextSession'" :cardType="type" />
-    <nuxt-link :to="`/${type}`">
+    <CardCurrentPlan v-if="type==='trainingPlan'" :cardType="type" />
+    <CardTrainingHistory v-if="type==='trainingHistory'" :cardType="type" />
+    <!-- <nuxt-link :to="`/${type}`">
       <v-card 
       class="dashCard">
         <div 
@@ -17,22 +19,22 @@
           <h2 class="subHeading">Templates</h2>
         </div>
       </v-card>
-    </nuxt-link>
+    </nuxt-link> -->
   </div>
 </template>
 
 <script>
-import MdPeopleIcon from 'vue-ionicons/dist/md-people.vue'
-import MdFolderIcon from 'vue-ionicons/dist/md-folder.vue'
 import CardNextSession from '~/components/CardNextSession'
+import CardCurrentPlan from '~/components/CardCurrentPlan'
+import CardTrainingHistory from '~/components/CardTrainingHistory'
 export default {
   props:{
     type: String,
   },
   components:{
-    MdPeopleIcon,
-    MdFolderIcon,
-    CardNextSession
+    CardNextSession,
+    CardCurrentPlan,
+    CardTrainingHistory
   }
 }
 </script>
