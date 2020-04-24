@@ -12,15 +12,15 @@
     <div v-if="loggedIn" class="navCol">
       <v-menu v-model="showMenu" absolute offset-y style="max-width: 40px">
         <template v-slot:activator="{ on }">
-          <span class="navIcon" v-on="on"><MdPersonIcon w="40px" h="40px"/></span>    
+          <span class="navIcon" v-on="on"><v-icon size="40" class="navLink">mdi-account</v-icon></span>    
         </template>
 
         <v-list>
-          <v-list-item class='navLink'>
+          <v-list-item >
             <nuxt-link class="navLink" to="/profile">View Profile</nuxt-link>
           </v-list-item>
-         <v-list-item class='navLink'>
-          <span class="navLink" @click="logOut()">Log Out</span>
+         <v-list-item >
+          <p class="navLink" @click="logOut()">Log Out</p>
          </v-list-item>
         </v-list>
       </v-menu>
@@ -32,11 +32,7 @@
 import axios from 'axios'
 axios.defaults.withCredentials = true;
 const url = 'https://coach-easy-deploy.herokuapp.com';
-import MdPersonIcon from 'vue-ionicons/dist/md-person.vue'
 export default {
-  components: {
-    MdPersonIcon
-  },
   data: () => ({
     showMenu: false,
     items: [
@@ -91,16 +87,17 @@ export default {
       display: flex;
       align-items: center;
     }
-    .navLink{
-      color: $text !important;
-      padding-left: 8px;
-      cursor: pointer;
-    }
     .navSpacer{
       width: 16px;
     }
     .navIcon{
       fill: $text;
     }
+  }
+
+  .navLink{
+    color: $text !important;
+    padding-left: 8px;
+    cursor: pointer !important;
   }
 </style>
