@@ -64,8 +64,10 @@ export default {
   },
   methods: {
     isTemplate: function(){
-      if(this.$router.currentRoute.name === 'template-id') {
+      console.log(this.$router.currentRoute.name);
+      if(this.$router.currentRoute.name === 'template-id' || this.$router.currentRoute.name === 'clients-id') {
         this.template = this.$props.templateList;
+        console.log(this.template);
         return true;
       } else {
         this.session = this.$props.templateList;
@@ -109,7 +111,7 @@ export default {
       let sessionIndex = this.templateList.sessions.map(function(e) { return e.id}).indexOf(sessionId);
       if (sessionIndex > -1) {
         this.templateList.sessions.splice(sessionIndex, 1);
-      }
+      }u
     },
     deleteExercise: function(exerciseId) {
       let exerciseIndex = this.templateList.coach_exercises.map(function(e) { return e.id}).indexOf(exerciseId);

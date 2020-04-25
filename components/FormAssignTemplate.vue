@@ -15,7 +15,7 @@
       <HeadingPage @sendRequest="assignTemplate()" status="Assign" message="Assign" />
       <div class="formCreateHeading">
         <v-text-field
-          label="Name"
+          label="Selected Template Name"
           v-model="templateName"
           required>
         </v-text-field>
@@ -52,7 +52,7 @@ export default {
       template: {},
       creating: true,
       assigning: true,
-      selectedTemplate: 'Select Template',
+      selectedTemplate: 'No Template Selected',
     }
   },
   components:{

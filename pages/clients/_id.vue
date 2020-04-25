@@ -5,6 +5,7 @@
     <div v-if="!loading && !error">
       <ProfileUser :user="client"/>
       <FormAssignTemplate @assignTemplate="assignTemplate" :shouldCreate="submitTemplate" :templates="templateList"/>
+      <ViewTemplate :template="submitTemplate" />
     </div>
   </div>
 </template>
@@ -14,6 +15,7 @@ import Loading from '~/components/Loading'
 import MessageError from '~/components/MessageError'
 import ProfileUser from '~/components/ProfileUser'
 import FormAssignTemplate from '~/components/FormAssignTemplate'
+import ViewTemplate from '~/components/ViewTemplate'
 import axios from 'axios'
 const url = 'https://coach-easy-deploy.herokuapp.com';
 axios.defaults.withCredentials = true;
@@ -23,7 +25,8 @@ export default {
     MessageError,
     Loading,
     ProfileUser,
-    FormAssignTemplate
+    FormAssignTemplate,
+    ViewTemplate
   },
   data() {
     return {
@@ -121,6 +124,7 @@ export default {
           this.hasTemplate = true;
           this.submitTemplate.name = templateResult.data.name;
           this.submitTemplate.sessions = templateResult.data.sessions;
+          this.submitTemplate = templateResult.data;
           this.clientTemplateId = templateResult.data.id;
         }
       }).catch(error => {
