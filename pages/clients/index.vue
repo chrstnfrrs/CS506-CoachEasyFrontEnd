@@ -36,7 +36,6 @@ export default {
       error: false,
       errorMessage: 'Error',
       clientList: {},
-      agh: this.$refs
     }
   },
   methods: {

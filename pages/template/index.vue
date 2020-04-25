@@ -56,7 +56,6 @@ export default {
       errorMessage: '',
       templateList: [],
       user: {},
-
     }
   },
   computed: {
@@ -78,19 +77,13 @@ export default {
     },
     createRequest: function(){
       let self = this;
-      try {
-        axios.post(`${url}/coach/template`, 
-          self.submitTemplate
-        ).then(function (response){
-          console.log(response);
-          self.updateTemplateList();
-        }).catch(function (error){ 
-            self.error = true
-        });
-      } catch (error) {
-        this.error = true;
-      }
-      console.log('saving')
+      axios.post(`${url}/coach/template`, 
+        self.submitTemplate
+      ).then(function (response){
+        self.updateTemplateList();
+      }).catch(function (error){ 
+          self.error = true
+      });
       this.status = !this.status;
 
     },
@@ -106,16 +99,16 @@ export default {
       this.status = !this.status;
     },
     getUserTemplate: function(){
-      Promise.all([ this.$store.state.userData ]).then( () => {
+      Promise.all([ this.$store.state.userData ])
+      .then( () => {
         this.user = this.$store.state.userData
         this.loading = false
         this.updateTemplateList();
       },() => {
-        this.loadingFailed = true
+        this.error = true
       })
     },
     updateTemplateList: function() {
-        console.log('Update')
         let self = this;
         let arg = self.user.role == 'COACH' ? '/coach/templates' : `/client/templates?user_id=${self.user.id}`;
         axios.get(`${url}${arg}`).then(result => {
@@ -129,19 +122,17 @@ export default {
         }); 
     },
     deleteTemplate: function(template_id) {
-      try {
-        axios.put(`${url}/coach/template/delete`, 
-        {
-          "coach_template_id": template_id
-        }).then(response => {
-          console.log(response);
-          this.updateTemplateList();
-        }).catch(error => {
-          console.log(error);
-        })
-      } catch (error) {
-        this.error = true;
-      }
+      let self = this;
+      axios.put(`${url}/coach/template/delete`, {
+        "coach_template_id": template_id
+      })
+      .then(response => {
+        self.updateTemplateList();
+      })
+      .catch(error => {
+        self.error = true
+        self.errorMessage = "Unable to delete template.";
+      })
     },
     setNoEdit: function() {
       this.$store.commit('noEdit');
