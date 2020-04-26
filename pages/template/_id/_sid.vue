@@ -57,7 +57,6 @@ export default {
       this.setEdit();
     },
     setEdit: function(){
-      console.log(this.edit)
       this.edit = !this.edit
     },
     getUserSession: function(){
