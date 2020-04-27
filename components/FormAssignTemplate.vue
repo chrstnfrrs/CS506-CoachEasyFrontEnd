@@ -12,21 +12,22 @@
       </v-select>
     </div>
     <div v-if="assigning">
+      <HeadingPage @sendRequest="assignTemplate()" status="Assign" message="Assign" />
       <div class="formCreateHeading">
         <v-text-field
-          label="Name"
+          label="Selected Template Name"
           v-model="templateName"
           required>
         </v-text-field>
         <button @click="createTemplate">
-          <ButtonAddForm @newForm="addForm()" type="Session" v-if="getNameLength() && sessionCount===0"/>
+          <!-- <ButtonAddForm @newForm="addForm()" type="Session" v-if="getNameLength() && sessionCount===0"/> -->
         </button>
       </div>
       <div v-if="!creating">
-        <FormCreateSession @newForm="addForm()" v-for="i in sessionCount" :key="i" :template="template"  :setsAndReps="assigning"/>
+        <FormCreateSession @newForm="addForm()" v-for="session in sessions" :key="session.id" :template="template" :setsAndReps="assigning"/>
       </div>
       <SpacerExtraSmall />
-      <ButtonAddForm @newForm="addForm()" type="Session" v-if="sessionCount!==0"/>
+      <!-- <ButtonAddForm @newForm="addForm()" type="Session" v-if="sessionCount!==0"/> -->
     </div>
   </div>
 </template>
@@ -35,6 +36,7 @@
 import ButtonAddForm from '~/components/ButtonAddForm'
 import FormCreateSession from '~/components/FormCreateSession'
 import SpacerExtraSmall from '~/components/SpacerExtraSmall'
+import HeadingPage from '~/components/HeadingPage'
 export default {
   props:{
     type: String,
@@ -46,22 +48,27 @@ export default {
       sessionCount: 0,
       templateName: '',
       templateList: this.templates,
+      sessions: [],
       template: {},
       creating: true,
-      assigning: false,
-      selectedTemplate: 'Select Template'
+      assigning: true,
+      selectedTemplate: 'No Template Selected',
     }
   },
   components:{
     ButtonAddForm,
     FormCreateSession,
-    SpacerExtraSmall
+    SpacerExtraSmall,
+    HeadingPage,
   },
   methods:{
+    // not used because assigning a template is static
     addForm: function(){
       this.sessionCount++;
-      console.log("Added session");
-      console.log(this.template);
+      this.sessions.push({
+        id: undefined,
+        exercises: []
+      });
     },
     createTemplate: function() {
       this.template.name = this.templateName,
@@ -71,16 +78,34 @@ export default {
       return this.templateName.length > 0;
     },
     selectTemplate: function(value){
+      this.creating = true;
+      this.sessionCount = 0;
       let result = this.templateList.filter(obj => {
         return obj.name === value
-      })
+      });
       this.assigning=true;
-      this.template=result;
-      console.log(this.template)
+      this.template=result[0];
+      console.log(this.template);
+      this.sessions = this.template.sessions;
+      if (this.template) {
+        this.fillFields();
+      }
+
+    },
+    fillFields: function() {
+      this.templateName = this.template.name;
+      this.sessionCount = this.template.sessions.length;
+      this.createTemplate();
+    },
+    assignTemplate: function() {
+      this.$emit('assignTemplate', this.template);
     }
   },
   mounted() {
     this.template = this.$props.shouldCreate;
+    if (this.$props.shouldCreate.name) {
+      this.templateName = this.$props.shouldCreate.name;
+    }
   }
 }
 </script>

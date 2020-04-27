@@ -25,22 +25,21 @@ export default {
       return this.$route.params.sid
     }
   },
+  methods: {
+    sendDelete: function() {
+      this.$emit('sendDelete');
+    }  
+  },
   mounted(){
     Promise.all([ this.$store.state.userData ]).then( () => {
       this.role = this.$store.state.userData.role
     },() => {
     })
-  }
+  },
 }
 </script>
 
 <style lang="scss">
-.disable{
-    pointer-events: none; 
-    /* -webkit-user-select: none; */
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-}
+
 </style>
 

@@ -3,7 +3,7 @@
     <CardNextSession v-if="type==='nextSession'" :cardType="type" />
     <CardCurrentPlan v-if="type==='trainingPlan'" :cardType="type" />
     <CardTrainingHistory v-if="type==='trainingHistory'" :cardType="type" />
-    <!-- <nuxt-link :to="`/${type}`">
+    <nuxt-link :to="`/${type}`">
       <v-card 
       class="dashCard">
         <div 
@@ -19,7 +19,7 @@
           <h2 class="subHeading">Templates</h2>
         </div>
       </v-card>
-    </nuxt-link> -->
+    </nuxt-link>
   </div>
 </template>
 

@@ -13,8 +13,8 @@
         <ViewClientExercise v-for="(exercise, index) in exerciseList" 
           :single="!loading"
           :key="index"
-          :exercise="exercise"
-          :edit=false  />
+          :exercise="exercise" 
+          :edit=true />
       </div>
       <div v-if="role==='COACH'">
         <ViewCoachExercise v-for="(exercise, index) in exerciseList" 
@@ -49,7 +49,6 @@ export default {
   },
   data() {
     return {
-      loading: true,
       exerciseList: [],
       role: '',
       loading: true,
@@ -74,6 +73,7 @@ export default {
   },
   mounted() {
     this.getSessionRole();
+    console.log('form view session mounted');
   }
 }
 </script>

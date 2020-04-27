@@ -9,13 +9,14 @@
         v-for="(exercise) in this.exercises"
         :key="exercise.id"
         type="exercise"
-        :items="exercise"/>
+        :items="exercise"
+        @sendDelete="deleteExercise(exercise.id)"/>
     </div>
     <div v-if="!loading && edit">
       <HeadingPage @sendRequest="saveRequest()" status="Save" :name="session.name"/>
       <SpacerSmall />
       <FormEditTemplate 
-        :templateList="this.session"
+        :templateList="session"
       />
     </div>
   </div> 
@@ -50,15 +51,18 @@ export default {
     session: {},
     user: {},
     edit: false,
-    exercises: []
+    exercises: [],
+    exerciseCountBefore: 0,
   }),
   methods: {
     saveRequest: function(){
       this.setEdit();
+      this.addNewExercises();
     },
     setEdit: function(){
       console.log(this.edit)
       this.edit = !this.edit
+      this.exerciseCountBefore = this.exercises.length;
     },
     getUserSession: function(){
       Promise.all([ this.$store.state.userData ]).then( () => {
@@ -87,6 +91,21 @@ export default {
           self.loading = false;
         }); 
     },
+    addNewExercises: function () {
+      // add the session id to the exercise since that is not done in FormCreateSession
+      for (let i = this.exerciseCountBefore - 1; i < this.session.coach_exercises.length; i++) {
+        this.session.coach_exercises[i].coach_session_id = this.session.id;
+      }
+      axios.put(`${url}/coach/session`, this.session).then(result => {
+        console.log(result);
+        this.updateSession();
+      }).catch(error => {
+        console.log(error);
+      });
+    },
+    deleteExercise: function(id) {
+
+    }
   },
   mounted() {
     this.getUserSession();
