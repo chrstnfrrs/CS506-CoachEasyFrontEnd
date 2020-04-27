@@ -105,7 +105,6 @@ export default {
         this.loading = false
         this.updateTemplateList();
       },() => {
-        this.error = true
       })
     },
     updateTemplateList: function() {
