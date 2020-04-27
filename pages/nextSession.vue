@@ -8,12 +8,12 @@
       <ButtonViewSession @complete="completeSession()" action="Complete" />
       <v-text-field
         label="Comment"
-        v-model="comment"
+        v-model="session.comment"
       >
       </v-text-field>
       <v-text-field
         label="Weight"
-        v-model="clientWeight">
+        v-model="session.exercise_weight">
       </v-text-field>
     </div>
   </div>
@@ -26,7 +26,7 @@ const url = "https://coach-easy-deploy.herokuapp.com";
 
 import ViewSession from "~/components/ViewSession";
 import ButtonViewSession from "~/components/ButtonViewSession"
-import FormViewSession from "~/components/FormEditSession"
+import FormViewSession from "~/components/FormViewSession"
 
 export default {
   components: {
@@ -71,6 +71,7 @@ export default {
     },
     completeSession: function() {
       console.log('completing session');
+      this.editStatus = false;
       let trainingEntries = [];
       this.session.exercises.forEach(ex => { 
         trainingEntries.push({
@@ -99,11 +100,9 @@ export default {
     },
     editSession: function() {
       this.editStatus = !this.editStatus;
-      console.log('editing session');
     }
   },
   mounted() {
-    console.log("here");
     this.getSessionEditRole();
   }
 };
