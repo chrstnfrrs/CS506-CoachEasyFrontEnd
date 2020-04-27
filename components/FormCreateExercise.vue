@@ -94,7 +94,6 @@ export default {
         this.getCategories();
       }).catch(error => {
         this.error = true;
-        console.log(error)
       });
     },
     // gets individual categories from list of exercises

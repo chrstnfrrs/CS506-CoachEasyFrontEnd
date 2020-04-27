@@ -1,6 +1,6 @@
 <template>
   <div class="pageContent" >
-    <Loading v-if="loading" :loading="this.loading"/>
+    <Loading v-if="loading" />
     <MessageError v-if="error" :message="errorMessage" />
     <div v-if="!loading && !edit">
       <HeadingPage @sendRequest="setEdit()" status="Edit" :name="session.name"/>
@@ -23,12 +23,6 @@
 </template>
 
 <script>
-// We need an axios request that gets session data
-// Then we pass that session data to the session components
-
-// Or we need to get session data from the template level
-// And pass that data to the session
-
 import axios from 'axios'
 axios.defaults.withCredentials = true;
 const url = 'https://coach-easy-deploy.herokuapp.com';

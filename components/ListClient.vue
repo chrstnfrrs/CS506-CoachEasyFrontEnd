@@ -43,19 +43,14 @@ export default {
   methods: {
     viewClient: function(client){
       const newPath = `/${this.$router.currentRoute.name}/${client.id}`;
-      console.log(newPath)
-      this.$router.push({ path: newPath })
-      // :to=
+      // this.$router.push({ path: newPath })
+      window.location.assign('newPath')
     },
     updateClientList: function(){
       let self = this;
       axios.get(`${url}/clientList`).then(result => {
         self.clientList = result.data
-        // self.loading = false;
-        // self.error = false;
       }).catch(error => {
-        // self.error = true;
-        // self.errorMessage = error;
       });
       this.setUpdate();
     },
@@ -66,12 +61,8 @@ export default {
       })
       .then(function (response) {
         self.updateClientList()
-        // self.error = false;
-        // self.errorMessage = `Update client list failed`;
       })
       .catch(function (error) {
-        // self.error = true;
-        // self.errorMessage = `${endpoint} failed: ${data.first_name} ${data.last_name}`;
       });
     },
     deleteClient: function(data){
@@ -79,11 +70,8 @@ export default {
       axios.delete(url+`/user?id=${data.id}`)
       .then(function (response) {
         self.updateClientList()
-        // self.error = false;
       })
       .catch(function (error) {
-        // self.error = true;
-        // self.errorMessage = `Delete failed: ${data.first_name} ${data.last_name}`;
       });
     },
     setUpdate: function() {

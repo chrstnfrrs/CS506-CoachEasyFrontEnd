@@ -10,11 +10,12 @@
       <nuxt-link to="/signUp" class="navLink">Sign Up</nuxt-link>
     </div>
     <div v-if="loggedIn" class="navCol">
+      <p class="userName"> {{getUserName}} </p>
+      <span class="navSpacer"></span>
       <v-menu v-model="showMenu" absolute offset-y style="max-width: 40px">
         <template v-slot:activator="{ on }">
           <span class="navIcon" v-on="on"><v-icon size="40" class="navLink">mdi-account</v-icon></span>    
         </template>
-
         <v-list>
           <v-list-item >
             <nuxt-link class="navLink" to="/profile">View Profile</nuxt-link>
@@ -35,10 +36,8 @@ const url = 'https://coach-easy-deploy.herokuapp.com';
 export default {
   data: () => ({
     showMenu: false,
-    items: [
-      { title: 'View Profile', icon: 'mdi-account', action: 'logOut' },
-      { title: 'Log Out', icon: 'mdi-flag', action: 'logOut()' },
-    ]
+    userName: '',
+    error: false
   }),
   computed: {
     loggedIn: function(){
@@ -49,6 +48,12 @@ export default {
         return this.$store.state.userData.role;
       }
       return 'none'
+    },
+    getUserName: function(){
+      if(this.$store.state.userData){
+        return this.$store.state.userData.first_name;
+      }
+      return ''
     }
   },
   methods: {
@@ -57,14 +62,15 @@ export default {
       axios.get(`${url}/auth/logout`)
       .then(function (response){
         self.$store.commit('logOut')
-        window.location.href = '/'
+        self.error = false
+        window.location.assign('/')
       })
       .catch(function (error){
         if(error.response.status===400){
           self.$store.commit('logOut')
-          console.log('not logged in');
+          self.error = true
         } else {
-          console.log(error);
+          self.error = true
         }
       })
     },
@@ -92,6 +98,10 @@ export default {
     }
     .navIcon{
       fill: $text;
+      cursor: pointer;
+    }
+    .userName{
+      cursor: default;
     }
   }
 

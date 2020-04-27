@@ -1,6 +1,6 @@
-<template>
+ <template>
   <div class="pageContent" >
-    <Loading v-if="loading" :loading="this.loading"/>
+    <Loading v-if="loading" />
     <div v-if="!loading && !status">
       <HeadingPage @updateStatus="setStatus()" @sendRequest="request()" message="New" :status="deleteMessage"/>
       <SpacerSmall />
@@ -11,7 +11,7 @@
         type="template"
         :items="template"
         @sendDelete="deleteTemplate(template.id)"/>
-      <MessageError :error="error" :message="errorMessage" />
+      <MessageError v-if="error" :message="errorMessage" />
     </div>
     <div v-if="!loading && status">
       <HeadingPage @updateStatus="setStatus()" @sendRequest="request()" :active="creatable" message="Exit" status="Create"/>
@@ -57,7 +57,6 @@ export default {
       templateList: [],
       user: {},
       creatable: false,
-
     }
   },
   computed: {
@@ -79,27 +78,18 @@ export default {
     },
     createRequest: function(){
       let self = this;
-      try {
-        axios.post(`${url}/coach/template`, 
-          self.submitTemplate
-        ).then(function (response){
-          console.log(response);
-          self.updateTemplateList();
-        }).catch(function (error){ 
-            self.error = true
-        });
-      } catch (error) {
-        this.error = true;
-      }
-      console.log('saving')
+      axios.post(`${url}/coach/template`, 
+        self.submitTemplate
+      ).then(function (response){
+        self.updateTemplateList();
+      }).catch(function (error){ 
+          self.error = true
+      });
       this.status = !this.status;
 
     },
     setDelete: function(){
       this.deleteStatus = !this.deleteStatus
-    },
-    deleteRequest: function(){
-      console.log('deleting')
     },
     setStatus: function(){
       this.submitTemplate = 
@@ -110,13 +100,14 @@ export default {
       this.status = !this.status;
     },
     getUserTemplate: function(){
-      Promise.all([ this.$store.state.userData ]).then( () => {
+      Promise.all([ this.$store.state.userData ])
+      .then( () => {
         this.user = this.$store.state.userData
         console.log(this.user)
         this.loading = false
         this.updateTemplateList();
       },() => {
-        this.loadingFailed = true
+        this.error = true
       })
     },
     updateTemplateList: function() {
@@ -142,7 +133,6 @@ export default {
         }).catch(error => {
           this.error = true;
         })
-
     },
     setNoEdit: function() {
       this.$store.commit('noEdit');
