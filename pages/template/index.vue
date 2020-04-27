@@ -1,6 +1,6 @@
-<template>
+ <template>
   <div class="pageContent" >
-    <Loading v-if="loading" :loading="this.loading"/>
+    <Loading v-if="loading" />
     <div v-if="!loading && !status">
       <HeadingPage @updateStatus="setStatus()" @sendRequest="request()" message="New" :status="deleteMessage"/>
       <SpacerSmall />
@@ -11,7 +11,7 @@
         type="template"
         :items="template"
         @sendDelete="deleteTemplate(template.id)"/>
-      <MessageError :error="error" :message="errorMessage" />
+      <MessageError v-if="error" :message="errorMessage" />
     </div>
     <div v-if="!loading && status">
       <HeadingPage @updateStatus="setStatus()" @sendRequest="request()" message="Exit" status="Create"/>
@@ -56,7 +56,6 @@ export default {
       errorMessage: '',
       templateList: [],
       user: {},
-
     }
   },
   computed: {
@@ -78,27 +77,18 @@ export default {
     },
     createRequest: function(){
       let self = this;
-      try {
-        axios.post(`${url}/coach/template`, 
-          self.submitTemplate
-        ).then(function (response){
-          console.log(response);
-          self.updateTemplateList();
-        }).catch(function (error){ 
-            self.error = true
-        });
-      } catch (error) {
-        this.error = true;
-      }
-      console.log('saving')
+      axios.post(`${url}/coach/template`, 
+        self.submitTemplate
+      ).then(function (response){
+        self.updateTemplateList();
+      }).catch(function (error){ 
+          self.error = true
+      });
       this.status = !this.status;
 
     },
     setDelete: function(){
       this.deleteStatus = !this.deleteStatus
-    },
-    deleteRequest: function(){
-      console.log('deleting')
     },
     setStatus: function(){
       this.submitTemplate = 
@@ -109,13 +99,14 @@ export default {
       this.status = !this.status;
     },
     getUserTemplate: function(){
-      Promise.all([ this.$store.state.userData ]).then( () => {
+      Promise.all([ this.$store.state.userData ])
+      .then( () => {
         this.user = this.$store.state.userData
         console.log(this.user)
         this.loading = false
         this.updateTemplateList();
       },() => {
-        this.loadingFailed = true
+        this.error = true
       })
     },
     updateTemplateList: function() {
@@ -132,19 +123,17 @@ export default {
         }); 
     },
     deleteTemplate: function(template_id) {
-      try {
-        axios.put(`${url}/coach/template/delete`, 
-        {
-          "coach_template_id": template_id
-        }).then(response => {
-          console.log(response);
-          this.updateTemplateList();
-        }).catch(error => {
-          console.log(error);
-        })
-      } catch (error) {
-        this.error = true;
-      }
+      let self = this;
+      axios.put(`${url}/coach/template/delete`, {
+        "coach_template_id": template_id
+      })
+      .then(response => {
+        self.updateTemplateList();
+      })
+      .catch(error => {
+        self.error = true
+        self.errorMessage = "Unable to delete template.";
+      })
     },
     setNoEdit: function() {
       this.$store.commit('noEdit');

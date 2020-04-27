@@ -55,9 +55,6 @@ export default {
     }
   },
   methods: {
-    testMethod: function(){
-      console.log(this.$route)
-    },
     saveRequest: function(){
       this.setEdit();
     },

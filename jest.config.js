@@ -13,10 +13,15 @@ module.exports = {
     '^.+\\.js$': 'babel-jest',
     '.*\\.(vue)$': 'vue-jest'
   },
+  transformIgnorePatterns: [
+    "/node_modules/(?!vue-ionicons)",
+  ],
   collectCoverage: true,
   collectCoverageFrom: [
     '<rootDir>/components/**/*.vue',
     '<rootDir>/pages/**/*.vue',
+    '<rootDir>/store/*.js',
   ],
   coverageReporters: ["text-summary", "text"]
+  // coverageReporters: ["text-summary"]
 }

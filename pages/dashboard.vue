@@ -1,6 +1,6 @@
 <template>
   <div class="pageContent">
-    <Loading v-if="loading" :loading="this.loading"/>
+    <Loading v-if="loading" />
     <HeadingPage v-if="!loading" />
     <ViewDashboard v-if="!loading" :type="this.role"/>
   </div>
@@ -19,7 +19,8 @@ export default {
   data() {
     return {
       loading: true,
-      role: ''
+      role: '',
+      loadingFailed: false
     }
   },
   mounted(){

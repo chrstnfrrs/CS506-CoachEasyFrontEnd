@@ -1,6 +1,7 @@
 # ce-fe
 
 > Coach Easy. CS506-Software Engineering Fitness Coach Project
+Current endpoint: https://coach-easy.herokuapp.com/
 
 ## Build Setup
 
