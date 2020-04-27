@@ -45,7 +45,6 @@ export default {
         this.user = this.$store.state.userData
         this.findClient();
       },() => {
-        this.loadingFailed = true
       })
     },
     findClient: function(){
@@ -65,7 +64,6 @@ export default {
         let self = this;
         let arg = self.user.role == 'COACH' ? '/coach/templates' : `/client/templates?user_id=${self.user.id}`;
         axios.get(`${url}${arg}`).then(result => {
-          console.log(result.data.templates)
           self.templateList = result.data.templates;
           self.loading = false;
           self.error = false;
