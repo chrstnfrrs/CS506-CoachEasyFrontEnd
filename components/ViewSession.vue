@@ -1,14 +1,14 @@
 <template>
   <div>
-    <HeadingPage />
+    <HeadingPage :name="session.name" />
     <SpacerSmall v-if="this.$props.session.exercises" />
     <draggable v-if="!loading" v-model="exerciseList">
       <div v-if="role==='CLIENT'" :class="{mainDisplay: this.$props.session.exercises}">
         <div class="exerciseClientGrid exerciseClientGridHeader">
-          <p class="exerciseCol">Name</p>
-          <p class="exerciseCol">Sets</p>
-          <p class="exerciseCol">Reps</p>
-          <p class="exerciseCol">Weight</p>
+          <p class="exerciseClientCol exerciseFirstCol">Name</p>
+          <p class="exerciseClientCol">Sets</p>
+          <p class="exerciseClientCol">Reps</p>
+          <p class="exerciseClientCol">Weight</p>
         </div>
         <ViewClientExercise v-for="(exercise, index) in exerciseList" 
           :single="!loading"
@@ -16,11 +16,11 @@
           :exercise="exercise"
           :edit=false  />
       </div>
-      <div v-if="role==='COACH'">
+      <!-- <div v-if="role==='COACH'">
         <ViewCoachExercise v-for="(exercise, index) in exerciseList" 
           :key="index" 
           :exercise="exercise"  />
-      </div>
+      </div> -->
     </draggable>
   </div>
 </template>
@@ -81,11 +81,15 @@ export default {
 <style lang="scss">
 .mainDisplay{
   border-radius: 16px;
+  padding: 8px;
   box-shadow: $elevation2;
   overflow: hidden;
 }
 .exerciseClientGridHeader{
+  height: 40px;
+  align-items: center;
   p{
+    font-size: 20px;
     font-weight: 500;
   }
 }

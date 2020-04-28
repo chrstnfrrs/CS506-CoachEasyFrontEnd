@@ -74,9 +74,10 @@ export default {
     },
     updateSession: function() {
         let self = this;
-        let tempID = this.$route.params.id
-        let seshID = this.$route.params.sid
-        let arg = self.user.role == 'COACH' ? `/coach/session?coach_session_id=${seshID}` : `/client/session?template_id=${tempID}&session_id=${seshID}`;
+        let tSlug = this.$route.params.slug
+        let sSlug = this.$route.params.sSlug
+        console.log(`${tSlug}/${sSlug}`)
+        let arg = self.user.role == 'COACH' ? `/coach/session?coach_session_id=${seshID}` : `/client/session?client_template_slug=${tSlug}&client_session_slug=${sSlug}`;
         axios.get(`${url}${arg}`).then(result => {
           if(self.user.role === 'COACH'){
             self.exercises = result.data.coach_exercises
@@ -107,8 +108,19 @@ export default {
 
     }
   },
+  beforeRouteEnter (to, from, next) { 
+    next(vm => { 
+      console.log(vm.$route.params)
+      console.log("before Route Enter")
+      next();
+    }) 
+  } ,
   mounted() {
+    console.log('here')
     this.getUserSession();
+  },
+  beforeCreate(){
+    console.log('made it')
   }
 }
 </script>

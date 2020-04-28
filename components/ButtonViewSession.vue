@@ -13,9 +13,7 @@ export default {
   },
   methods: {
     doAction: function() {
-      if (this.action === 'Edit' || this.action === 'Done') {
-        this.$emit('edit');
-      } else if (this.action === 'Complete') {
+      if (this.action === 'Complete') {
         this.$emit('complete');
       }
     }
@@ -26,8 +24,9 @@ export default {
 <style lang="scss">
 .sessionButton {
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   flex-wrap: wrap;
-  margin-top: 10px;
+  width: 100%;
+  font-weight: 500;
 }
 </style>

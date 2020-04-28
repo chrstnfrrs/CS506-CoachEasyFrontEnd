@@ -3,9 +3,10 @@
     <div v-if="!loading && view">
       <ViewSession v-if="!editStatus" :session="this.session" />
       <FormViewSession v-if="editStatus" :session="this.session" />
-      <ButtonViewSession v-if="!editStatus" @edit="editSession()" action="Edit" />
-      <ButtonViewSession v-if="editStatus" @edit="editSession()" action="Done" />
-      <ButtonViewSession @complete="completeSession()" action="Complete" />
+      <!-- <ButtonViewSession v-if="!editStatus" @edit="editSession()" action="Edit" /> -->
+      <!-- <ButtonViewSession v-if="editStatus" @edit="editSession()" action="Done" /> -->
+      <SpacerSmall />
+      <ButtonViewSession v-if="editStatus" @complete="completeSession()" action="Complete" />
       <v-text-field
         label="Comment"
         v-model="session.comment"
@@ -27,12 +28,14 @@ const url = "https://coach-easy-deploy.herokuapp.com";
 import ViewSession from "~/components/ViewSession";
 import ButtonViewSession from "~/components/ButtonViewSession"
 import FormViewSession from "~/components/FormViewSession"
+import SpacerSmall from '~/components/SpacerSmall'
 
 export default {
   components: {
     ViewSession,
     ButtonViewSession,
     FormViewSession,
+    SpacerSmall
   },
   data() {
     return {
@@ -40,7 +43,7 @@ export default {
       loading: true,
       id: undefined,
       view: true,
-      editStatus: false,
+      editStatus: true,
       editMessage: "Edit",
       comment: '',
       clientWeight: 0,
@@ -109,4 +112,37 @@ export default {
 </script>
 
 <style lang="scss">
+
+.exerciseClientCol{
+  width: 100%;
+  text-align: center;
+  align-items: center;
+  display: flex;
+}
+.exerciseFirstCol{
+  padding-left: 16px;
+  text-align: left;
+}
+.exerciseCoachGrid {
+  min-width: 325px;
+  display: grid;
+  grid-template-columns: minmax(50px, 1fr) 55px 55px;
+  justify-items: center;
+  justify-content: center;
+  background: $background-secondary !important;
+}
+.exerciseClientGrid {
+  min-width: 400px;
+  display: grid;
+  grid-template-columns: minmax(50px, 1fr) 55px 55px 75px;
+  justify-items: center;
+  justify-content: center;
+  background: $background-secondary !important;
+  .v-text-field{
+    max-width: 40px;
+    min-width: 30px;
+    margin-left:12px;
+    flex: 1;
+  }
+}
 </style>

@@ -10,6 +10,7 @@
         :key="template.id"
         type="template"
         :items="template"
+        :slug="template.slug"
         @sendDelete="deleteTemplate(template.id)"/>
       <MessageError v-if="error" :message="errorMessage" />
     </div>

@@ -1,6 +1,6 @@
 <template>
   <div class="listRow">
-    <v-card class="listCard"  :to="`/${type}/${items.id}`" :class="{disable: (isDisabled)}">
+    <v-card class="listCard"  :to="`/${type}/${items.slug}`" :class="{disable: (isDisabled)}">
       <p class="listItem">{{ items.name }}</p>
     </v-card>
     <button @click="sendDelete" v-if="deleteStatus" class="buttonDelete errorBackground"><v-icon dark>mdi-delete</v-icon></button>

@@ -1,10 +1,11 @@
 <template>
   <div class="cardRow">
-    <div class="cardCol" v-for="i in cardList" :key="i">
+    <!-- <div class="cardCol" v-for="i in cardList" :key="i"> -->
       <DashboardCard 
+        v-for="i in cardList" :key="i"
         :type="i"
       />
-    </div>
+    <!-- </div> -->
   </div>
 </template>
 
@@ -25,6 +26,26 @@ export default {
     }
   },
   methods: {
+    getUserData: function(){
+      let self = this;
+      Promise.all([ this.$store.state.userData ]).then( () => {
+        self.user = this.$store.state.userData;
+        self.getCurrentTemplate();
+      },() => {
+        self.loadingFailed = true
+      })
+    },
+    getCurrentTemplate: function(){
+      let self = this;
+      axios.get(`${url}/client/template/active?user_id=${self.user.id}`)
+      .then(result => {
+        self.template = result.data;
+        self.loading = false;
+      }).catch(error => {
+        self.error = true;
+        console.log(error)
+      });
+    },
     setList: function() {
       if(this.type==='COACH'){
         this.cardList = this.coachList;

@@ -8,6 +8,7 @@
       :deleteStatus="truthVar"
       type="session"
       :items="session"
+      :slug="session.slug"
       @sendDelete="deleteObject(session.id)" />
     </draggable>
     <FormCreateSession :template="template" v-for="i in sessionCount" :key="i"/>

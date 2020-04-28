@@ -8,8 +8,10 @@
       <ListItem 
         v-for="(session) in this.templateList.sessions"
         :key="session.id"
-        :type="`template/${templateList.id}`"
-        :items="session"/>
+        :type="`/template/${templateList.slug}`"
+        :items="session"
+        :slug="session.slug"
+        />
     </div>
     <div v-if="!loading && edit">
       <HeadingPage @sendRequest="saveRequest()" status="Save" :name="templateList.name"/>
@@ -73,10 +75,12 @@ export default {
     },
     updateTemplateList: function() {
         let self = this;
-        let route = this.$route.params.id
-        let arg = self.user.role == 'COACH' ? `/coach/template?coach_template_id=${route}` : `/client/template?client_template_id=${route}`;
+        let route = this.$route.params.slug
+        let arg = self.user.role == 'COACH' ? `/coach/template?coach_template_slug=${route}` : `/client/template?client_template_slug=${route}`;
         axios.get(`${url}${arg}`).then(result => {
           self.templateList = result.data;
+          console.log('update')
+          console.log(self.templateList.slug)
           self.loading = false;
           self.error = false;
           self.sessionCountBefore = self.templateList.sessions.length;
@@ -93,12 +97,11 @@ export default {
       if (this.sessionCountBefore != this.templateList.sessions.length) {
         for (let i = this.sessionCountBefore; i < this.templateList.sessions.length; i++) {
           axios.post(`${url}/coach/session`, {
-            coach_template_id: this.templateList.id,
+            coach_template_slug: this.templateList.slug,
             name: this.templateList.sessions[i].name,
             order: this.templateList.sessions[i].order,
             coach_exercises: this.templateList.sessions[i].coach_exercises
           }).then(result => {
-            console.log(result);
           }).catch(error => {
             this.error = true;
           });
@@ -106,9 +109,7 @@ export default {
       }
 
       // update the template
-      console.log(this.templateList);
       axios.put(`${url}/coach/template`, this.templateList).then( result => {
-        console.log(result);
         this.updateTemplateList();
       }).catch(error => {
         this.error = true;
