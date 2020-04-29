@@ -1,9 +1,9 @@
 <template>
-  <div class="exerciseGrid">
-    <p class="exerciseCol"> {{exercise.name}} </p>
-    <p class="exerciseCol"> {{exercise.sets}} </p>
-    <p class="exerciseCol"> {{exercise.reps}} </p>
-    <p class="exerciseCol"> {{exercise.weight}} </p>
+  <div class="exerciseClientGrid">
+    <div class="exerciseCol"><p> {{exercise.name}} </p></div>
+    <div class="exerciseClientCol"><p> {{exercise.sets}} </p></div>
+    <div class="exerciseClientCol"><p> {{exercise.reps}} </p></div>
+    <div class="exerciseClientCol"><p> {{exercise.weight}} </p></div>
   </div>
 </template>
 
@@ -11,16 +11,29 @@
 export default {
   props: {
     exercise: Object,
-  },
+  }
 }
 </script>
 
 <style lang="scss">
-  .exerciseGrid {
-    display: flex;
+  .exerciseCoachGrid {
+    min-width: 325px;
+    display: grid;
+    grid-template-columns: minmax(50px, 1fr) 55px 55px;
+    justify-items: center;
+    justify-content: center;
+    background: $background-secondary !important;
   }
-
-  .exerciseCol{
-    flex:1
+  .exerciseClientGrid {
+    min-width: 400px;
+    display: grid;
+    grid-template-columns: minmax(50px, 1fr) 55px 55px 75px;
+    justify-items: center;
+    justify-content: center;
+    background: $background-secondary !important;
   }
+  // .exerciseClientCol{
+  //   display: flex;
+  //   justify-content: center;
+  // }
 </style>

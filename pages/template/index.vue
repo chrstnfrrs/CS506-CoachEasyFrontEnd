@@ -102,6 +102,7 @@ export default {
       Promise.all([ this.$store.state.userData ])
       .then( () => {
         this.user = this.$store.state.userData
+        console.log(this.user)
         this.loading = false
         this.updateTemplateList();
       },() => {

@@ -5,8 +5,8 @@
       class="dashCard">
         <div 
           class="dashContents">
-          <v-icon size="75">mdi-dumbbell</v-icon>
-          <h2 class="subHeading">Next Session</h2>
+          <v-icon size="75">mdi-folder</v-icon>
+          <h2 class="subHeading">Training History</h2>
         </div>
       </v-card>
     </nuxt-link>

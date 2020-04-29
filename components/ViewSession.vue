@@ -1,13 +1,25 @@
 <template>
   <Div>
     <HeadingPage />
+    <SpacerSmall v-if="this.$props.session.exercises" />
     <draggable v-if="!loading" v-model="exerciseList">
-      <ViewClientExercise v-if="role==='CLIENT'" v-for="(exercise, index) in exerciseList" 
-        :key="index" 
-        :exercise="exercise"  />
-      <ViewCoachExercise v-if="role==='COACH'" v-for="(exercise, index) in exerciseList" 
-        :key="index" 
-        :exercise="exercise"  />
+      <div v-if="role==='CLIENT'" :class="{mainDisplay: this.$props.session.exercises}">
+        <div class="exerciseClientGrid exerciseClientGridHeader">
+          <p class="exerciseCol">Name</p>
+          <p class="exerciseCol">Sets</p>
+          <p class="exerciseCol">Reps</p>
+          <p class="exerciseCol">Weight</p>
+        </div>
+        <ViewClientExercise v-for="(exercise, index) in exerciseList" 
+          :single="!loading"
+          :key="index" 
+          :exercise="exercise"  />
+      </div>
+      <div v-if="role==='COACH'">
+        <ViewCoachExercise v-for="(exercise, index) in exerciseList" 
+          :key="index" 
+          :exercise="exercise"  />
+      </div>
     </draggable>
   </Div>
 </template>
@@ -19,6 +31,7 @@ axios.defaults.withCredentials = true;
 const url = 'https://coach-easy-deploy.herokuapp.com';
 
 import HeadingPage from '~/components/HeadingPage'
+import SpacerSmall from '~/components/SpacerSmall'
 import ViewClientExercise from '~/components/ViewClientExercise'
 import ViewCoachExercise from '~/components/ViewCoachExercise'
 import draggable from 'vuedraggable'
@@ -28,6 +41,7 @@ export default {
   },
   components: {
     HeadingPage,
+    SpacerSmall,
     ViewClientExercise,
     ViewCoachExercise,
     draggable
@@ -45,24 +59,33 @@ export default {
     getSessionRole: function(){
       Promise.all([ this.$store.state.userData ]).then( () => {
         this.role = this.$store.state.userData.role
-        this.loading = false
+        this.updateExerciseList();
+        // this.loading = false
       },() => {
         this.loadingFailed = true
       })
     },
     updateExerciseList: function() {
       this.exerciseList = (this.role == 'COACH') ? 
-        this.$props.session.coach_exercises : this.$props.session.client_exercises;
+        this.$props.session.coach_exercises : (this.$props.session.exercises) ? this.$props.session.exercises : this.$props.session.client_exercises;
       this.loading = false;
     }
   },
   mounted() {
     this.getSessionRole();
-    this.updateExerciseList();
   }
 }
 </script>
 
-<style>
-
+<style lang="scss">
+.mainDisplay{
+  border-radius: 16px;
+  box-shadow: $elevation2;
+  overflow: hidden;
+}
+.exerciseClientGridHeader{
+  p{
+    font-weight: 500;
+  }
+}
 </style>
