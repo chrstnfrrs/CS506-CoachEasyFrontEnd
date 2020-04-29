@@ -9,7 +9,6 @@
     </div>
     <div v-else>
         <ButtonHeading @setStatus="updateStatus()" v-if="this.status==='Start' || this.status==='Cancel'" active :message="this.status"/>
-        <!-- <ButtonHeading @sendRequest="save()" :message="this.message" /> -->
     </div>
   </div>
 </template>

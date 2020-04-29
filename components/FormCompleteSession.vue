@@ -32,6 +32,7 @@
           :key="index" 
           :exercise="exercise"  />
       </div>
+      <ButtonViewSession @complete="completeSession()" :session="this.session" action="Complete" />
     </div>
   </div>
 </template>
@@ -46,6 +47,8 @@ import HeadingSection from '~/components/HeadingSection'
 import SpacerExtraSmall from '~/components/SpacerExtraSmall'
 import FormClientExercise from '~/components/FormClientExercise'
 import ViewCoachExercise from '~/components/ViewCoachExercise'
+import ButtonViewSession from "~/components/ButtonViewSession"
+
 export default {
   props: {
     session: Object
@@ -54,7 +57,8 @@ export default {
     SpacerExtraSmall,
     FormClientExercise,
     ViewCoachExercise,
-    HeadingSection
+    HeadingSection,
+    ButtonViewSession
   },
   data() {
     return {
@@ -78,6 +82,9 @@ export default {
       this.exerciseList = (this.role == 'COACH') ? 
         this.$props.session.coach_exercises : (this.$props.session.exercises) ? this.$props.session.exercises : this.$props.session.client_exercises;
       this.loading = false;
+    },
+    completeSession: function() {
+      this.$emit('complete');
     }
   },
   mounted() {
