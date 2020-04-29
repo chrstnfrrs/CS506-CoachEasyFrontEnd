@@ -1,21 +1,10 @@
 <template>
   <div class="pageContent">
-    <div v-if="!loading && view">
-      <ViewSession v-if="!editStatus" :session="this.session" />
-      <FormViewSession v-if="editStatus" :session="this.session" />
-      <!-- <ButtonViewSession v-if="!editStatus" @edit="editSession()" action="Edit" /> -->
-      <!-- <ButtonViewSession v-if="editStatus" @edit="editSession()" action="Done" /> -->
-      <SpacerSmall />
-      <ButtonViewSession v-if="editStatus" @complete="completeSession()" action="Complete" />
-      <v-text-field
-        label="Comment"
-        v-model="session.comment"
-      >
-      </v-text-field>
-      <v-text-field
-        label="Weight"
-        v-model="session.exercise_weight">
-      </v-text-field>
+    <div v-if="!loading && !edit">
+      <ViewSession :session="this.session" />
+    </div>
+    <div v-if="!loading && edit">
+      <ViewSession :session="this.session" />
     </div>
   </div>
 </template>
@@ -26,24 +15,17 @@ axios.defaults.withCredentials = true;
 const url = "https://coach-easy-deploy.herokuapp.com";
 
 import ViewSession from "~/components/ViewSession";
-import ButtonViewSession from "~/components/ButtonViewSession"
-import FormViewSession from "~/components/FormViewSession"
-import SpacerSmall from '~/components/SpacerSmall'
 
 export default {
   components: {
     ViewSession,
-    ButtonViewSession,
-    FormViewSession,
-    SpacerSmall
   },
   data() {
     return {
       session: undefined,
       loading: true,
       id: undefined,
-      view: true,
-      editStatus: true,
+      edit: false,
       editMessage: "Edit",
       comment: '',
       clientWeight: 0,
@@ -113,36 +95,4 @@ export default {
 
 <style lang="scss">
 
-.exerciseClientCol{
-  width: 100%;
-  text-align: center;
-  align-items: center;
-  display: flex;
-}
-.exerciseFirstCol{
-  padding-left: 16px;
-  text-align: left;
-}
-.exerciseCoachGrid {
-  min-width: 325px;
-  display: grid;
-  grid-template-columns: minmax(50px, 1fr) 55px 55px;
-  justify-items: center;
-  justify-content: center;
-  background: $background-secondary !important;
-}
-.exerciseClientGrid {
-  min-width: 400px;
-  display: grid;
-  grid-template-columns: minmax(50px, 1fr) 55px 55px 75px;
-  justify-items: center;
-  justify-content: center;
-  background: $background-secondary !important;
-  .v-text-field{
-    max-width: 40px;
-    min-width: 30px;
-    margin-left:12px;
-    flex: 1;
-  }
-}
 </style>

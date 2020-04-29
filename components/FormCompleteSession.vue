@@ -10,7 +10,7 @@
           <p class="exerciseCol">Reps</p>
           <p class="exerciseCol">Weight</p>
         </div>
-        <ViewClientExercise v-for="(exercise, index) in exerciseList" 
+        <FormClientExercise v-for="(exercise, index) in exerciseList" 
           :single="!loading"
           :key="index"
           :exercise="exercise" 
@@ -33,7 +33,7 @@ const url = 'https://coach-easy-deploy.herokuapp.com';
 
 import HeadingPage from '~/components/HeadingPage'
 import SpacerSmall from '~/components/SpacerSmall'
-import ViewClientExercise from '~/components/ViewClientExercise'
+import FormClientExercise from '~/components/FormClientExercise'
 import ViewCoachExercise from '~/components/ViewCoachExercise'
 import draggable from 'vuedraggable'
 export default {
@@ -43,7 +43,7 @@ export default {
   components: {
     HeadingPage,
     SpacerSmall,
-    ViewClientExercise,
+    FormClientExercise,
     ViewCoachExercise,
     draggable,
   },
