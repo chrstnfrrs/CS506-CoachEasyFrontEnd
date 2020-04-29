@@ -7,6 +7,10 @@
       <ButtonHeading @sendRequest="save()" v-if="this.status==='Create'" :active="active" :message="this.status"/>
       <ButtonHeading @setStatus="updateStatus()" v-if="hasButton() && this.message" active :message="this.message"/>
     </div>
+    <div v-else>
+        <ButtonHeading @setStatus="updateStatus()" v-if="this.status==='Start' || this.status==='Cancel'" active :message="this.status"/>
+        <!-- <ButtonHeading @sendRequest="save()" :message="this.message" /> -->
+    </div>
   </div>
 </template>
 
@@ -25,7 +29,7 @@ export default {
   data() {
     return {
       role: '',
-      buttonPages: ['template', 'template-id'],
+      buttonPages: ['template', 'template-id', 'nextSession'],
     }
   },
   methods:{
@@ -37,6 +41,7 @@ export default {
     },
     hasButton: function(){
       let route = this.$router.currentRoute.name;
+      console.log(`route: ${route}`);
       if(this.buttonPages.includes(route) && this.role==='COACH'){
         return true;
       } else {

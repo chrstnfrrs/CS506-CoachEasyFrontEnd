@@ -1,21 +1,13 @@
 <template>
   <div class="pageContent">
     <div v-if="!loading && view">
+      <HeadingPage @updateStatus="editSession()" :status="this.editMessage" />
+      <FormSessionInfo :session="this.session" label="Weight" />
       <ViewSession v-if="!editStatus" :session="this.session" />
       <FormViewSession v-if="editStatus" :session="this.session" />
-      <!-- <ButtonViewSession v-if="!editStatus" @edit="editSession()" action="Edit" /> -->
-      <!-- <ButtonViewSession v-if="editStatus" @edit="editSession()" action="Done" /> -->
       <SpacerSmall />
       <ButtonViewSession v-if="editStatus" @complete="completeSession()" action="Complete" />
-      <v-text-field
-        label="Comment"
-        v-model="session.comment"
-      >
-      </v-text-field>
-      <v-text-field
-        label="Weight"
-        v-model="session.exercise_weight">
-      </v-text-field>
+      <FormSessionInfo :session="this.session" label="Comment" />
     </div>
   </div>
 </template>
@@ -29,13 +21,17 @@ import ViewSession from "~/components/ViewSession";
 import ButtonViewSession from "~/components/ButtonViewSession"
 import FormViewSession from "~/components/FormViewSession"
 import SpacerSmall from '~/components/SpacerSmall'
+import FormSessionInfo from '~/components/FormSessionInfo'
+import HeadingPage from '~/components/HeadingPage'
 
 export default {
   components: {
     ViewSession,
     ButtonViewSession,
     FormViewSession,
-    SpacerSmall
+    SpacerSmall,
+    FormSessionInfo,
+    HeadingPage
   },
   data() {
     return {
@@ -43,8 +39,8 @@ export default {
       loading: true,
       id: undefined,
       view: true,
-      editStatus: true,
-      editMessage: "Edit",
+      editStatus: false,
+      editMessage: "Start",
       comment: '',
       clientWeight: 0,
     };
@@ -73,36 +69,41 @@ export default {
         });
     },
     completeSession: function() {
-      console.log('completing session');
-      this.editStatus = false;
-      let trainingEntries = [];
-      this.session.exercises.forEach(ex => { 
-        trainingEntries.push({
-          name: ex.name,
-          category: ex.category,
-          sets: ex.sets,
-          reps: ex.reps,
-          weight: ex.weight,
-          order: ex.order
-        });
-      });
-      axios.put(`${url}/client/session`, {
-        id: this.session.id,
-        comment: this.comment,
-        client_template_id: this.session.client_template_id,
-        name: this.session.name,
-        client_weight: this.clientWeight,
-        completed: true,
-        training_entries: trainingEntries,
-        exercises: this.session.exercises
-      }).then(response => {
-        console.log(response);
-      }).catch(error => {
-        console.log(error);
-      });
+      if (!(this.comment || this.clientWeight)) {
+        console.log("Submit session without entering weight and/or commnet?");
+      } else {
+        // console.log('completing session');
+        // this.editStatus = false;
+        // let trainingEntries = [];
+        // this.session.exercises.forEach(ex => { 
+        //   trainingEntries.push({
+        //     name: ex.name,
+        //     category: ex.category,
+        //     sets: ex.sets,
+        //     reps: ex.reps,
+        //     weight: ex.weight,
+        //     order: ex.order
+        //   });
+        // });
+        // axios.put(`${url}/client/session`, {
+        //   id: this.session.id,
+        //   comment: this.comment,
+        //   client_template_id: this.session.client_template_id,
+        //   name: this.session.name,
+        //   client_weight: this.clientWeight,
+        //   completed: true,
+        //   training_entries: trainingEntries,
+        //   exercises: this.session.exercises
+        // }).then(response => {
+        //   console.log(response);
+        // }).catch(error => {
+        //   console.log(error);
+        // });
+      }
     },
     editSession: function() {
       this.editStatus = !this.editStatus;
+      this.editMessage = this.editStatus ? "Cancel" : "Start";
     }
   },
   mounted() {

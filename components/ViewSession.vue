@@ -1,6 +1,6 @@
 <template>
   <div>
-    <HeadingPage :name="session.name" />
+    <!-- <HeadingPage :name="session.name" /> -->
     <SpacerSmall v-if="this.$props.session.exercises" />
     <draggable v-if="!loading" v-model="exerciseList">
       <div v-if="role==='CLIENT'" :class="{mainDisplay: this.$props.session.exercises}">
