@@ -1,13 +1,15 @@
 <template>
+    <!-- loading animation and spacer -->
+
   <div class="pageContent">
-    <div v-if="!loading && view">
-      <HeadingPage @updateStatus="editSession()" :status="this.editMessage" />
-      <FormSessionInfo :session="this.session" label="Weight" />
-      <ViewSession v-if="!editStatus" :session="this.session" />
-      <FormViewSession v-if="editStatus" :session="this.session" />
-      <SpacerSmall />
-      <ButtonViewSession v-if="editStatus" @complete="completeSession()" action="Complete" />
-      <FormSessionInfo :session="this.session" label="Comment" />
+    <HeadingPage v-if="!loading" @updateStatus="editSession()" :status="this.editMessage" />
+    <div v-if="!loading && !edit">
+      <ViewSession :session="this.session" />
+    </div>
+    <div v-if="!loading && edit">
+      <FormCompleteSession :session="this.session" />
+      <ButtonViewSession @complete="completeSession" action="Complete" />
+      <span v-if="confirmComplete" class="errorText">Complete session without entering weight and/or a comment? Press complete to confirm.</span>
     </div>
   </div>
 </template>
@@ -18,31 +20,26 @@ axios.defaults.withCredentials = true;
 const url = "https://coach-easy-deploy.herokuapp.com";
 
 import ViewSession from "~/components/ViewSession";
+import HeadingPage from "~/components/HeadingPage"
+import FormCompleteSession from "~/components/FormCompleteSession"
 import ButtonViewSession from "~/components/ButtonViewSession"
-import FormViewSession from "~/components/FormViewSession"
-import SpacerSmall from '~/components/SpacerSmall'
-import FormSessionInfo from '~/components/FormSessionInfo'
-import HeadingPage from '~/components/HeadingPage'
-
 export default {
   components: {
     ViewSession,
-    ButtonViewSession,
-    FormViewSession,
-    SpacerSmall,
-    FormSessionInfo,
-    HeadingPage
+    HeadingPage,
+    FormCompleteSession,
+    ButtonViewSession
   },
   data() {
     return {
       session: undefined,
       loading: true,
       id: undefined,
-      view: true,
-      editStatus: false,
+      edit: false,
       editMessage: "Start",
       comment: '',
       clientWeight: 0,
+      confirmComplete: false,
     };
   },
   methods: {
@@ -69,8 +66,9 @@ export default {
         });
     },
     completeSession: function() {
-      if (!(this.comment || this.clientWeight)) {
-        console.log("Submit session without entering weight and/or commnet?");
+      if (!(this.comment &&  this.clientWeight) && !this.confirmComplete) {
+        this.confirmComplete = true;
+        console.log("Submit session without entering weight and/or comment?");
       } else {
         // console.log('completing session');
         // this.editStatus = false;
@@ -102,8 +100,8 @@ export default {
       }
     },
     editSession: function() {
-      this.editStatus = !this.editStatus;
-      this.editMessage = this.editStatus ? "Cancel" : "Start";
+      this.edit = !this.edit;
+      this.editMessage = this.edit ? "Cancel" : "Start";
     }
   },
   mounted() {
@@ -113,37 +111,7 @@ export default {
 </script>
 
 <style lang="scss">
-
-.exerciseClientCol{
-  width: 100%;
-  text-align: center;
-  align-items: center;
-  display: flex;
-}
-.exerciseFirstCol{
-  padding-left: 16px;
-  text-align: left;
-}
-.exerciseCoachGrid {
-  min-width: 325px;
-  display: grid;
-  grid-template-columns: minmax(50px, 1fr) 55px 55px;
-  justify-items: center;
-  justify-content: center;
-  background: $background-secondary !important;
-}
-.exerciseClientGrid {
-  min-width: 400px;
-  display: grid;
-  grid-template-columns: minmax(50px, 1fr) 55px 55px 75px;
-  justify-items: center;
-  justify-content: center;
-  background: $background-secondary !important;
-  .v-text-field{
-    max-width: 40px;
-    min-width: 30px;
-    margin-left:12px;
-    flex: 1;
-  }
+.errorText{
+  color: red;
 }
 </style>

@@ -35,7 +35,7 @@ export default {
       user: '',
       template: undefined,
       coachList: ["clients", "template"],
-      clientList: ["nextSession", "trainingPlan", "trainingHistory"],
+      clientList: ["nextSession", "checkin", "trainingPlan", "trainingHistory"],
       cardList: [],
     }
   },

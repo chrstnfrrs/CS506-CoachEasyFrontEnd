@@ -29,7 +29,7 @@ export default {
   data() {
     return {
       role: '',
-      buttonPages: ['template', 'template-id', 'nextSession'],
+      buttonPages: ['template', 'template-id'],
     }
   },
   methods:{

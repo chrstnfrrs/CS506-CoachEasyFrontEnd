@@ -1,26 +1,38 @@
 <template>
   <div>
-    <SpacerSmall v-if="this.$props.session.exercises" />
-    <draggable v-if="!loading" v-model="exerciseList">
-      <div v-if="role==='CLIENT'" :class="{mainDisplay: this.$props.session.exercises}">
-        <div class="exerciseClientGrid exerciseClientGridHeader">
-          <p class="exerciseCol">Name</p>
-          <p class="exerciseCol">Sets</p>
-          <p class="exerciseCol">Reps</p>
-          <p class="exerciseCol">Weight</p>
-        </div>
-        <ViewClientExercise v-for="(exercise, index) in exerciseList" 
-          :single="!loading"
-          :key="index"
-          :exercise="exercise" 
-          :edit=true />
+    {{ session }}
+    <HeadingSection :text="session.name" />
+    <SpacerExtraSmall />
+    <div class="mainDisplay">
+      <div class="secondaryDisplay">
+        <v-text-field
+          label="Body Weight"
+          v-model="session.client_weight">
+        </v-text-field>
+      </div>
+      <div class="exerciseClientGrid exerciseClientGridHeader">
+        <p class="exerciseClientCol exerciseFirstCol">Name</p>
+        <p class="exerciseClientCol">Sets</p>
+        <p class="exerciseClientCol">Reps</p>
+        <p class="exerciseClientCol">Weight</p>
+      </div>
+      <FormClientExercise v-for="(exercise, index) in exerciseList" 
+        :single="!loading"
+        :key="index"
+        :exercise="exercise" 
+        :edit=true />
+      <div class="secondaryDisplay">
+        <v-text-field
+          label="Comment"
+          v-model="session.comment">
+        </v-text-field>
       </div>
       <div v-if="role==='COACH'">
         <ViewCoachExercise v-for="(exercise, index) in exerciseList" 
           :key="index" 
           :exercise="exercise"  />
       </div>
-    </draggable>
+    </div>
   </div>
 </template>
 
@@ -30,21 +42,19 @@ import axios from 'axios'
 axios.defaults.withCredentials = true;
 const url = 'https://coach-easy-deploy.herokuapp.com';
 
-import HeadingPage from '~/components/HeadingPage'
-import SpacerSmall from '~/components/SpacerSmall'
-import ViewClientExercise from '~/components/ViewClientExercise'
+import HeadingSection from '~/components/HeadingSection'
+import SpacerExtraSmall from '~/components/SpacerExtraSmall'
+import FormClientExercise from '~/components/FormClientExercise'
 import ViewCoachExercise from '~/components/ViewCoachExercise'
-import draggable from 'vuedraggable'
 export default {
   props: {
     session: Object
   },
   components: {
-    HeadingPage,
-    SpacerSmall,
-    ViewClientExercise,
+    SpacerExtraSmall,
+    FormClientExercise,
     ViewCoachExercise,
-    draggable,
+    HeadingSection
   },
   data() {
     return {
@@ -82,6 +92,9 @@ export default {
   border-radius: 16px;
   box-shadow: $elevation2;
   overflow: hidden;
+}
+.secondaryDisplay{
+  margin: 8px 0px 8px 16px !important;
 }
 .exerciseClientGridHeader{
   p{

@@ -1,27 +1,27 @@
 <template>
   <div>
-    <!-- <HeadingPage :name="session.name" /> -->
-    <SpacerSmall v-if="this.$props.session.exercises" />
-    <draggable v-if="!loading" v-model="exerciseList">
-      <div v-if="role==='CLIENT'" :class="{mainDisplay: this.$props.session.exercises}">
-        <div class="exerciseClientGrid exerciseClientGridHeader">
-          <p class="exerciseClientCol exerciseFirstCol">Name</p>
-          <p class="exerciseClientCol">Sets</p>
-          <p class="exerciseClientCol">Reps</p>
-          <p class="exerciseClientCol">Weight</p>
-        </div>
-        <ViewClientExercise v-for="(exercise, index) in exerciseList" 
-          :single="!loading"
-          :key="index"
-          :exercise="exercise"
-          :edit=false  />
+    <HeadingSection :text="session.name" />
+    <SpacerExtraSmall />
+    <div class="mainDisplay">
+      <div v-if="session.client_weight" class="secondaryDisplay">
+        <strong>Weight</strong>
+        <p>{{session.client_weight}}</p>
       </div>
-      <!-- <div v-if="role==='COACH'">
-        <ViewCoachExercise v-for="(exercise, index) in exerciseList" 
-          :key="index" 
-          :exercise="exercise"  />
-      </div> -->
-    </draggable>
+      <div class="exerciseClientGrid exerciseClientGridHeader">
+        <p class="exerciseClientCol exerciseFirstCol">Name</p>
+        <p class="exerciseClientCol">Sets</p>
+        <p class="exerciseClientCol">Reps</p>
+        <p class="exerciseClientCol">Weight</p>
+      </div>
+      <ViewClientExercise v-for="(exercise, index) in exerciseList" 
+        :key="index"
+        :exercise="exercise" />
+      <div v-if="session.comment" class="secondaryDisplay">
+        <strong>Comment</strong>
+        <p>{{session.comment}}</p>
+      </div>
+    </div>
+    <SpacerExtraSmall />
   </div>
 </template>
 
@@ -31,49 +31,45 @@ import axios from 'axios'
 axios.defaults.withCredentials = true;
 const url = 'https://coach-easy-deploy.herokuapp.com';
 
-import HeadingPage from '~/components/HeadingPage'
-import SpacerSmall from '~/components/SpacerSmall'
+import HeadingSection from '~/components/HeadingSection'
+import SpacerExtraSmall from '~/components/SpacerExtraSmall'
 import ViewClientExercise from '~/components/ViewClientExercise'
 import ViewCoachExercise from '~/components/ViewCoachExercise'
-import draggable from 'vuedraggable'
 export default {
   props: {
-    session: Object
+    session: Object,
+    role: String
   },
   components: {
-    HeadingPage,
-    SpacerSmall,
+    HeadingSection,
+    SpacerExtraSmall,
     ViewClientExercise,
     ViewCoachExercise,
-    draggable,
   },
   data() {
     return {
       loading: true,
       exerciseList: [],
-      role: '',
       loading: true,
       loadingFailed: false,
     }
   },
   methods: {
-    getSessionRole: function(){
-      Promise.all([ this.$store.state.userData ]).then( () => {
-        this.role = this.$store.state.userData.role
-        this.updateExerciseList();
-        // this.loading = false
-      },() => {
-        this.loadingFailed = true
-      })
-    },
     updateExerciseList: function() {
-      this.exerciseList = (this.role == 'COACH') ? 
-        this.$props.session.coach_exercises : (this.$props.session.exercises) ? this.$props.session.exercises : this.$props.session.client_exercises;
+      if(this.$props.role == 'COACH'){
+        this.exerciseList = this.$props.session.coach_exercises ;
+      } else if(this.$props.session.exercises){
+        this.exerciseList = this.$props.session.exercises;
+      } else if(this.$props.session.training_entries){
+        this.exerciseList = this.$props.session.training_entries
+      } else {
+        this.exerciseList = this.$props.session.client_exercises
+      }
       this.loading = false;
     }
   },
   mounted() {
-    this.getSessionRole();
+    this.updateExerciseList();
   }
 }
 </script>
@@ -85,11 +81,14 @@ export default {
   box-shadow: $elevation2;
   overflow: hidden;
 }
+.secondaryDisplay{
+  margin: 8px 0px 8px 16px !important;
+}
 .exerciseClientGridHeader{
   height: 40px;
   align-items: center;
   p{
-    font-size: 20px;
+    font-size: 16px;
     font-weight: 500;
   }
 }

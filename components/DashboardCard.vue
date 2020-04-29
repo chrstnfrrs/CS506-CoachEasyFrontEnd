@@ -1,6 +1,7 @@
 <template>
   <div class="dashCardContainer">
     <CardNextSession v-if="type==='nextSession'" :cardType="type" />
+    <CardCheckin v-if="type==='checkin'" :cardType="type" />
     <CardCurrentPlan v-if="type==='trainingPlan'" :cardType="type" :id="this.id"/>
     <CardTrainingHistory v-if="type==='trainingHistory'" :cardType="type" />
     <!-- <nuxt-link :to="`/${type}`">
@@ -25,6 +26,7 @@
 
 <script>
 import CardNextSession from '~/components/CardNextSession'
+import CardCheckin from '~/components/CardCheckin'
 import CardCurrentPlan from '~/components/CardCurrentPlan'
 import CardTrainingHistory from '~/components/CardTrainingHistory'
 export default {
@@ -34,6 +36,7 @@ export default {
   },
   components:{
     CardNextSession,
+    CardCheckin,
     CardCurrentPlan,
     CardTrainingHistory
   }
