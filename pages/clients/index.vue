@@ -35,7 +35,7 @@ export default {
       loading: true,
       error: false,
       errorMessage: 'Error',
-      clientList: [],
+      clientList: {},
     }
   },
   methods: {

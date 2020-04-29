@@ -54,7 +54,7 @@ describe('ClientsIndex', () => {
     const defaultData = ClientsIndex.data()
 
     await wrapper.vm.$nextTick()
-    expect(defaultData.clientList).toMatchObject([])
+    expect(defaultData.clientList).toMatchObject({})
     expect(defaultData.loading).toBe(true)
     expect(defaultData.error).toBe(false)
     expect(defaultData.errorMessage).toBeTruthy()
