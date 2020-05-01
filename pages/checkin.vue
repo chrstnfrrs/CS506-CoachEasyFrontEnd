@@ -40,7 +40,7 @@ export default {
       user: undefined,
       role: undefined,
       checkin: undefined,
-      edit: true,
+      edit: false,
       loading: true,
       loggedIn: undefined,
       editMessage: "Start",
