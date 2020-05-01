@@ -1,50 +1,54 @@
 <template>
   <div>
     <MessageError v-if="error" :message="errorMessage" />
-    <v-form class="userForm">
-      <v-text-field
-        class="userInput"
-        label="First name"
-        v-model="firstName"
-        :rules="firstNameRules"
-        outlined
-        required
-        @keyup.enter="signUp()"
-      ></v-text-field>
-      <v-text-field
-        class="userInput"
-        label="Last name"
-        v-model="lastName"
-        :rules="lastNameRules"
-        outlined
-        required
-        @keyup.enter="signUp()"
-      ></v-text-field>
-      <v-text-field
-        class="userInput"
-        label="Email"
-        v-model="email"
-        :rules="emailRules"
-        outlined
-        required
-        @keyup.enter="signUp()"
-      ></v-text-field>
-      <v-text-field
-        class="userInput"
-        label="Password"
-        v-model="password"
-        :rules="passwordRules"
-        :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
-        :type="show ? 'text' : 'password'"
-        outlined
-        required
-        @click:append="show = !show"
-        @keyup.enter="signUp()"
-      ></v-text-field>
-      <MessageRedirect link="/login" message="Already a member? Log in" />
-      <SpacerExtraSmall />
-    </v-form>
-    <ButtonFormSubmit message='Sign Up' @submit="signUp()" />
+    <Loading v-if="loading" />
+    <div v-if="!loading">
+      <HeadingUserAuth message="Sign Up" />
+      <v-form class="userForm">
+        <v-text-field
+          class="userInput"
+          label="First name"
+          v-model="firstName"
+          :rules="firstNameRules"
+          outlined
+          required
+          @keyup.enter="signUp()"
+        ></v-text-field>
+        <v-text-field
+          class="userInput"
+          label="Last name"
+          v-model="lastName"
+          :rules="lastNameRules"
+          outlined
+          required
+          @keyup.enter="signUp()"
+        ></v-text-field>
+        <v-text-field
+          class="userInput"
+          label="Email"
+          v-model="email"
+          :rules="emailRules"
+          outlined
+          required
+          @keyup.enter="signUp()"
+        ></v-text-field>
+        <v-text-field
+          class="userInput"
+          label="Password"
+          v-model="password"
+          :rules="passwordRules"
+          :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
+          :type="show ? 'text' : 'password'"
+          outlined
+          required
+          @click:append="show = !show"
+          @keyup.enter="signUp()"
+        ></v-text-field>
+        <MessageRedirect link="/login" message="Already a member? Log in" />
+        <SpacerExtraSmall />
+      </v-form>
+      <ButtonFormSubmit message='Sign Up' @submit="signUp()" />
+    </div>
   </div>
 </template>
 
@@ -53,6 +57,7 @@ import ButtonFormSubmit from '~/components/ButtonFormSubmit'
 import MessageError from '~/components/MessageError'
 import MessageRedirect from '~/components/MessageRedirect'
 import SpacerExtraSmall from '~/components/SpacerExtraSmall'
+import HeadingUserAuth from '~/components/HeadingUserAuth'
 
 import axios from 'axios';
 axios.defaults.withCredentials = true;
@@ -63,7 +68,8 @@ export default {
     ButtonFormSubmit,
     MessageError,
     MessageRedirect,
-    SpacerExtraSmall
+    SpacerExtraSmall,
+    HeadingUserAuth,
   },
   data: () => ({
     firstName: '',
@@ -71,6 +77,7 @@ export default {
     email: '',
     password: '',
     show: false,
+    loading: false,
     firstNameRules: [
       v => !!v || 'First name is required',
     ],
@@ -89,6 +96,7 @@ export default {
   methods:{
     signUp: function() {
       var self = this;
+      self.loading = true;
       self.error = false 
       self.errorMessage = ''
       axios.post(`${url}/signUp`, {
@@ -111,12 +119,14 @@ export default {
         .catch(function (error){
           //if the login request fails
           self.errorMessage = self.getErrorMessage(error)
+          self.loading = false;
           self.error = true
         })
       })
       .catch(function (error) {
         //if the signup request fails
           self.errorMessage = self.getErrorMessage(error)
+          self.loading = false;
           self.error = true
       }); 
     },

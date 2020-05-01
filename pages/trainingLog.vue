@@ -47,12 +47,24 @@ export default {
         self.loadingFailed = true
       })
     },
+    setLoading: function(){
+      this.loading=false;
+    },
     getTrainingLog: function(){
       let self = this;
-      axios.get(`${url}/client/trainingLog?client_id=${self.user.id}`)
+      let reqID = -1;
+      const queryString = window.location.search;
+      const urlParams = new URLSearchParams(queryString);
+      const client_id = urlParams.get('client_id');
+      if(self.user.role === 'CLIENT'){
+        reqID = self.user.id
+      } else {
+        reqID = client_id
+      }
+      axios.get(`${url}/client/trainingLog?client_id=${reqID}`)
       .then(result => {
         self.trainingLog = result.data
-        self.loading = false;
+        self.setLoading();
         self.error = false;
       }).catch(error => {
         self.error = true;

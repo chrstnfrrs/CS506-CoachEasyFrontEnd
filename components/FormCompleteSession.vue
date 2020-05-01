@@ -1,6 +1,5 @@
 <template>
   <div>
-    {{ session }}
     <HeadingSection :text="session.name" />
     <SpacerExtraSmall />
     <div class="mainDisplay">
@@ -32,8 +31,9 @@
           :key="index" 
           :exercise="exercise"  />
       </div>
-      <ButtonViewSession @complete="completeSession()" :session="this.session" action="Complete" />
+      <ButtonViewSession v-if="type==='Session'" @complete="completeSession()" :session="this.session" action="Complete" />
     </div>
+    <SpacerSmall />
   </div>
 </template>
 
@@ -48,17 +48,20 @@ import SpacerExtraSmall from '~/components/SpacerExtraSmall'
 import FormClientExercise from '~/components/FormClientExercise'
 import ViewCoachExercise from '~/components/ViewCoachExercise'
 import ButtonViewSession from "~/components/ButtonViewSession"
+import SpacerSmall from "~/components/SpacerSmall"
 
 export default {
   props: {
-    session: Object
+    session: Object,
+    type: String,
   },
   components: {
     SpacerExtraSmall,
     FormClientExercise,
     ViewCoachExercise,
     HeadingSection,
-    ButtonViewSession
+    ButtonViewSession,
+    SpacerSmall
   },
   data() {
     return {
@@ -79,8 +82,15 @@ export default {
       })
     },
     updateExerciseList: function() {
-      this.exerciseList = (this.role == 'COACH') ? 
-        this.$props.session.coach_exercises : (this.$props.session.exercises) ? this.$props.session.exercises : this.$props.session.client_exercises;
+      if(this.$props.session.training_entries){
+        this.exerciseList = this.$props.session.training_entries
+      } else if(this.$props.role === 'COACH'){
+        this.exerciseList = this.$props.session.coach_exercises ;
+      } else if(this.$props.session.exercises){
+        this.exerciseList = this.$props.session.exercises;
+      } else {
+        this.exerciseList = this.$props.session.client_exercises
+      }
       this.loading = false;
     },
     completeSession: function() {
