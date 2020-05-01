@@ -19,14 +19,12 @@
 import Loading from '~/components/Loading'
 import HeadingPage from '~/components/HeadingPage'
 import SpacerSmall from '~/components/SpacerSmall'
-import ViewDashboard from '~/components/ViewDashboard'
 import DashboardCard from '~/components/DashboardCard'
 export default {
   components: {
     Loading,
     HeadingPage,
     SpacerSmall,
-    ViewDashboard,
     DashboardCard
   },
   data() {
@@ -36,7 +34,7 @@ export default {
       loadingFailed: false,
       user: '',
       template: undefined,
-      coachList: ["clients", "template"],
+      coachList: ["clients", "checkins", "template"],
       clientList: ["nextSession", "checkin", "trainingPlan", "trainingHistory"],
       cardList: [],
     }
@@ -67,3 +65,10 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+  .cardRow{
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  }
+</style>

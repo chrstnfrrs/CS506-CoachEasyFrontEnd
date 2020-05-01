@@ -3,9 +3,9 @@
     <HeadingSection :text="session.name" />
     <SpacerExtraSmall />
     <div class="mainDisplay">
-      <div v-if="session.client_weight" class="secondaryDisplay">
+      <div v-if="session.client_weight != undefined" class="secondaryDisplay">
         <strong>Weight</strong>
-        <p>{{session.client_weight}}</p>
+        <p>{{session.client_weight}} lbs</p>
       </div>
       <div class="exerciseClientGrid exerciseClientGridHeader">
         <p class="exerciseClientCol exerciseFirstCol">Name</p>
@@ -16,7 +16,7 @@
       <ViewClientExercise v-for="(exercise, index) in exerciseList" 
         :key="index"
         :exercise="exercise" />
-      <div v-if="session.comment" class="secondaryDisplay">
+      <div v-if="session.comment != undefined && session.comment.length>0" class="secondaryDisplay">
         <strong>Comment</strong>
         <p>{{session.comment}}</p>
       </div>
@@ -65,12 +65,10 @@ export default {
       } else {
         this.exerciseList = this.$props.session.client_exercises
       }
-      console.log(this.$props.session.exercises)
       this.loading = false;
     }
   },
   mounted() {
-    console.log(this.$props.session)
     this.updateExerciseList();
   }
 }

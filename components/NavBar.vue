@@ -37,7 +37,7 @@ export default {
   data: () => ({
     showMenu: false,
     userName: '',
-    error: false
+    error: false,
   }),
   computed: {
     loggedIn: function(){

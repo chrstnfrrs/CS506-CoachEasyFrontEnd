@@ -8,7 +8,7 @@
       <ViewSession :session="this.session" />
     </div>
     <div v-if="!loading && edit">
-      <FormCompleteSession @complete="completeSession()" :session="this.session" />
+      <FormCompleteSession type='Session' @complete="completeSession()" :session="this.session" />
     </div>
   </div>
 </template>
