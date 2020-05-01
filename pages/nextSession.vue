@@ -89,6 +89,7 @@ export default {
         training_entries: trainingEntries,
         exercises: this.session.exercises
       }).then(response => {
+        this.loading = true;
         this.getNextSession();
         console.log(response);
       }).catch(error => {

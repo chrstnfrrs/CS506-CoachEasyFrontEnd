@@ -1,6 +1,7 @@
 <template>
   <div>
-    <div>
+    <HeadingPage class="clientListHeader" @updateStatus="assignStatus()" :name="`${clientName} Template`" :status="buttonMessage" :message="buttonMessage" />
+    <div v-if="shouldAssignTemplate">
       <v-select
       :items="templateList"
       item-text="name"
@@ -11,23 +12,22 @@
       @change="selectTemplate">
       </v-select>
     </div>
-    <div v-if="assigning">
-      <HeadingPage @sendRequest="assignTemplate()" status="Assign" message="Assign" />
+    <div v-else>
       <div class="formCreateHeading">
         <v-text-field
           label="Selected Template Name"
           v-model="templateName"
           required>
         </v-text-field>
-        <button @click="createTemplate">
-          <!-- <ButtonAddForm @newForm="addForm()" type="Session" v-if="getNameLength() && sessionCount===0"/> -->
-        </button>
       </div>
-      <div v-if="!creating">
-        <FormCreateSession @newForm="addForm()" v-for="session in sessions" :key="session.id" :template="template" :setsAndReps="assigning"/>
-      </div>
-      <SpacerExtraSmall />
-      <!-- <ButtonAddForm @newForm="addForm()" type="Session" v-if="sessionCount!==0"/> -->
+    </div>
+    <div v-if="assigning">
+      <FormCreateSession v-if="template" v-for="session in sessions" :key="session.id" :template="template" :setsAndReps="assigning" />
+      <button
+          class="actionBtn"
+          @click="assignStatus()">
+            Assign
+      </button>
     </div>
   </div>
 </template>
@@ -42,6 +42,8 @@ export default {
     type: String,
     shouldCreate: Object,
     templates: Array,
+    hasTemplate: Boolean,
+    clientName: String,
   },
   data() {
     return {
@@ -53,6 +55,8 @@ export default {
       creating: true,
       assigning: true,
       selectedTemplate: 'No Template Selected',
+      shouldAssignTemplate: undefined,
+      buttonMessage: undefined,
     }
   },
   components:{
@@ -79,13 +83,14 @@ export default {
     },
     selectTemplate: function(value){
       this.creating = true;
+      this.assigning = true;
       this.sessionCount = 0;
       let result = this.templateList.filter(obj => {
         return obj.name === value
       });
-      this.assigning=true;
+      console.log('selected new template');
+      console.log(result);
       this.template=result[0];
-      console.log(this.template);
       this.sessions = this.template.sessions;
       if (this.template) {
         this.fillFields();
@@ -98,7 +103,29 @@ export default {
       this.createTemplate();
     },
     assignTemplate: function() {
-      this.$emit('assignTemplate', this.template);
+      if (this.template) {
+        this.$emit('assignTemplate', this.template);
+        this.shouldAssignTemplate = false;
+        this.assigning = false;
+      }
+    },
+    assignStatus: function() {
+      this.buttonMessage = this.shouldAssignTemplate ? "Change" : "Back";
+      if (this.buttonMessage == "Back") {
+        this.assigning = true;
+        this.creating = true;
+      } else {
+        this.assigning = false;
+      }
+      this.shouldAssignTemplate = !this.shouldAssignTemplate;
+    },
+    changeButtonMessage: function(hasTemplate) {
+      if (hasTemplate) {
+        this.buttonMessage = "Change";
+      } else {
+        this.buttonMessage = "Assign";
+        this.shouldAssignTemplate = false;
+      }
     }
   },
   mounted() {
@@ -106,6 +133,8 @@ export default {
     if (this.$props.shouldCreate.name) {
       this.templateName = this.$props.shouldCreate.name;
     }
+    this.shouldAssignTemplate = !this.$props.hasTemplate;
+    this.changeButtonMessage(this.$props.hasTemplate);
   }
 }
 </script>

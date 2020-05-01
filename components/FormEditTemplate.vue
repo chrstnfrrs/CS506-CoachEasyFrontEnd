@@ -1,5 +1,6 @@
 <template>
   <div>
+    {{ templateList }}
     <MessageError v-if="error" :message="errorMessage" />
     <draggable v-model="sessionList" @end="reorderSessionList()">
     <ListItem 
@@ -11,8 +12,8 @@
       :slug="session.slug"
       @sendDelete="deleteObject(session.id)" />
     </draggable>
-    <FormCreateSession :template="template" v-for="i in sessionCount" :key="i"/>
-    <FormCreateExercise :session="session" v-for="i in exerciseCount" :key="i" />
+    <FormCreateNewSession v-if="isTemplate()" :template="template" v-for="session in newSessions" :key="session.id"/>
+    <FormCreateExercise v-if="!isTemplate()" :session="session" v-for="i in exerciseCount" :key="i" />
     <ButtonAddForm v-if="isTemplate()" @newForm="addSessionForm()" type="Session"/>
     <ButtonAddForm v-if="!isTemplate()" @newExerciseForm="addExerciseForm()" type="Exercise"/>
   </div>
@@ -24,6 +25,7 @@ import ListItem from '~/components/ListItem'
 import MessageError from '~/components/MessageError'
 import draggable from 'vuedraggable'
 import FormCreateSession from '~/components/FormCreateSession'
+import FormCreateNewSession from '~/components/FormCreateNewSession'
 import FormCreateExercise from '~/components/FormCreateExercise'
 import ButtonAddForm from '~/components/ButtonAddForm'
 
@@ -38,6 +40,7 @@ export default {
     MessageError,
     draggable,
     FormCreateSession,
+    FormCreateNewSession,
     FormCreateExercise,
     ButtonAddForm
   },
@@ -57,12 +60,13 @@ export default {
       exerciseCount: 0,
       template: {},
       session: {},
+      newSessions: []
     }
   },
   methods: {
     isTemplate: function(){
       console.log(this.$router.currentRoute.name);
-      if(this.$router.currentRoute.name === 'template-id' || this.$router.currentRoute.name === 'clients-id') {
+      if(this.$router.currentRoute.name === 'template-slug' || this.$router.currentRoute.name === 'clients-id') {
         this.template = this.$props.templateList;
         console.log(this.template);
         return true;
@@ -73,6 +77,12 @@ export default {
     },
     addSessionForm: function(){
       this.sessionCount++;
+      this.newSessions.push({
+        coach_template_id: this.$props.templateList.id,
+        name: '',
+        order: 0,
+        coach_exercises: []
+      });
     },
     addExerciseForm: function(){
       this.exerciseCount++;

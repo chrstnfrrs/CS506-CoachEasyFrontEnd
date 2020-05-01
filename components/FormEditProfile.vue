@@ -90,6 +90,7 @@ export default {
         self.success = true;
         self.$store.commit('editStatus');
         self.loading = false;
+        self.$emit('edit');
       })
       .catch(function (error) {
         self.submitted = true;
