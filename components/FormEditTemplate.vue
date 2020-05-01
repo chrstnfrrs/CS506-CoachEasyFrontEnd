@@ -1,6 +1,5 @@
 <template>
   <div>
-    {{ templateList }}
     <MessageError v-if="error" :message="errorMessage" />
     <draggable v-model="sessionList" @end="reorderSessionList()">
     <ListItem 

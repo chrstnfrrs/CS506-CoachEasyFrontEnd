@@ -12,7 +12,6 @@
         type="exercise"
         :items="exercise"
         @sendDelete="deleteExercise(exercise.id)"/>
-      {{this.session}}
       <ViewSession
         v-if="user.role==='CLIENT'"
         :session="this.session" />
@@ -84,9 +83,10 @@ export default {
         let tSlug = this.$route.params.slug
         let sSlug = this.$route.params.sSlug
         console.log(`${tSlug}/${sSlug}`)
-        let arg = self.user.role == 'COACH' ? `/coach/session?coach_session_id=${seshID}` : `/client/session?client_template_slug=${tSlug}&client_session_slug=${sSlug}`;
+        let arg = self.user.role == 'COACH' ? `/coach/session?coach_template_slug=${tSlug}&coach_session_slug=${sSlug}` : `/client/session?client_template_slug=${tSlug}&client_session_slug=${sSlug}`;
         axios.get(`${url}${arg}`).then(result => {
           if(self.user.role === 'COACH'){
+            console.log(result.data);
             self.exercises = result.data.coach_exercises
           } else {
             self.exercises = result.data.exercises
