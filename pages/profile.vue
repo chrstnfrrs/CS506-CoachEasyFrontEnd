@@ -11,7 +11,8 @@
         :coach="this.user.role==='COACH'" />
       <FormEditProfile
         v-if="edit"
-        :userProp="this.user" />
+        :userProp="this.user" 
+        @edit="getUser()"/>
       <SpacerSmall />
       <MessageRedirect link='/changePassword' message='Change Password?' />
     </div>

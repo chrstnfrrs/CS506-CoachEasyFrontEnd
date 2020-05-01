@@ -4,7 +4,7 @@
     <MessageError :error="error" :message="errorMessage"/>
     <div v-if="!loading && !error">
       <ProfileUser :user="client"/>
-      <FormAssignTemplate @assignTemplate="assignTemplate" :shouldCreate="submitTemplate" :templates="templateList"/>
+      <FormAssignTemplate @assignTemplate="assignTemplate" :clientName="`${client.first_name} ${client.last_name}'s`" :hasTemplate="hasTemplate" :shouldCreate="submitTemplate" :templates="templateList"/>
       <ViewTemplate :template="submitTemplate" />
       <ListCheckIns v-if="this.checkins" :checkIns="checkins" />
     </div>

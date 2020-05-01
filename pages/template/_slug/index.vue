@@ -97,6 +97,7 @@ export default {
       if (this.sessionCountBefore != this.templateList.sessions.length) {
         for (let i = this.sessionCountBefore; i < this.templateList.sessions.length; i++) {
           axios.post(`${url}/coach/session`, {
+            coach_template_id: this.templateList.id,
             coach_template_slug: this.templateList.slug,
             name: this.templateList.sessions[i].name,
             order: this.templateList.sessions[i].order,

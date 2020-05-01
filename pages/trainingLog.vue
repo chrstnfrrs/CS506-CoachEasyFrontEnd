@@ -4,7 +4,7 @@
     <div v-if="!loading">
       <HeadingPage name="Training Log" />
       <SpacerSmall />
-      <ViewSession 
+      <ViewSession
         v-for="s in trainingLog.sessions"
         :key="s.id"
         :role="user.role"
