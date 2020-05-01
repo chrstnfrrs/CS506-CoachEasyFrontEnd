@@ -24,7 +24,7 @@
       </v-select>
       <button
         v-if="!createdNewExercise"
-        class="newExerciseBtn"
+        class="actionBtn addForm"
         @click="isCreatingNewExercise"
       >
         New
@@ -245,6 +245,7 @@ export default {
 .formCreateExercise{
   display: flex;
   min-width: 100px;
+  align-items: center;
 }
 .formCreateItem{
   flex: 1;

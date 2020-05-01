@@ -56,7 +56,7 @@ export default {
     },
     getNextSession: function(id) {
       axios
-        .get(`${url}/client/session/next?client_id=${id}`)
+        .get(`${url}/client/session/next?client_id=${this.id}`)
         .then(result => {
           this.session = result.data;
           this.loading = false;
@@ -67,33 +67,33 @@ export default {
     },
     completeSession: function() {
       console.log('completing session');
-      // this.editStatus = false;
-      // let trainingEntries = [];
-      // this.session.exercises.forEach(ex => { 
-      //   trainingEntries.push({
-      //     name: ex.name,
-      //     category: ex.category,
-      //     sets: ex.sets,
-      //     reps: ex.reps,
-      //     weight: ex.weight,
-      //     order: ex.order
-      //   });
-      // });
-      // axios.put(`${url}/client/session`, {
-      //   id: this.session.id,
-      //   comment: this.comment,
-      //   client_template_id: this.session.client_template_id,
-      //   name: this.session.name,
-      //   client_weight: this.clientWeight,
-      //   completed: true,
-      //   training_entries: trainingEntries,
-      //   exercises: this.session.exercises
-      // }).then(response => {
-      //   this.getNextSession();
-      //   console.log(response);
-      // }).catch(error => {
-      //   console.log(error);
-      // });
+      this.editStatus = false;
+      let trainingEntries = [];
+      this.session.exercises.forEach(ex => { 
+        trainingEntries.push({
+          name: ex.name,
+          category: ex.category,
+          sets: ex.sets,
+          reps: ex.reps,
+          weight: ex.weight,
+          order: ex.order
+        });
+      });
+      axios.put(`${url}/client/session`, {
+        id: this.session.id,
+        comment: this.comment,
+        client_template_id: this.session.client_template_id,
+        name: this.session.name,
+        client_weight: this.clientWeight,
+        completed: true,
+        training_entries: trainingEntries,
+        exercises: this.session.exercises
+      }).then(response => {
+        this.getNextSession();
+        console.log(response);
+      }).catch(error => {
+        console.log(error);
+      });
     },
     editSession: function() {
       this.edit = !this.edit;

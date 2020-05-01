@@ -1,11 +1,9 @@
 <template>
   <div class="cardRow">
-    <!-- <div class="cardCol" v-for="i in cardList" :key="i"> -->
-      <DashboardCard 
+    <DashboardCard 
         v-for="i in cardList" :key="i"
         :type="i"
       />
-    <!-- </div> -->
   </div>
 </template>
 

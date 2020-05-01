@@ -11,10 +11,10 @@
         :coach="this.user.role==='COACH'" />
       <FormEditProfile
         v-if="edit"
-        :user="this.user" />
+        :userProp="this.user" />
       <SpacerSmall />
+      <MessageRedirect link='/changePassword' message='Change Password?' />
     </div>
-    <MessageRedirect link='/changePassword' message='Change Password?' />
   </div>
 </template>
 
@@ -28,6 +28,7 @@ import ProfileUser from '~/components/ProfileUser'
 import FormEditProfile from '~/components/FormEditProfile'
 import SpacerSmall from '~/components/SpacerSmall'
 import Loading from '~/components/Loading'
+import MessageRedirect from '~/components/MessageRedirect'
 
 export default {
   components: {
@@ -36,6 +37,7 @@ export default {
     FormEditProfile,
     SpacerSmall,
     Loading,
+    MessageRedirect
   },
   data() {
     return {

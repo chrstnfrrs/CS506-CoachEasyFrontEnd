@@ -4,23 +4,6 @@
     <CardCheckin v-if="type==='checkin'" :cardType="type" />
     <CardCurrentPlan v-if="type==='trainingPlan'" :cardType="type" :id="this.id"/>
     <CardTrainingHistory v-if="type==='trainingHistory'" :cardType="type" />
-    <nuxt-link :to="`/${type}`">
-      <v-card 
-      class="dashCard">
-        <div 
-          v-if="type==='clients'"
-          class="dashContents">
-          <MdPeopleIcon w="75px" h="75px"/>
-          <h2 class="subHeading">Client List</h2>
-        </div>
-        <div 
-          v-if="type==='template'"
-          class="dashContents">
-          <MdFolderIcon w="75px" h="75px"/>
-          <h2 class="subHeading">Templates</h2>
-        </div>
-      </v-card>
-    </nuxt-link>
   </div>
 </template>
 

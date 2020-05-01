@@ -1,6 +1,6 @@
 <template>
-  <div class="buttonAddForm" @click="addForm">
-    <p class="addForm"><strong>New {{type}}</strong></p>
+  <div class="actionBtn addForm" @click="addForm">
+    <p ><strong>New {{type}}</strong></p>
   </div>
 </template>
 
@@ -37,6 +37,7 @@ export default {
   box-shadow: $elevation1;
 }
 .addForm{
-  padding: 6px 10px;
+  margin: 6px 10px;
+  height: fit-content;
 }
 </style>

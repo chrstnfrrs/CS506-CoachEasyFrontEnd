@@ -3,6 +3,7 @@
     <Loading v-if="loading" />
     <div v-if="!loading">
       <HeadingPage v-if="!loading" />
+      <SpacerSmall />
       <div class="cardRow">
         <DashboardCard 
           v-for="i in cardList" :key="i"
@@ -15,15 +16,16 @@
 </template>
 
 <script>
-
 import Loading from '~/components/Loading'
 import HeadingPage from '~/components/HeadingPage'
+import SpacerSmall from '~/components/SpacerSmall'
 import ViewDashboard from '~/components/ViewDashboard'
 import DashboardCard from '~/components/DashboardCard'
 export default {
   components: {
     Loading,
     HeadingPage,
+    SpacerSmall,
     ViewDashboard,
     DashboardCard
   },

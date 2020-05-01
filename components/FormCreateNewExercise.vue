@@ -1,5 +1,5 @@
 <template>
-  <div class="embeddedForm">
+  <div>
     <div class="formCreateExercise">
       <v-text-field
         class="listExercises listCategories"
@@ -16,14 +16,14 @@
       >
       </v-text-field>
       <button
-        class="newExerciseBtn"
+        class="actionBtn addForm"
         @click="returnToSelect"
       >
         Back
       </button>
       <button
         v-if="creatable"
-        class="newExerciseBtn"
+        class="actionBtn addForm"
         @click="createNewExercise"
       >
         Create
