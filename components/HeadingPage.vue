@@ -40,7 +40,6 @@ export default {
     },
     hasButton: function(){
       let route = this.$router.currentRoute.name;
-      console.log(`route: ${route}`);
       if(this.buttonPages.includes(route) && this.role==='COACH'){
         return true;
       } else {

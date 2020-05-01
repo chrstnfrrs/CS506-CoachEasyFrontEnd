@@ -70,6 +70,10 @@ path{
   user-select: none;
   opacity: 0.7;
 }
+.completed {
+  background: rgba(174, 174, 174, 0.673) !important;
+  text-align: left;
+}
 .dashContents{
   text-align: center;
   .subHeading{

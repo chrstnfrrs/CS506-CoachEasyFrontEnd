@@ -75,7 +75,7 @@ export default {
       } else {
         this.session = {
           name: this.sessionName,
-          id: 777,
+          //id: 777,
           exercises: [],
         }
       }
@@ -142,6 +142,7 @@ export default {
         order: 0,
         coach_exercises: []
       }
+      this.index = this.$props.template.sessions.length - 1;
     }
   }
 }

@@ -6,6 +6,7 @@
       <ProfileUser :user="client"/>
       <FormAssignTemplate @assignTemplate="assignTemplate" :shouldCreate="submitTemplate" :templates="templateList"/>
       <ViewTemplate :template="submitTemplate" />
+      <ListCheckIns v-if="this.checkins" :checkIns="checkins" />
     </div>
   </div>
 </template>
@@ -16,6 +17,7 @@ import MessageError from '~/components/MessageError'
 import ProfileUser from '~/components/ProfileUser'
 import FormAssignTemplate from '~/components/FormAssignTemplate'
 import ViewTemplate from '~/components/ViewTemplate'
+import ListCheckIns from '~/components/ListCheckIns'
 import axios from 'axios'
 const url = 'https://coach-easy-deploy.herokuapp.com';
 axios.defaults.withCredentials = true;
@@ -26,7 +28,8 @@ export default {
     Loading,
     ProfileUser,
     FormAssignTemplate,
-    ViewTemplate
+    ViewTemplate,
+    ListCheckIns
   },
   data() {
     return {
@@ -43,6 +46,7 @@ export default {
       selectedTemplate: undefined,
       hasTemplate: false,
       clientTemplateId: undefined,
+      checkins: undefined,
     }
   },
   methods: {
@@ -61,6 +65,7 @@ export default {
       .then(result => {
         self.client = result.data.user
         self.updateTemplateList();
+        self.getClientCheckIns();
       }).catch(error => {
         self.loading = false;
         self.error = true;
@@ -95,7 +100,6 @@ export default {
           client_id: this.$route.params.id,
           sessions: this.submitTemplate.sessions
         }).then(result => {
-          console.log(result);
           this.hasTemplate = true;
         }).catch(error => {
           console.log(error);
@@ -118,8 +122,6 @@ export default {
     },
     getClientTemplate: function() {
       axios.get(`${url}/client/template/active?user_id=${this.$route.params.id}`).then(templateResult => {
-        console.log('active template');
-        console.log(templateResult.data);
         if (templateResult.data) {
           this.hasTemplate = true;
           this.submitTemplate.name = templateResult.data.name;
@@ -127,6 +129,13 @@ export default {
           this.submitTemplate = templateResult.data;
           this.clientTemplateId = templateResult.data.id;
         }
+      }).catch(error => {
+        console.log(error);
+      })
+    },
+    getClientCheckIns: function() {
+      axios.get(`${url}/client/checkins?client_id=${this.$route.params.id}`).then(result => {
+        this.checkins = result.data;
       }).catch(error => {
         console.log(error);
       })

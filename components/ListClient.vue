@@ -44,7 +44,7 @@ export default {
     viewClient: function(client){
       const newPath = `/${this.$router.currentRoute.name}/${client.id}`;
       // this.$router.push({ path: newPath })
-      window.location.assign('newPath')
+      window.location.assign(newPath)
     },
     updateClientList: function(){
       let self = this;

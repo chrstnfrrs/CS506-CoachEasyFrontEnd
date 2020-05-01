@@ -5,7 +5,7 @@
       <HeadingPage name="Check In" />
       <h2>{{checkin.start_date}} - {{checkin.end_date}}</h2>
       <div v-if="!edit">
-        <ViewSession v-for="session in checkin.sessions" :key="session.id" :role="this.role" />
+        <ViewSession v-for="session in checkin.sessions" :key="session.id" :session="session" :role="role" />
       </div>
       <div v-if="edit">
         <!-- <FormCompleteSession v-for="session in checkin.sessions" :key="session.id" :role="this.role"/> -->
@@ -44,6 +44,7 @@ export default {
     getUserData: function(){
       let self = this;
       Promise.all([ this.$store.state.userData ]).then( () => {
+        console.log(this.$store.state.userData);
         self.user = this.$store.state.userData;
         self.role = this.$store.state.userData.role;
         self.getCheckin();
@@ -53,9 +54,11 @@ export default {
     },
     getCheckin: function(){
       let self = this;
-      axios.get(`${url}/checkin`)
+      axios.get(`${url}/checkin?client_id=${self.user.id}`)
       .then(result => {
         self.checkin = result.data;
+        console.log('checkin');
+        console.log(self.checkin);
         self.loading = false;
       }).catch(error => {
         self.error = true;
