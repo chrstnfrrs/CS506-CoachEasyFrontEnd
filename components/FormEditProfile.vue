@@ -1,32 +1,30 @@
 <template>
   <div>
     <MessageSuccess v-if="success" :message="successMessage"/>
-    <MessageError :error="error" :message="errorMessage" />
-    <SpacerSmall v-if="submitted" />
-    <v-text-field
-      label="First Name"
-      :placeholder="user.first_name"
-      v-model="firstName"
-      outlined
-    ></v-text-field>
-    <v-text-field
-      label="Last Name"
-      :placeholder="user.last_name"
-      v-model="lastName"
-      outlined
-    ></v-text-field>
-    <v-text-field
-      label="Email"
-      :placeholder="user.email"
-      v-model="email"
-      outlined
-    ></v-text-field>
-    <button 
-      @click='editProfile'
-      class="submitBtn"
-    >
-      <MessageButton message='Save'/>
-    </button>
+    <MessageError v-if="error" :message="errorMessage" />
+    <Loading v-if="loading" />
+    <div v-if="!loading">
+      <SpacerSmall v-if="submitted" />
+      <v-text-field
+        label="First Name"
+        :placeholder="user.first_name"
+        v-model="firstName"
+        outlined
+      ></v-text-field>
+      <v-text-field
+        label="Last Name"
+        :placeholder="user.last_name"
+        v-model="lastName"
+        outlined
+      ></v-text-field>
+      <v-text-field
+        label="Email"
+        :placeholder="user.email"
+        v-model="email"
+        outlined
+      ></v-text-field>
+      <ButtonFormSubmit message='Save' @submit="editProfile()" />
+    </div>
   </div>
 </template>
 
@@ -34,25 +32,28 @@
 import axios from 'axios'
 axios.defaults.withCredentials = true;
 const url = 'https://coach-easy-deploy.herokuapp.com';
+
+import ButtonFormSubmit from '~/components/ButtonFormSubmit'
 import Loading from '~/components/Loading'
 import MessageSuccess from '~/components/MessageSuccess'
 import MessageError from '~/components/MessageError'
-import MessageButton from '~/components/MessageButton'
 import SpacerSmall from '~/components/SpacerSmall'
+
 export default {
   components:{
+    ButtonFormSubmit,
     Loading,
     MessageSuccess,
     MessageError,
-    MessageButton,
     SpacerSmall
   },
   props: {
-    u: Object
+    userProp: Object
   },
   data() {
     return {
-      user: this.u,
+      user: undefined,
+      loading: true,
       firstName: '',
       lastName: '',
       email: '',
@@ -72,6 +73,7 @@ export default {
     },
     editProfile: function(){
       var self = this;
+      this.loading = true;
       this.resetVariables();
       let fn = this.firstName!=='' ? this.firstName : this.user.first_name;
       let ln = this.lastName!=='' ? this.lastName : this.user.last_name;
@@ -87,12 +89,20 @@ export default {
         self.submitted = true;
         self.success = true;
         self.$store.commit('editStatus');
+        self.loading = false;
+        self.$emit('edit');
       })
       .catch(function (error) {
         self.submitted = true;
         self.error = true;
+        self.loading = false;
       });
     }
+  },
+  mounted() {
+    if(this.$props.userProp)
+      this.user = this.$props.userProp;
+    this.loading = false;
   },
 }
 </script>

@@ -8,9 +8,7 @@ const localVue = createLocalVue()
 
 //A helper function that mounts the component
 function getMountedComponent(Component, propsData) {
-  return shallowMount(Component, {
-    propsData
-  })
+  return shallowMount(Component, {propsData})
 }
 
 describe('MessageError', () => {
@@ -25,17 +23,11 @@ describe('MessageError', () => {
   })
 
   test('has no default value', () => {
-    expect(
-      getMountedComponent(MessageError, {}).text()
-    ).toBe('')
+    expect(getMountedComponent(MessageError, {}).text()).toBe('')
   })
 
   test('shows the provided message', () => {
-    expect(
-      getMountedComponent(MessageError, {
-        message: 'test 1'
-      }).text()
-    ).toBe('test 1')
+    expect(getMountedComponent(MessageError, {message: 'test 1'}).text()).toBe('test 1')
   })
 
   test('updates the rendered message when wrapper.message updates', async () => {

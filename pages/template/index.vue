@@ -1,6 +1,6 @@
-<template>
+ <template>
   <div class="pageContent" >
-    <Loading v-if="loading" :loading="this.loading"/>
+    <Loading v-if="loading" />
     <div v-if="!loading && !status">
       <HeadingPage @updateStatus="setStatus()" @sendRequest="request()" message="New" :status="deleteMessage"/>
       <SpacerSmall />
@@ -10,13 +10,14 @@
         :key="template.id"
         type="template"
         :items="template"
+        :slug="template.slug"
         @sendDelete="deleteTemplate(template.id)"/>
-      <MessageError :error="error" :message="errorMessage" />
+      <MessageError v-if="error" :message="errorMessage" />
     </div>
     <div v-if="!loading && status">
-      <HeadingPage @updateStatus="setStatus()" @sendRequest="request()" message="Exit" status="Create"/>
+      <HeadingPage @updateStatus="setStatus()" @sendRequest="request()" :active="creatable" message="Exit" status="Create"/>
       <SpacerSmall />
-      <FormCreateTemplate :shouldCreate="submitTemplate" />
+      <FormCreateTemplate @creatable="isCreatable()" @notCreatable="isNotCreatable()" :shouldCreate="submitTemplate" />
     </div>
   </div> 
 
@@ -56,7 +57,7 @@ export default {
       errorMessage: '',
       templateList: [],
       user: {},
-
+      creatable: false,
     }
   },
   computed: {
@@ -78,27 +79,18 @@ export default {
     },
     createRequest: function(){
       let self = this;
-      try {
-        axios.post(`${url}/coach/template`, 
-          self.submitTemplate
-        ).then(function (response){
-          console.log(response);
-          self.updateTemplateList();
-        }).catch(function (error){ 
-            self.error = true
-        });
-      } catch (error) {
-        this.error = true;
-      }
-      console.log('saving')
+      axios.post(`${url}/coach/template`, 
+        self.submitTemplate
+      ).then(function (response){
+        self.updateTemplateList();
+      }).catch(function (error){ 
+          self.error = true
+      });
       this.status = !this.status;
 
     },
     setDelete: function(){
       this.deleteStatus = !this.deleteStatus
-    },
-    deleteRequest: function(){
-      console.log('deleting')
     },
     setStatus: function(){
       this.submitTemplate = 
@@ -109,16 +101,17 @@ export default {
       this.status = !this.status;
     },
     getUserTemplate: function(){
-      Promise.all([ this.$store.state.userData ]).then( () => {
+      Promise.all([ this.$store.state.userData ])
+      .then( () => {
         this.user = this.$store.state.userData
+        console.log(this.user)
         this.loading = false
         this.updateTemplateList();
       },() => {
-        this.loadingFailed = true
+        this.error = true
       })
     },
     updateTemplateList: function() {
-        console.log('Update')
         let self = this;
         let arg = self.user.role == 'COACH' ? '/coach/templates' : `/client/templates?user_id=${self.user.id}`;
         axios.get(`${url}${arg}`).then(result => {
@@ -132,7 +125,6 @@ export default {
         }); 
     },
     deleteTemplate: function(template_id) {
-      try {
         axios.put(`${url}/coach/template/delete`, 
         {
           "coach_template_id": template_id
@@ -140,15 +132,22 @@ export default {
           console.log(response);
           this.updateTemplateList();
         }).catch(error => {
-          console.log(error);
+          this.error = true;
         })
-      } catch (error) {
-        this.error = true;
-      }
     },
     setNoEdit: function() {
       this.$store.commit('noEdit');
     },
+    setCreatable: function() {
+      console.log("creatable is changing");
+      this.creatable = false;
+    },
+    isCreatable: function() {
+      this.creatable = true;
+    },
+    isNotCreatable: function() {
+      this.creatable = false;
+    }
   },
   mounted() {
     this.getUserTemplate();

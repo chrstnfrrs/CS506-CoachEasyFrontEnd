@@ -1,5 +1,6 @@
 <template>
   <div>
+    <MessageError v-if="error" :message="errorMessage" />
     <v-form class="userForm">
       <v-text-field
         class="userInput"
@@ -25,25 +26,21 @@
         @keyup.enter="resetPassword()"
       ></v-text-field>
     </v-form>
-    <MessageError v-if="error" :message="errorMessage" />
-    <button 
-      @click='resetPassword'
-      class="submitBtn"
-    >
-      <MessageButton message='Continue'/>
-    </button>
+    <ButtonFormSubmit message='Continue' @submit="resetPassword()" />
   </div>
 </template>
 
 <script>
-import MessageButton from '~/components/MessageButton'
+import ButtonFormSubmit from '~/components/ButtonFormSubmit'
 import MessageError from '~/components/MessageError'
+
 import axios from 'axios'
 axios.defaults.withCredentials = true;
 const url = 'https://coach-easy-deploy.herokuapp.com';
+
 export default {
   components: {
-    MessageButton,
+    ButtonFormSubmit,
     MessageError
   },
   data: () => ({
@@ -68,12 +65,33 @@ export default {
         reset_token: self.$route.query.reset_token
       })
       .then(function (response){
-        self.error = true
-        window.location.href = '/login'
+        self.error = false
+        window.location.assign('/login')
       })
       .catch(function (error){
+        self.errorMessage = self.getErrorMessage(error)
         self.error = true
       })
+    },
+    getErrorMessage: function(error) { 
+      //error is the response from the server
+      //during an erroneous axios request
+      let status = error.response.status
+      let errorMessage = ''
+      switch (status){
+        case 400:
+          errorMessage = 'Invalid reset session. Please request another one. '
+          break;
+
+        case 404:
+          errorMessage = "Invalid reset session. Please request another one."
+          break;
+
+        default:
+          errorMessage = "Uh oh, something unexpected happened. Please try again."
+          break;
+      }
+      return errorMessage;
     },
   },
 }

@@ -10,17 +10,18 @@
       <nuxt-link to="/signUp" class="navLink">Sign Up</nuxt-link>
     </div>
     <div v-if="loggedIn" class="navCol">
+      <p class="userName">Welcome, {{getUserName}} </p>
+      <span class="navSpacer"></span>
       <v-menu v-model="showMenu" absolute offset-y style="max-width: 40px">
         <template v-slot:activator="{ on }">
-          <span class="navIcon" v-on="on"><MdPersonIcon w="40px" h="40px"/></span>    
+          <span class="navIcon" v-on="on"><v-icon size="40" class="navLink">mdi-account</v-icon></span>    
         </template>
-
         <v-list>
-          <v-list-item class='navLink'>
+          <v-list-item >
             <nuxt-link class="navLink" to="/profile">View Profile</nuxt-link>
           </v-list-item>
-         <v-list-item class='navLink'>
-          <span class="navLink" @click="logOut()">Log Out</span>
+         <v-list-item >
+          <p class="navLink" @click="logOut()">Log Out</p>
          </v-list-item>
         </v-list>
       </v-menu>
@@ -32,17 +33,11 @@
 import axios from 'axios'
 axios.defaults.withCredentials = true;
 const url = 'https://coach-easy-deploy.herokuapp.com';
-import MdPersonIcon from 'vue-ionicons/dist/md-person.vue'
 export default {
-  components: {
-    MdPersonIcon
-  },
   data: () => ({
     showMenu: false,
-    items: [
-      { title: 'View Profile', icon: 'mdi-account', action: 'logOut' },
-      { title: 'Log Out', icon: 'mdi-flag', action: 'logOut()' },
-    ]
+    userName: '',
+    error: false,
   }),
   computed: {
     loggedIn: function(){
@@ -53,6 +48,12 @@ export default {
         return this.$store.state.userData.role;
       }
       return 'none'
+    },
+    getUserName: function(){
+      if(this.$store.state.userData){
+        return this.$store.state.userData.first_name;
+      }
+      return ''
     }
   },
   methods: {
@@ -61,14 +62,15 @@ export default {
       axios.get(`${url}/auth/logout`)
       .then(function (response){
         self.$store.commit('logOut')
-        window.location.href = '/'
+        self.error = false
+        window.location.assign('/')
       })
       .catch(function (error){
         if(error.response.status===400){
           self.$store.commit('logOut')
-          console.log('not logged in');
+          self.error = true
         } else {
-          console.log(error);
+          self.error = true
         }
       })
     },
@@ -91,16 +93,24 @@ export default {
       display: flex;
       align-items: center;
     }
-    .navLink{
-      color: $text !important;
-      padding-left: 8px;
-      cursor: pointer;
-    }
     .navSpacer{
       width: 16px;
     }
     .navIcon{
       fill: $text;
+      cursor: pointer;
     }
+    .userName{
+      cursor: default;
+    }
+    p{
+      margin-bottom: 0 !important;
+    }
+  }
+
+  .navLink{
+    color: $text !important;
+    padding-left: 8px;
+    cursor: pointer !important;
   }
 </style>

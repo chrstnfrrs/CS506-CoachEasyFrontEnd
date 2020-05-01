@@ -35,6 +35,6 @@ export default {
 <style lang="scss">
   .profileHeading{
     display: flex;
-    justify-content: flex-start;
+    justify-content: space-between;
   }
 </style>

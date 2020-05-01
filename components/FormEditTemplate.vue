@@ -1,5 +1,6 @@
 <template>
   <div>
+    {{ templateList }}
     <MessageError v-if="error" :message="errorMessage" />
     <draggable v-model="sessionList" @end="reorderSessionList()">
     <ListItem 
@@ -7,10 +8,12 @@
       :key="session.id"
       :deleteStatus="truthVar"
       type="session"
-      :items="session" />
+      :items="session"
+      :slug="session.slug"
+      @sendDelete="deleteObject(session.id)" />
     </draggable>
-    <FormCreateSession v-for="i in sessionCount" :key="i"/>
-    <FormCreateExercise v-for="i in exerciseCount" :key="i" solo="true"/>
+    <FormCreateNewSession v-if="isTemplate()" :template="template" v-for="session in newSessions" :key="session.id"/>
+    <FormCreateExercise v-if="!isTemplate()" :session="session" v-for="i in exerciseCount" :key="i" />
     <ButtonAddForm v-if="isTemplate()" @newForm="addSessionForm()" type="Session"/>
     <ButtonAddForm v-if="!isTemplate()" @newExerciseForm="addExerciseForm()" type="Exercise"/>
   </div>
@@ -20,10 +23,9 @@
 import Loading from '~/components/Loading'
 import ListItem from '~/components/ListItem'
 import MessageError from '~/components/MessageError'
-import MessageButton from '~/components/MessageButton'
-import HeadingUserAuth from '~/components/HeadingUserAuth'
 import draggable from 'vuedraggable'
 import FormCreateSession from '~/components/FormCreateSession'
+import FormCreateNewSession from '~/components/FormCreateNewSession'
 import FormCreateExercise from '~/components/FormCreateExercise'
 import ButtonAddForm from '~/components/ButtonAddForm'
 
@@ -36,10 +38,9 @@ export default {
     Loading,
     ListItem,
     MessageError,
-    MessageButton,
-    HeadingUserAuth,
     draggable,
     FormCreateSession,
+    FormCreateNewSession,
     FormCreateExercise,
     ButtonAddForm
   },
@@ -56,22 +57,39 @@ export default {
       items: {},
       sessionList: [],
       sessionCount: 0,
-      exerciseCount: 0
+      exerciseCount: 0,
+      template: {},
+      session: {},
+      newSessions: []
     }
   },
   methods: {
     isTemplate: function(){
-      if(this.$router.currentRoute.name === 'template-id')
+      console.log(this.$router.currentRoute.name);
+      if(this.$router.currentRoute.name === 'template-slug' || this.$router.currentRoute.name === 'clients-id') {
+        this.template = this.$props.templateList;
+        console.log(this.template);
         return true;
-      return false
+      } else {
+        this.session = this.$props.templateList;
+        return false
+      }
     },
     addSessionForm: function(){
       this.sessionCount++;
+      this.newSessions.push({
+        coach_template_id: this.$props.templateList.id,
+        name: '',
+        order: 0,
+        coach_exercises: []
+      });
     },
     addExerciseForm: function(){
       this.exerciseCount++;
     },
     updateSessionList: function () {
+
+      this.session = this.$props
       if(this.isTemplate()){
         this.sessionList = this.templateList.sessions;
       } else {
@@ -88,13 +106,32 @@ export default {
     },
     updateReorderKey: function() {
       this.reorderKey += 1;
+    },
+    deleteObject: function(id) {
+      if (this.isTemplate()) {
+        this.deleteSession(id);
+      } else {
+        this.deleteExercise(id);
+      }
+    },
+    deleteSession: function(sessionId) {
+      let sessionIndex = this.templateList.sessions.map(function(e) { return e.id}).indexOf(sessionId);
+      if (sessionIndex > -1) {
+        this.templateList.sessions.splice(sessionIndex, 1);
+      }
+    },
+    deleteExercise: function(exerciseId) {
+      let exerciseIndex = this.templateList.coach_exercises.map(function(e) { return e.id}).indexOf(exerciseId);
+      if (exerciseIndex > -1) {
+        this.templateList.coach_exercises.splice(exerciseIndex, 1);
+      }
     }
   },
+
   mounted() {
     this.updateSessionList();
   },
 }
 </script>
 
-<style lang="scss">
   

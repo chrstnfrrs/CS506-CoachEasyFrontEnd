@@ -25,12 +25,7 @@
       @click:append="show3 = !show3"
       outlined
     ></v-text-field>
-    <button 
-      @click='changePassword'
-      class="submitBtn"
-    >
-      <MessageButton message='Save'/>
-    </button>
+    <ButtonFormSubmit message='Save' @submit="changePassword()" />
 </div>
 </template>
 
@@ -39,12 +34,12 @@ import axios from 'axios'
 axios.defaults.withCredentials = true;
 const url = 'https://coach-easy-deploy.herokuapp.com';
 
-import MessageButton from '~/components/MessageButton'
+import ButtonFormSubmit from '~/components/ButtonFormSubmit'
 import MessageError from '~/components/MessageError'
 
 export default {
   components:{
-    MessageButton,
+    ButtonFormSubmit,
     MessageError
   },
   data() {
@@ -53,7 +48,7 @@ export default {
       newPassword: '',
       confirmPassword: '',
       error: false,
-      errorMessage: "Failed to Submit Form",
+      errorMessage: "",
       show1: false,
       show2: false,
       show3: false
@@ -71,17 +66,43 @@ export default {
           oldPassword: this.oldPassword
         })
         .then(function (response) {
-          window.location.href = '/profile'
+          window.location.assign('/profile')
+          self.error = false
         })
         .catch(function (error) {
           //axios promise failed
-          self.error = true;
+          self.errorMessage = self.getErrorMessage(error)
+          self.error = true
         });
       } else {
         this.error = true;
-        errorMessage = 'New password and password confirmation do not match'
+        this.errorMessage = 'New password and password confirmation do not match'
       }
-    }
-  },
+    },
+    getErrorMessage: function(error) { 
+      //error is the response from the server
+      //during an erroneous axios request
+      let status = error.response.status
+      let errorMessage = ''
+      switch (status){
+        case 400:
+          errorMessage = 'Incorrect password.'
+          break;
+
+        case 406:
+          errorMessage = "Improper email format. Please check that your email is in the form example@email.com"
+          break;
+
+        case 500:
+          errorMessage = "Uh oh, something unexpected happened. Please try again."
+          break;
+
+        default:
+          errorMessage = "Uh oh, something unexpected happened. Please try again."
+          break;
+      }
+      return errorMessage;
+    },
+  }
 }
 </script>
