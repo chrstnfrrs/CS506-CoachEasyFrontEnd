@@ -118,7 +118,7 @@ export default {
       let sessionIndex = this.templateList.sessions.map(function(e) { return e.id}).indexOf(sessionId);
       if (sessionIndex > -1) {
         this.templateList.sessions.splice(sessionIndex, 1);
-      }u
+      }
     },
     deleteExercise: function(exerciseId) {
       let exerciseIndex = this.templateList.coach_exercises.map(function(e) { return e.id}).indexOf(exerciseId);
