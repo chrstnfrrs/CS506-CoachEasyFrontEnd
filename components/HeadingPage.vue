@@ -7,6 +7,9 @@
       <ButtonHeading @sendRequest="save()" v-if="this.status==='Create'" :active="active" :message="this.status"/>
       <ButtonHeading @setStatus="updateStatus()" v-if="hasButton() && this.message" active :message="this.message"/>
     </div>
+    <div v-else>
+        <ButtonHeading @setStatus="updateStatus()" v-if="this.status==='Start' || this.status==='Cancel'" active :message="this.status"/>
+    </div>
   </div>
 </template>
 

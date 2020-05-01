@@ -1,10 +1,14 @@
 <template>
+    <!-- loading animation and spacer -->
   <div class="pageContent">
+    <Loading v-if="loading" />
+    <HeadingPage v-if="!loading" @updateStatus="editSession()" :status="this.editMessage" />
+    <SpacerExtraSmall />
     <div v-if="!loading && !edit">
       <ViewSession :session="this.session" />
     </div>
     <div v-if="!loading && edit">
-      <ViewSession :session="this.session" />
+      <FormCompleteSession @complete="completeSession()" :session="this.session" />
     </div>
   </div>
 </template>
@@ -15,10 +19,17 @@ axios.defaults.withCredentials = true;
 const url = "https://coach-easy-deploy.herokuapp.com";
 
 import ViewSession from "~/components/ViewSession";
-
+import HeadingPage from "~/components/HeadingPage"
+import FormCompleteSession from "~/components/FormCompleteSession"
+import Loading from "~/components/Loading"
+import SpacerExtraSmall from "~/components/SpacerExtraSmall"
 export default {
   components: {
     ViewSession,
+    HeadingPage,
+    FormCompleteSession,
+    Loading,
+    SpacerExtraSmall
   },
   data() {
     return {
@@ -26,7 +37,7 @@ export default {
       loading: true,
       id: undefined,
       edit: false,
-      editMessage: "Edit",
+      editMessage: "Start",
       comment: '',
       clientWeight: 0,
     };
@@ -56,35 +67,37 @@ export default {
     },
     completeSession: function() {
       console.log('completing session');
-      this.editStatus = false;
-      let trainingEntries = [];
-      this.session.exercises.forEach(ex => { 
-        trainingEntries.push({
-          name: ex.name,
-          category: ex.category,
-          sets: ex.sets,
-          reps: ex.reps,
-          weight: ex.weight,
-          order: ex.order
-        });
-      });
-      axios.put(`${url}/client/session`, {
-        id: this.session.id,
-        comment: this.comment,
-        client_template_id: this.session.client_template_id,
-        name: this.session.name,
-        client_weight: this.clientWeight,
-        completed: true,
-        training_entries: trainingEntries,
-        exercises: this.session.exercises
-      }).then(response => {
-        console.log(response);
-      }).catch(error => {
-        console.log(error);
-      });
+      // this.editStatus = false;
+      // let trainingEntries = [];
+      // this.session.exercises.forEach(ex => { 
+      //   trainingEntries.push({
+      //     name: ex.name,
+      //     category: ex.category,
+      //     sets: ex.sets,
+      //     reps: ex.reps,
+      //     weight: ex.weight,
+      //     order: ex.order
+      //   });
+      // });
+      // axios.put(`${url}/client/session`, {
+      //   id: this.session.id,
+      //   comment: this.comment,
+      //   client_template_id: this.session.client_template_id,
+      //   name: this.session.name,
+      //   client_weight: this.clientWeight,
+      //   completed: true,
+      //   training_entries: trainingEntries,
+      //   exercises: this.session.exercises
+      // }).then(response => {
+      //   this.getNextSession();
+      //   console.log(response);
+      // }).catch(error => {
+      //   console.log(error);
+      // });
     },
     editSession: function() {
-      this.editStatus = !this.editStatus;
+      this.edit = !this.edit;
+      this.editMessage = this.edit ? "Cancel" : "Start";
     }
   },
   mounted() {

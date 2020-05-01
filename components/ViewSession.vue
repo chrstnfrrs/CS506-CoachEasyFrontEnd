@@ -3,9 +3,9 @@
     <HeadingSection :text="session.name" />
     <SpacerExtraSmall />
     <div class="mainDisplay">
-      <div v-if="session.weight" class="secondaryDisplay">
+      <div v-if="session.client_weight" class="secondaryDisplay">
         <strong>Weight</strong>
-        <p>{{session.weight}}</p>
+        <p>{{session.client_weight}}</p>
       </div>
       <div class="exerciseClientGrid exerciseClientGridHeader">
         <p class="exerciseClientCol exerciseFirstCol">Name</p>
