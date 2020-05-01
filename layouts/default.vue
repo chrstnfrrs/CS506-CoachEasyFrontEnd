@@ -2,7 +2,6 @@
   <v-app class="defaultLayout">
     <NavBar />
     <nuxt />
-    <Footer />
   </v-app>
 </template>
 
