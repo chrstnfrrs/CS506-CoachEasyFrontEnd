@@ -6,11 +6,16 @@
       <HeadingPage @sendRequest="setEdit()" status="Edit" :name="session.name"/>
       <SpacerSmall />
       <ListItem 
+        v-if="user.role==='COACH'"
         v-for="(exercise) in this.exercises"
         :key="exercise.id"
         type="exercise"
         :items="exercise"
         @sendDelete="deleteExercise(exercise.id)"/>
+      {{this.session}}
+      <ViewSession
+        v-if="user.role==='CLIENT'"
+        :session="this.session" />
     </div>
     <div v-if="!loading && edit">
       <HeadingPage @sendRequest="saveRequest()" status="Save" :name="session.name"/>
@@ -32,6 +37,7 @@ import Loading from '~/components/Loading'
 import MessageError from '~/components/MessageError'
 import SpacerSmall from '~/components/SpacerSmall'
 import ListItem from '~/components/ListItem'
+import ViewSession from '~/components/ViewSession'
 import FormEditTemplate from '~/components/FormEditTemplate'
 
 export default {
@@ -41,6 +47,7 @@ export default {
     MessageError,
     SpacerSmall,
     ListItem,
+    ViewSession,
     FormEditTemplate
   },
   data: () => ({
@@ -116,11 +123,9 @@ export default {
     }) 
   } ,
   mounted() {
-    console.log('here')
     this.getUserSession();
   },
   beforeCreate(){
-    console.log('made it')
   }
 }
 </script>

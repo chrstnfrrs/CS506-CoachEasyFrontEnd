@@ -56,19 +56,21 @@ export default {
   },
   methods: {
     updateExerciseList: function() {
-      if(this.$props.role == 'COACH'){
+      if(this.$props.session.training_entries){
+        this.exerciseList = this.$props.session.training_entries
+      } else if(this.$props.role === 'COACH'){
         this.exerciseList = this.$props.session.coach_exercises ;
       } else if(this.$props.session.exercises){
         this.exerciseList = this.$props.session.exercises;
-      } else if(this.$props.session.training_entries){
-        this.exerciseList = this.$props.session.training_entries
       } else {
         this.exerciseList = this.$props.session.client_exercises
       }
+      console.log(this.$props.session.exercises)
       this.loading = false;
     }
   },
   mounted() {
+    console.log(this.$props.session)
     this.updateExerciseList();
   }
 }

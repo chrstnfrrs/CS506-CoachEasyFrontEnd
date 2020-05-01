@@ -2,32 +2,35 @@
   <div>
     <MessageError v-if="error" :message="errorMessage" />
     <Loading v-if="loading" />
-    <v-form class="userForm">
-      <v-text-field
-        class="userInput"
-        label="Email"
-        v-model="email"
-        :rules="emailRules"
-        outlined
-        required
-        @keyup.enter="loginSubmit()"
-      ></v-text-field>
-      <v-text-field
-        label="Password"
-        v-model="password"
-        :rules="passwordRules"
-        :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
-        :type="show ? 'text' : 'password'"
-        outlined
-        required
-        @click:append="show = !show"
-        @keyup.enter="loginSubmit()"
-      ></v-text-field>
-      <MessageRedirect link='/forgotPassword' message='Forgot password?' />
-      <SpacerExtraSmall />
-      <MessageRedirect link="/signup" message="Not registered? Sign Up" />
-    </v-form>
-    <ButtonFormSubmit message='Log In' @submit="loginSubmit()" />
+    <div v-if="!loading">
+      <HeadingUserAuth message="Log In" />
+      <v-form class="userForm">
+        <v-text-field
+          class="userInput"
+          label="Email"
+          v-model="email"
+          :rules="emailRules"
+          outlined
+          required
+          @keyup.enter="loginSubmit()"
+        ></v-text-field>
+        <v-text-field
+          label="Password"
+          v-model="password"
+          :rules="passwordRules"
+          :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
+          :type="show ? 'text' : 'password'"
+          outlined
+          required
+          @click:append="show = !show"
+          @keyup.enter="loginSubmit()"
+        ></v-text-field>
+        <MessageRedirect link='/forgotPassword' message='Forgot password?' />
+        <SpacerExtraSmall />
+        <MessageRedirect link="/signup" message="Not registered? Sign Up" />
+      </v-form>
+      <ButtonFormSubmit message='Log In' @submit="loginSubmit()" />
+    </div>
   </div>
 </template>
 
@@ -37,6 +40,7 @@ import Loading from '~/components/Loading'
 import MessageError from '~/components/MessageError'
 import MessageRedirect from '~/components/MessageRedirect'
 import SpacerExtraSmall from '~/components/SpacerExtraSmall'
+import HeadingUserAuth from '~/components/HeadingUserAuth'
 
 import axios from 'axios'
 axios.defaults.withCredentials = true;
@@ -48,7 +52,8 @@ export default {
     Loading,
     MessageError,
     MessageRedirect,
-    SpacerExtraSmall
+    SpacerExtraSmall,
+    HeadingUserAuth
   },
   data: () => ({
       email: '',

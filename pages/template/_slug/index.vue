@@ -8,7 +8,7 @@
       <ListItem 
         v-for="(session) in this.templateList.sessions"
         :key="session.id"
-        :type="`/template/${templateList.slug}`"
+        :type="`template/${templateList.slug}`"
         :items="session"
         :slug="session.slug"
         />

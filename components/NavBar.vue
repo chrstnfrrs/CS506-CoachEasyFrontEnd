@@ -10,7 +10,7 @@
       <nuxt-link to="/signUp" class="navLink">Sign Up</nuxt-link>
     </div>
     <div v-if="loggedIn" class="navCol">
-      <p class="userName"> {{getUserName}} </p>
+      <p class="userName">Welcome, {{getUserName}} </p>
       <span class="navSpacer"></span>
       <v-menu v-model="showMenu" absolute offset-y style="max-width: 40px">
         <template v-slot:activator="{ on }">
@@ -102,6 +102,9 @@ export default {
     }
     .userName{
       cursor: default;
+    }
+    p{
+      margin-bottom: 0 !important;
     }
   }
 

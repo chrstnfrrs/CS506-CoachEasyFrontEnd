@@ -12,15 +12,16 @@
 </template>
 
 <script>
+import axios from 'axios'
+const url = 'https://coach-easy-deploy.herokuapp.com';
+axios.defaults.withCredentials = true;
+
 import Loading from '~/components/Loading'
 import MessageError from '~/components/MessageError'
 import ProfileUser from '~/components/ProfileUser'
 import FormAssignTemplate from '~/components/FormAssignTemplate'
 import ViewTemplate from '~/components/ViewTemplate'
 import ListCheckIns from '~/components/ListCheckIns'
-import axios from 'axios'
-const url = 'https://coach-easy-deploy.herokuapp.com';
-axios.defaults.withCredentials = true;
 
 export default {
   components:{

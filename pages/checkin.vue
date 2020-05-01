@@ -3,6 +3,7 @@
     <Loading v-if="loading" />
     <div v-if="!loading">
       <HeadingPage name="Check In" />
+      {{checkin}}
       <h2>{{checkin.start_date}} - {{checkin.end_date}}</h2>
       <div v-if="!edit">
         <ViewSession v-for="session in checkin.sessions" :key="session.id" :session="session" :role="role" />
@@ -54,7 +55,16 @@ export default {
     },
     getCheckin: function(){
       let self = this;
-      axios.get(`${url}/checkin?client_id=${self.user.id}`)
+      let queryParams = "";
+      const queryString = window.location.search;
+      const urlParams = new URLSearchParams(queryString);
+      const checkin_id = urlParams.get('checkin_id');
+      if(checkin_id && self.user.role === 'COACH'){
+        queryParams = `?checkin_id=${checkin_id}`;
+      }else{
+        queryParams = `?client_id=${self.user.id}`;
+      } 
+      axios.get(`${url}/checkin${queryParams}`)
       .then(result => {
         self.checkin = result.data;
         console.log('checkin');

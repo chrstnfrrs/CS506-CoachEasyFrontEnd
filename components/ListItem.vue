@@ -3,7 +3,7 @@
     <v-card v-if="!(type === 'checkin')" class="listCard"  :to="`/${type}/${items.slug}`" :class="{disable: (isDisabled)}">
       <p class="listItem">{{ items.name }}</p>
     </v-card>
-     <v-card v-if="type === 'checkin'" class="listCard"  :to="`/checkin?id=${items.id}`" :class="{disable: (isDisabled), completed: this.isCompleted()}">
+     <v-card v-if="type === 'checkin'" class="listCard"  :to="`/checkin?checkin_id=${items.id}`" :class="{disable: (isDisabled), completed: this.isCompleted()}">
       <p class="listItem">{{ this.formatDate(items) }}</p>
     </v-card>
     <button @click="sendDelete" v-if="deleteStatus" class="buttonDelete errorBackground"><v-icon dark>mdi-delete</v-icon></button>
@@ -26,7 +26,7 @@ export default {
   },
   computed:{
     isDisabled: function(){
-      return this.$route.params.sid
+      return this.$route.params.sSlug
     },
   },
   methods: {
