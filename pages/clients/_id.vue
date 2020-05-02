@@ -3,10 +3,25 @@
     <Loading v-if="this.loading" />
     <MessageError :error="error" :message="errorMessage"/>
     <div v-if="!loading && !error">
-      <ProfileUser :user="client"/>
-      <FormAssignTemplate @assignTemplate="assignTemplate" :clientName="`${client.first_name} ${client.last_name}'s`" :hasTemplate="hasTemplate" :shouldCreate="submitTemplate" :templates="templateList"/>
-      <ViewTemplate :template="submitTemplate" />
-      <ListCheckIns v-if="this.checkins" :checkIns="checkins" />
+      <ProfileUser 
+        :user="client"/>
+      <SpacerSmall />
+      <FormAssignTemplate 
+        @assignTemplate="assignTemplate" 
+        :clientName="`${client.first_name} ${client.last_name}'s`" 
+        :hasTemplate="hasTemplate" 
+        :shouldCreate="submitTemplate" 
+        :templates="templateList"/>
+      <SpacerSmall />
+      <ViewTemplate 
+        :template="submitTemplate" />
+      <SpacerSmall />
+      <ListCheckIns 
+        v-if="this.checkins" 
+        :checkIns="checkins" />
+      <SpacerSmall />
+      <ViewTrainingLog :id="this.$route.params.id"/>
+      <SpacerSmall />
     </div>
   </div>
 </template>
@@ -22,6 +37,8 @@ import ProfileUser from '~/components/ProfileUser'
 import FormAssignTemplate from '~/components/FormAssignTemplate'
 import ViewTemplate from '~/components/ViewTemplate'
 import ListCheckIns from '~/components/ListCheckIns'
+import SpacerSmall from '~/components/SpacerSmall'
+import ViewTrainingLog from '~/components/ViewTrainingLog'
 
 export default {
   components:{
@@ -30,7 +47,9 @@ export default {
     ProfileUser,
     FormAssignTemplate,
     ViewTemplate,
-    ListCheckIns
+    ListCheckIns,
+    SpacerSmall,
+    ViewTrainingLog
   },
   data() {
     return {

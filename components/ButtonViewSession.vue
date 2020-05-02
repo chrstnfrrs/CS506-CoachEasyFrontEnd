@@ -27,11 +27,13 @@ export default {
          this.confirmComplete = true;
         } else {
           if (this.action === 'Complete') {
+            console.log('button view session emitting 1');
             this.$emit('complete');
           }
         }
       } else {
         if (this.action === 'Complete') {
+            console.log('button view session emitting 2');
             this.$emit('complete');
         }
       }

@@ -1,5 +1,6 @@
 <template>
   <div>
+    <MessageError v-if="error" :message="errorMessage" />
     <div class="formCreateExercise">
       <v-text-field
         class="listExercises listCategories"
@@ -38,12 +39,18 @@ import axios from "axios";
 axios.defaults.withCredentials = true;
 const url = "https://coach-easy-deploy.herokuapp.com";
 
+import MessageError from '~/components/MessageError'
 export default {
+  components: {
+    MessageError
+  },
   data() {
     return {
       categoryName: "",
       exerciseName: "",
-      creatable: false
+      creatable: false,
+      error: false,
+      errorMessage: ''
     };
   },
   methods: {
@@ -67,6 +74,8 @@ export default {
         })
         .catch(error => {
           console.log(error);
+          this.error = true;
+          this.error = 'Failed to create new exercise.'
         });
     },
     returnToSelect: function() {

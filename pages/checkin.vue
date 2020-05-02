@@ -1,7 +1,8 @@
 <template>
   <div class="pageContent">
     <Loading v-if="loading" />
-    <div v-if="!loading && loggedIn">
+    <MessageError v-if="error" message="No Check In Found"/>
+    <div v-if="!loading && loggedIn && !error">
       <HeadingPage :name="`Check In - ${checkin.template_name}`" @updateStatus="editSession()" :status="this.editMessage"/>
       <h3>{{checkin.check_in.start_date}} - {{checkin.check_in.end_date}}</h3>
       <SpacerSmall />
@@ -9,7 +10,7 @@
         <ViewCheckin :checkin="this.checkin" :role="role"/>
       </div>
       <div v-if="edit">
-        <FormCompleteCheckin :checkin="this.checkin" />
+        <FormCompleteCheckin @complete="completeCheckin()" :checkin="this.checkin" />
       </div>
     </div>
   </div>
@@ -25,6 +26,7 @@ import HeadingPage from '~/components/HeadingPage'
 import SpacerSmall from '~/components/SpacerSmall'
 import ViewCheckin from '~/components/ViewCheckin'
 import FormCompleteCheckin from '~/components/FormCompleteCheckin'
+import MessageError from '~/components/MessageError'
 
 export default {
   components: {
@@ -32,7 +34,8 @@ export default {
     HeadingPage,
     ViewCheckin,
     FormCompleteCheckin,
-    SpacerSmall
+    SpacerSmall,
+    MessageError
   },
   data() {
     return {
@@ -43,6 +46,7 @@ export default {
       loading: true,
       loggedIn: undefined,
       editMessage: "Start",
+      error: false
     }
   },
   methods: {
@@ -74,12 +78,18 @@ export default {
         self.loading = false;
       }).catch(error => {
         self.error = true;
+        self.loading = false;
         console.log(error)
       });
     },
     editSession: function() {
       this.edit = !this.edit;
       this.editMessage = this.edit ? "Cancel" : "Start";
+    },
+    completeCheckin: function() {
+      this.edit = false;
+      this.getCheckin();
+      console.log('completing checkin');
     }
   },
   beforeRouteEnter(to, from, next) {

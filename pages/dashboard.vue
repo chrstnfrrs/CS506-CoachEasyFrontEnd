@@ -34,7 +34,7 @@ export default {
       loadingFailed: false,
       user: '',
       template: undefined,
-      coachList: ["clients", "checkins", "template"],
+      coachList: ["clients", "template"],
       clientList: ["nextSession", "checkin", "trainingHistory", "trainingPlan"],
       cardList: [],
     }

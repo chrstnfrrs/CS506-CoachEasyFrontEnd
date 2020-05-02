@@ -1,7 +1,7 @@
  <template>
   <div class="pageContent" >
     <Loading v-if="loading" />
-    <div v-if="!loading && !status">
+    <div v-if="!loading && !status && !error">
       <HeadingPage @updateStatus="setStatus()" @sendRequest="request()" message="New" :status="deleteMessage"/>
       <SpacerSmall />
       <ListItem 
@@ -14,7 +14,7 @@
         @sendDelete="deleteTemplate(template.id)"/>
       <MessageError v-if="error" :message="errorMessage" />
     </div>
-    <div v-if="!loading && status">
+    <div v-if="!loading && status && !error">
       <HeadingPage @updateStatus="setStatus()" @sendRequest="request()" :active="creatable" message="Exit" status="Create"/>
       <SpacerSmall />
       <FormCreateTemplate @creatable="isCreatable()" @notCreatable="isNotCreatable()" :shouldCreate="submitTemplate" />

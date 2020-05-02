@@ -1,16 +1,18 @@
 <template>
   <div>
     <div 
-    class="fileContainer" 
     v-if="(checkin.check_in.front !== null) ||
     (checkin.check_in.back !== null) ||
     (checkin.check_in.side_a !== null)||
     (checkin.check_in.side_b !== null)">
-      <strong>Checkin Images</strong>
-      <v-img v-if="checkin.check_in.front !== null" :src="checkin.check_in.front" aspect-ratio="1"></v-img>
-      <v-img v-if="checkin.check_in.back !== null" :src="checkin.check_in.back" aspect-ratio="1"></v-img>
-      <v-img v-if="checkin.check_in.side_a !== null" :src="checkin.check_in.side_a" aspect-ratio="1"></v-img>
-      <v-img v-if="checkin.check_in.side_b !== null" :src="checkin.check_in.side_b" aspect-ratio="1"></v-img>
+    <HeadingSection text="Check In Images"/>
+    <SpacerSmall />
+      <div class="fileContainer">
+        <v-img v-if="checkin.check_in.front !== null" :src="checkin.check_in.front" aspect-ratio="1"></v-img>
+        <v-img v-if="checkin.check_in.back !== null" :src="checkin.check_in.back" aspect-ratio="1"></v-img>
+        <v-img v-if="checkin.check_in.side_a !== null" :src="checkin.check_in.side_a" aspect-ratio="1"></v-img>
+        <v-img v-if="checkin.check_in.side_b !== null" :src="checkin.check_in.side_b" aspect-ratio="1"></v-img>
+      </div>
     </div>
     <div class="secondaryDisplay flexColumn">
       <div v-if="checkin.check_in.coach_comment!=null">
@@ -27,10 +29,14 @@
 </template>
 
 <script>
+import HeadingSection from '~/components/HeadingSection'
 import ViewSession from '~/components/ViewSession'
+import SpacerSmall from '~/components/SpacerSmall'
 export default {
   components:{
-    ViewSession
+    HeadingSection,
+    ViewSession,
+    SpacerSmall
   },
   props: {
     checkin: Object,
