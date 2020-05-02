@@ -82,9 +82,9 @@ export default {
         index++;
       });
     },
-    updateReorderKey: function() {
-      this.reorderKey += 1;
-    }
+    // updateReorderKey: function() {
+    //   this.reorderKey += 1;
+    // }
   },
   mounted() {
     this.updateSessionList();

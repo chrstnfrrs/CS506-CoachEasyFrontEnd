@@ -46,6 +46,7 @@ export default {
       selectedExercise: {},
       exercise: {},
       index: 0,
+      error: false,
       creating: true,
       exerciseList: [],
       setRules: [

@@ -25,7 +25,7 @@ export default {
     FormCreateExercise,
   },
   props: {
-    template: Array,
+    template: Object,
     setsAndReps: Boolean
   },
   data() {

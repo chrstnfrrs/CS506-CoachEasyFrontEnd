@@ -63,9 +63,9 @@ export default {
   },
   methods: {
     resetVariables: function(){
-        self.submitted = false;
-        self.success = false;
-        self.error = false;
+      self.submitted = false;
+      self.success = false;
+      self.error = false;
     },
     editProfile: function(){
       var self = this;

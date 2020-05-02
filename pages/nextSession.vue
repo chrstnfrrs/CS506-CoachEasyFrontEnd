@@ -31,7 +31,7 @@ export default {
         this.id = this.$store.state.userData.id
         this.getNextSession(this.$store.state.userData.id)
       },() => {
-        this.loadingFailed = true
+        // this.loadingFailed = true
       })
     },
     getNextSession: function(id){
@@ -39,12 +39,12 @@ export default {
         this.session = result.data;
         this.loading = false
       }).catch(error => {
-        console.log('error')
+        // console.log('error')
       });
     },
   },
   mounted(){
-    console.log('here')
+    // console.log('here')
     this.getSessionEditRole();
   }
 }

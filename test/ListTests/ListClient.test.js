@@ -79,4 +79,32 @@ describe('ListClient', () => {
     expect(wrapper.emitted().setUpdate.length).toBe(1)
   })
 
+  test('changeClient changes the client we are looking at', async () => {
+    const testData = {}
+    axios.put.mockResolvedValue({ data : testData })
+
+    const updateClientListMock = jest.fn()
+    wrapper.setMethods({updateClientList: updateClientListMock})
+    await wrapper.vm.$nextTick()
+
+    wrapper.vm.changeClient({id: 1})
+    await wrapper.vm.$nextTick()
+    expect(updateClientListMock).toHaveBeenCalled()
+    expect(updateClientListMock).toHaveBeenCalledTimes(1)
+  })
+
+  test('deleteClient deletes a client from the list', async () => {
+    const testData = {}
+    axios.delete.mockResolvedValue({ data : testData })
+
+    const updateClientListMock = jest.fn()
+    wrapper.setMethods({updateClientList: updateClientListMock})
+    await wrapper.vm.$nextTick()
+
+    wrapper.vm.deleteClient({id: 1})
+    await wrapper.vm.$nextTick()
+    expect(updateClientListMock).toHaveBeenCalled()
+    expect(updateClientListMock).toHaveBeenCalledTimes(1)
+  })
+
 })

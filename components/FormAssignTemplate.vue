@@ -60,8 +60,8 @@ export default {
   methods:{
     addForm: function(){
       this.sessionCount++;
-      console.log("Added session");
-      console.log(this.template);
+      // console.log("Added session");
+      // console.log(this.template);
     },
     createTemplate: function() {
       this.template.name = this.templateName,
@@ -76,7 +76,7 @@ export default {
       })
       this.assigning=true;
       this.template=result;
-      console.log(this.template)
+      // console.log(this.template)
     }
   },
   mounted() {

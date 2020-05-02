@@ -52,7 +52,7 @@ export default {
       exerciseList: [],
       role: '',
       loading: true,
-      loadingFailed: false,
+      // loadingFailed: false,
     }
   },
   methods: {
@@ -62,7 +62,7 @@ export default {
         this.updateExerciseList();
         // this.loading = false
       },() => {
-        this.loadingFailed = true
+        // this.loadingFailed = true
       })
     },
     updateExerciseList: function() {
