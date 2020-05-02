@@ -2,7 +2,7 @@
   <div class="pageContent" >
     <Loading v-if="loading" :loading="this.loading"/>
     <MessageError v-if="error" :message="errorMessage" />
-    <div v-if="!loading && !edit">
+    <div v-if="!loading && !edit && !error">
       <HeadingPage @sendRequest="setEdit()" status="Edit" :name="templateList.name"/>
       <SpacerSmall />
       <ListItem 
@@ -13,7 +13,7 @@
         :slug="session.slug"
         />
     </div>
-    <div v-if="!loading && edit">
+    <div v-if="!loading && edit  && !error">
       <HeadingPage @sendRequest="saveRequest()" status="Save" :name="templateList.name"/>
       <SpacerSmall />
       <FormEditTemplate 

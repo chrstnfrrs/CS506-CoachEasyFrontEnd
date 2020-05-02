@@ -65,8 +65,20 @@ export default {
     },
     getCheckins: function(){
       let self = this;
-      // console.log(`${url}/client/checkins/?client_id=${self.user.id}`)
-      axios.get(`${url}/client/checkins?client_id=${self.user.id}`)
+      let queryParams = "";
+      const queryString = window.location.search;
+      const urlParams = new URLSearchParams(queryString);
+      const client_id = urlParams.get('client_id');
+      if(client_id){
+          queryParams = `?client_id=${client_id}`
+      } else {
+        if(this.user.role==="CLIENT"){
+          queryParams = `?client_id=${self.user.id}`
+        } else {
+          
+        }
+      }
+      axios.get(`${url}/client/checkins${queryParams}`)
       .then(result => {
         self.checkins = result.data;
         self.loading = false;

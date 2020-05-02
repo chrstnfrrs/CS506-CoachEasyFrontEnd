@@ -2,12 +2,13 @@
     <!-- loading animation and spacer -->
   <div class="pageContent">
     <Loading v-if="loading" />
-    <HeadingPage v-if="!loading" @updateStatus="editSession()" :status="this.editMessage" />
+    <MessageError v-if="error" message="No Next Session Available"/>
+    <HeadingPage v-if="!loading && !error" @updateStatus="editSession()" :status="this.editMessage" />
     <SpacerExtraSmall />
-    <div v-if="!loading && !edit">
+    <div v-if="!loading && !edit && !error">
       <ViewSession :session="this.session" />
     </div>
-    <div v-if="!loading && edit">
+    <div v-if="!loading && edit && !error">
       <FormCompleteSession type='Session' @complete="completeSession()" :session="this.session" />
     </div>
   </div>
@@ -23,13 +24,15 @@ import HeadingPage from "~/components/HeadingPage"
 import FormCompleteSession from "~/components/FormCompleteSession"
 import Loading from "~/components/Loading"
 import SpacerExtraSmall from "~/components/SpacerExtraSmall"
+import MessageError from "~/components/MessageError"
 export default {
   components: {
     ViewSession,
     HeadingPage,
     FormCompleteSession,
     Loading,
-    SpacerExtraSmall
+    SpacerExtraSmall,
+    MessageError
   },
   data() {
     return {
@@ -40,6 +43,7 @@ export default {
       editMessage: "Start",
       comment: '',
       clientWeight: 0,
+      error: false,
     };
   },
   methods: {
@@ -62,7 +66,9 @@ export default {
           this.loading = false;
         })
         .catch(error => {
-          console.log("error");
+          this.loading = false;
+          this.error = true;
+          // console.log("error");
         });
     },
     completeSession: function() {

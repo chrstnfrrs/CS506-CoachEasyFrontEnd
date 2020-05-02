@@ -3,7 +3,8 @@
     <form>
       <h2>Check In Photos</h2>
       <SpacerExtraSmall />
-        <div class="formContainer">
+        <div class="fileContainer">
+          <div>
             <v-file-input
               v-model="front"
               filled
@@ -11,25 +12,28 @@
               label="Front">
             </v-file-input>
             <v-img v-if="checkin.check_in.front !== null" :src="checkin.check_in.front" aspect-ratio="1"></v-img>
-            <v-file-input
+            </div><div><v-file-input
               v-model="back"
               filled
               solo
               label="Back">
             </v-file-input>
             <v-img v-if="checkin.check_in.back !== null" :src="checkin.check_in.back" aspect-ratio="1"></v-img>
-            <v-file-input
+            </div><div><v-file-input
               v-model="sidea"
               filled
               solo
               label="SideA"></v-file-input>
             <v-img v-if="checkin.check_in.side_a !== null" :src="checkin.check_in.side_a" aspect-ratio="1"></v-img>
+            </div>
+          <div>
             <v-file-input
               v-model="sideb"
               filled
               solo
               label="SideB"></v-file-input>
             <v-img v-if="checkin.check_in.side_b !== null" :src="checkin.check_in.side_b" aspect-ratio="1"></v-img>
+        </div>
       </div>
       <SpacerSmall />
       <v-text-field
@@ -62,10 +66,14 @@ export default {
     SpacerExtraSmall,
     FormCompleteSession,
     ButtonViewSession,
-    SpacerSmall,
-    ButtonFormSubmit
+    ButtonFormSubmit,
+    SpacerSmall
   },
   methods: {
+    completeSession: function() {
+      console.log("form complete check in emitting");
+      this.$emit('complete');
+    },
     completeCheckin: function() {
       let formData = new FormData()
       if (this.front !== null) {
