@@ -68,6 +68,7 @@ export default {
     createSession: function() {
       if (!this.setsAndReps) {
         this.session = {
+          coach_template_id: this.$props.template.id,
           name: this.sessionName,
           order: this.$props.template.sessions.length,
           coach_exercises: [],
@@ -136,10 +137,12 @@ export default {
       this.getSessionExercises(this.$vnode.key);
     } else {
       this.session = {
+        coach_template_id: this.$props.template.id,
         name: '',
         order: 0,
         coach_exercises: []
       }
+      this.$props.template.sessions.push(this.session);
       this.index = this.$props.template.sessions.length - 1;
     }
   }

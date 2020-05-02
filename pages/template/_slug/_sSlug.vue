@@ -6,16 +6,21 @@
       <HeadingPage @sendRequest="setEdit()" status="Edit" :name="session.name"/>
       <SpacerSmall />
       <ListItem 
+        v-if="user.role==='COACH'"
         v-for="(exercise) in this.exercises"
         :key="exercise.id"
         type="exercise"
-        :items="exercise"/>
+        :items="exercise"
+        @sendDelete="deleteExercise(exercise.id)"/>
+      <ViewSession
+        v-if="user.role==='CLIENT'"
+        :session="this.session" />
     </div>
     <div v-if="!loading && edit">
       <HeadingPage @sendRequest="saveRequest()" status="Save" :name="session.name"/>
       <SpacerSmall />
       <FormEditTemplate 
-        :templateList="this.session"
+        :templateList="session"
       />
     </div>
   </div> 
@@ -31,6 +36,7 @@ import Loading from '~/components/Loading'
 import MessageError from '~/components/MessageError'
 import SpacerSmall from '~/components/SpacerSmall'
 import ListItem from '~/components/ListItem'
+import ViewSession from '~/components/ViewSession'
 import FormEditTemplate from '~/components/FormEditTemplate'
 
 export default {
@@ -40,6 +46,7 @@ export default {
     MessageError,
     SpacerSmall,
     ListItem,
+    ViewSession,
     FormEditTemplate
   },
   data: () => ({
@@ -50,14 +57,17 @@ export default {
     session: {},
     user: {},
     edit: false,
-    exercises: []
+    exercises: [],
+    exerciseCountBefore: 0,
   }),
   methods: {
     saveRequest: function(){
       this.setEdit();
+      this.addNewExercises();
     },
     setEdit: function(){
       this.edit = !this.edit
+      this.exerciseCountBefore = this.exercises.length;
     },
     getUserSession: function(){
       Promise.all([ this.$store.state.userData ]).then( () => {
@@ -69,11 +79,13 @@ export default {
     },
     updateSession: function() {
         let self = this;
-        let tempID = this.$route.params.id
-        let seshID = this.$route.params.sid
-        let arg = self.user.role == 'COACH' ? `/coach/session?coach_session_id=${seshID}` : `/client/session?template_id=${tempID}&session_id=${seshID}`;
+        let tSlug = this.$route.params.slug
+        let sSlug = this.$route.params.sSlug
+        console.log(`${tSlug}/${sSlug}`)
+        let arg = self.user.role == 'COACH' ? `/coach/session?coach_template_slug=${tSlug}&coach_session_slug=${sSlug}` : `/client/session?client_template_slug=${tSlug}&client_session_slug=${sSlug}`;
         axios.get(`${url}${arg}`).then(result => {
           if(self.user.role === 'COACH'){
+            console.log(result.data);
             self.exercises = result.data.coach_exercises
           } else {
             self.exercises = result.data.exercises
@@ -86,9 +98,33 @@ export default {
           self.loading = false;
         }); 
     },
+    addNewExercises: function () {
+      // add the session id to the exercise since that is not done in FormCreateSession
+      for (let i = this.exerciseCountBefore - 1; i < this.session.coach_exercises.length; i++) {
+        this.session.coach_exercises[i].coach_session_id = this.session.id;
+      }
+      axios.put(`${url}/coach/session`, this.session).then(result => {
+        console.log(result);
+        this.updateSession();
+      }).catch(error => {
+        console.log(error);
+      });
+    },
+    deleteExercise: function(id) {
+
+    }
   },
+  beforeRouteEnter (to, from, next) { 
+    next(vm => { 
+      console.log(vm.$route.params)
+      console.log("before Route Enter")
+      next();
+    }) 
+  } ,
   mounted() {
     this.getUserSession();
+  },
+  beforeCreate(){
   }
 }
 </script>

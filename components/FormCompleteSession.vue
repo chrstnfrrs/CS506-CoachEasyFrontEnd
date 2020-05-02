@@ -3,9 +3,11 @@
     <HeadingSection :text="session.name" />
     <SpacerExtraSmall />
     <div class="mainDisplay">
-      <div v-if="session.client_weight != undefined" class="secondaryDisplay flexCol">
-        <strong>Weight</strong>
-        <p>{{session.client_weight}} lbs</p>
+      <div class="secondaryDisplay">
+        <v-text-field
+          label="Body Weight"
+          v-model="session.client_weight">
+        </v-text-field>
       </div>
       <div class="exerciseClientGrid exerciseClientGridHeader">
         <p class="exerciseClientCol exerciseFirstCol">Name</p>
@@ -13,15 +15,28 @@
         <p class="exerciseClientCol">Reps</p>
         <p class="exerciseClientCol">Weight</p>
       </div>
-      <ViewClientExercise v-for="(exercise, index) in exerciseList" 
+      <FormClientExercise v-for="(exercise, index) in exerciseList" 
+        :single="!loading"
         :key="index"
-        :exercise="exercise" />
-      <div v-if="session.comment != undefined && session.comment.length>0" class="secondaryDisplay flexCol">
-        <strong>Comment</strong>
-        <p>{{session.comment}}</p>
+        :exercise="exercise" 
+        :edit=true />
+      <div class="secondaryDisplay">
+        <v-text-field
+          label="Comment"
+          v-model="session.comment">
+        </v-text-field>
       </div>
+      <div v-if="role==='COACH'">
+        <ViewCoachExercise v-for="(exercise, index) in exerciseList" 
+          :key="index" 
+          :exercise="exercise"  />
+      </div>
+      <div class="secondaryDisplay completedCheckbox">
+        <v-checkbox v-if="type!=='Session'" v-model="session.completed" label="Completed"></v-checkbox>
+      </div>
+      <ButtonViewSession v-if="type==='Session'" @complete="completeSession()" :session="this.session" action="Complete" />
     </div>
-    <SpacerExtraSmall />
+    <SpacerSmall />
   </div>
 </template>
 
@@ -33,40 +48,42 @@ const url = 'https://coach-easy-deploy.herokuapp.com';
 
 import HeadingSection from '~/components/HeadingSection'
 import SpacerExtraSmall from '~/components/SpacerExtraSmall'
-import ViewClientExercise from '~/components/ViewClientExercise'
+import FormClientExercise from '~/components/FormClientExercise'
 import ViewCoachExercise from '~/components/ViewCoachExercise'
+import ButtonViewSession from "~/components/ButtonViewSession"
+import SpacerSmall from "~/components/SpacerSmall"
+
 export default {
   props: {
     session: Object,
-    role: String
+    type: String,
   },
   components: {
-    HeadingSection,
     SpacerExtraSmall,
-    ViewClientExercise,
+    FormClientExercise,
     ViewCoachExercise,
+    HeadingSection,
+    ButtonViewSession,
+    SpacerSmall
   },
   data() {
     return {
-      loading: true,
       exerciseList: [],
+      role: '',
       loading: true,
-      // loadingFailed: false,
+      loadingFailed: false,
     }
   },
   methods: {
-<<<<<<< HEAD
     getSessionRole: function(){
       Promise.all([ this.$store.state.userData ]).then( () => {
         this.role = this.$store.state.userData.role
         this.updateExerciseList();
         // this.loading = false
       },() => {
-        // this.loadingFailed = true
+        this.loadingFailed = true
       })
     },
-=======
->>>>>>> upstream/master
     updateExerciseList: function() {
       if(this.$props.session.training_entries.length > 0){
         this.exerciseList = this.$props.session.training_entries
@@ -78,10 +95,14 @@ export default {
         this.exerciseList = this.$props.session.client_exercises
       }
       this.loading = false;
+    },
+    completeSession: function() {
+      this.$emit('complete');
     }
   },
   mounted() {
-    this.updateExerciseList();
+    this.getSessionRole();
+    console.log('form view session mounted');
   }
 }
 </script>
@@ -89,22 +110,22 @@ export default {
 <style lang="scss">
 .mainDisplay{
   border-radius: 16px;
-  padding: 8px;
   box-shadow: $elevation2;
   overflow: hidden;
 }
 .secondaryDisplay{
-  margin: 8px 0px 8px 16px !important;
-}
-.flexCol{
-  flex-direction: column;
+  display: flex;
+  margin: 8px 16px 8px 16px !important;
 }
 .exerciseClientGridHeader{
-  height: 40px;
-  align-items: center;
   p{
-    font-size: 16px;
     font-weight: 500;
   }
+}
+.completedCheckbox{
+  justify-content: flex-end;
+}
+.v-input--selection-controls{
+  margin-top: 0px;
 }
 </style>

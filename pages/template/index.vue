@@ -10,13 +10,14 @@
         :key="template.id"
         type="template"
         :items="template"
+        :slug="template.slug"
         @sendDelete="deleteTemplate(template.id)"/>
       <MessageError v-if="error" :message="errorMessage" />
     </div>
     <div v-if="!loading && status">
-      <HeadingPage @updateStatus="setStatus()" @sendRequest="request()" message="Exit" status="Create"/>
+      <HeadingPage @updateStatus="setStatus()" @sendRequest="request()" :active="creatable" message="Exit" status="Create"/>
       <SpacerSmall />
-      <FormCreateTemplate :shouldCreate="submitTemplate" />
+      <FormCreateTemplate @creatable="isCreatable()" @notCreatable="isNotCreatable()" :shouldCreate="submitTemplate" />
     </div>
   </div> 
 
@@ -56,6 +57,7 @@ export default {
       errorMessage: '',
       templateList: [],
       user: {},
+      creatable: false,
     }
   },
   computed: {
@@ -122,21 +124,29 @@ export default {
         }); 
     },
     deleteTemplate: function(template_id) {
-      let self = this;
-      axios.put(`${url}/coach/template/delete`, {
-        "coach_template_id": template_id
-      })
-      .then(response => {
-        self.updateTemplateList();
-      })
-      .catch(error => {
-        self.error = true
-        self.errorMessage = "Unable to delete template.";
-      })
+        axios.put(`${url}/coach/template/delete`, 
+        {
+          "coach_template_id": template_id
+        }).then(response => {
+          console.log(response);
+          this.updateTemplateList();
+        }).catch(error => {
+          this.error = true;
+        })
     },
     setNoEdit: function() {
       this.$store.commit('noEdit');
     },
+    setCreatable: function() {
+      console.log("creatable is changing");
+      this.creatable = false;
+    },
+    isCreatable: function() {
+      this.creatable = true;
+    },
+    isNotCreatable: function() {
+      this.creatable = false;
+    }
   },
   mounted() {
     this.getUserTemplate();

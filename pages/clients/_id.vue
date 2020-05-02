@@ -4,26 +4,33 @@
     <MessageError :error="error" :message="errorMessage"/>
     <div v-if="!loading && !error">
       <ProfileUser :user="client"/>
-      <FormAssignTemplate :shouldCreate="submitTemplate" :templates="templateList"/>
+      <FormAssignTemplate @assignTemplate="assignTemplate" :clientName="`${client.first_name} ${client.last_name}'s`" :hasTemplate="hasTemplate" :shouldCreate="submitTemplate" :templates="templateList"/>
+      <ViewTemplate :template="submitTemplate" />
+      <ListCheckIns v-if="this.checkins" :checkIns="checkins" />
     </div>
   </div>
 </template>
 
 <script>
+import axios from 'axios'
+const url = 'https://coach-easy-deploy.herokuapp.com';
+axios.defaults.withCredentials = true;
+
 import Loading from '~/components/Loading'
 import MessageError from '~/components/MessageError'
 import ProfileUser from '~/components/ProfileUser'
 import FormAssignTemplate from '~/components/FormAssignTemplate'
-import axios from 'axios'
-const url = 'https://coach-easy-deploy.herokuapp.com';
-axios.defaults.withCredentials = true;
+import ViewTemplate from '~/components/ViewTemplate'
+import ListCheckIns from '~/components/ListCheckIns'
 
 export default {
   components:{
     MessageError,
     Loading,
     ProfileUser,
-    FormAssignTemplate
+    FormAssignTemplate,
+    ViewTemplate,
+    ListCheckIns
   },
   data() {
     return {
@@ -36,7 +43,11 @@ export default {
         sessions: []
       },
       user: undefined,
-      templateList: undefined
+      templateList: undefined,
+      selectedTemplate: undefined,
+      hasTemplate: false,
+      clientTemplateId: undefined,
+      checkins: undefined,
     }
   },
   methods: {
@@ -54,6 +65,7 @@ export default {
       .then(result => {
         self.client = result.data.user
         self.updateTemplateList();
+        self.getClientCheckIns();
       }).catch(error => {
         self.loading = false;
         self.error = true;
@@ -73,9 +85,64 @@ export default {
           self.loading = false;
         }); 
     },
+    assignTemplate(template) {
+      this.submitTemplate = template;
+      if (!this.hasTemplate) {
+        const Role = {
+          COACH: "COACH",
+          CLIENT: "CLIENT",
+        };
+        Object.freeze(Role);
+        axios.post(`${url}/client/template`, {
+          role: Role.COACH,
+          template_id: this.submitTemplate.id,
+          client_id: this.$route.params.id,
+          sessions: this.submitTemplate.sessions
+        }).then(result => {
+          this.hasTemplate = true;
+        }).catch(error => {
+          console.log(error);
+        });
+      } else {
+        this.updateAssignedTemplate(template);
+      }
+    },
+    updateAssignedTemplate: function(template) {
+      axios.put(`${url}/client/template`,{
+        id: this.clientTemplateId,
+        user_id: this.$route.params.id,
+        sessions: template.sessions,
+        name: template.name
+      }).then(result => {
+        console.log(result);
+      }).catch(error => {
+        console.log(error);
+      });
+    },
+    getClientTemplate: function() {
+      axios.get(`${url}/client/template/active?user_id=${this.$route.params.id}`).then(templateResult => {
+        if (templateResult.data) {
+          this.hasTemplate = true;
+          this.submitTemplate.name = templateResult.data.name;
+          this.submitTemplate.sessions = templateResult.data.sessions;
+          this.submitTemplate = templateResult.data;
+          this.clientTemplateId = templateResult.data.id;
+        }
+      }).catch(error => {
+        console.log(error);
+      })
+    },
+    getClientCheckIns: function() {
+      axios.get(`${url}/client/checkins?client_id=${this.$route.params.id}`).then(result => {
+        this.checkins = result.data;
+      }).catch(error => {
+        console.log(error);
+      })
+    }
   },
   mounted() {
     this.getUserClientsId();
+    this.getClientTemplate();
   },
 }
 </script>

@@ -1,6 +1,5 @@
 <template>
   <div class="pageContent">
-    <HeadingUserAuth message="Sign Up" />
     <FormSignup/>
   </div>
 </template>

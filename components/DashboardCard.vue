@@ -1,46 +1,47 @@
 <template>
-  <div>
+  <div class="dashCardContainer">
+    <CardClients v-if="type==='clients'" :cardType="type" />
+    <CardTemplate v-if="type==='template'" :cardType="type" />
     <CardNextSession v-if="type==='nextSession'" :cardType="type" />
-    <CardCurrentPlan v-if="type==='trainingPlan'" :cardType="type" />
+    <CardCheckin v-if="type==='checkin'" :cardType="type" />
+    <CardCheckins v-if="type==='checkins'" :cardType="type" />
+    <CardCurrentPlan v-if="type==='trainingPlan'" :cardType="type" :id="this.id"/>
     <CardTrainingHistory v-if="type==='trainingHistory'" :cardType="type" />
-    <!-- <nuxt-link :to="`/${type}`">
-      <v-card 
-      class="dashCard">
-        <div 
-          v-if="type==='clients'"
-          class="dashContents">
-          <MdPeopleIcon w="75px" h="75px"/>
-          <h2 class="subHeading">Client List</h2>
-        </div>
-        <div 
-          v-if="type==='template'"
-          class="dashContents">
-          <MdFolderIcon w="75px" h="75px"/>
-          <h2 class="subHeading">Templates</h2>
-        </div>
-      </v-card>
-    </nuxt-link> -->
   </div>
 </template>
 
 <script>
+import CardClients from '~/components/CardClients'
+import CardTemplate from '~/components/CardTemplate'
 import CardNextSession from '~/components/CardNextSession'
+import CardCheckin from '~/components/CardCheckin'
 import CardCurrentPlan from '~/components/CardCurrentPlan'
 import CardTrainingHistory from '~/components/CardTrainingHistory'
+import CardCheckins from '~/components/CardCheckins'
 export default {
   props:{
     type: String,
+    id: Number
   },
   components:{
+    CardClients,
+    CardTemplate,
     CardNextSession,
+    CardCheckin,
     CardCurrentPlan,
-    CardTrainingHistory
+    CardTrainingHistory,
+    CardCheckins
   }
 }
 </script>
 
 <style lang="scss">
+.dashCardContainer{
+  width: calc(100% - 20px) !important;
+  margin: 10px !important;
+}
   .dashCard{
+    
     display: flex !important;
     width: 100%;
     height: 250px;

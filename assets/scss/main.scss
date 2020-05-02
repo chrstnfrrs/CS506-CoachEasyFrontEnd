@@ -33,10 +33,12 @@ path{
 .listItem{
   text-transform: capitalize;
   color: $text !important;
+  margin-bottom: 0 !important;
 }
 .formCreateHeading{
   display: flex;
   justify-content: space-between;
+  align-items: center;
 }
 
 .listRow{
@@ -58,7 +60,22 @@ path{
   margin: 16px 0px;
   padding: 8px;
 }
-
+.embeddedForm{
+  margin: -10px 20px 0px 20px;
+ // padding: 10px;
+}
+.disable{
+  pointer-events: none; 
+  /* -webkit-user-select: none; */
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  opacity: 0.7;
+}
+.completed {
+  background: rgba(174, 174, 174, 0.673) !important;
+  text-align: left;
+}
 .dashContents{
   text-align: center;
   .subHeading{
@@ -67,4 +84,43 @@ path{
   .ion__svg{
     padding-top: 7px;
   }
+}
+
+
+.exerciseClientCol{
+  width: 100%;
+  text-align: center;
+  align-items: center;
+  display: flex;
+}
+.exerciseFirstCol{
+  padding-left: 16px;
+  text-align: left;
+}
+.exerciseCoachGrid {
+  min-width: 325px;
+  display: grid;
+  grid-template-columns: minmax(50px, 1fr) 55px 55px;
+  justify-items: center;
+  justify-content: center;
+  background: $background-secondary !important;
+}
+.exerciseClientGrid {
+  min-width: 400px;
+  display: grid;
+  grid-template-columns: minmax(50px, 1fr) 55px 55px 75px;
+  justify-items: center;
+  justify-content: center;
+  background: $background-secondary !important;
+  .v-text-field{
+    max-width: 40px;
+    min-width: 30px;
+    margin-left:12px;
+    flex: 1;
+  }
+}
+
+
+.flexColumn{
+  flex-direction: column;
 }
