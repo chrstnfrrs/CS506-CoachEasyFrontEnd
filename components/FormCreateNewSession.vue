@@ -1,22 +1,25 @@
 <template>
-  <div class="formContainer">
-    <div class="formCreateHeading">
-      <v-text-field
-        :class="{ 'custom-place-holder': !creatable }"
-        label="Session Name"
-        v-model="sessionName"
-        @input="updateSession"
-        :placeholder="placeHolderText"
-        required>   
-      </v-text-field>
-      <p v-if="deleteStatus" class="buttonDelete errorBackground"><v-icon dark>mdi-delete</v-icon></p>
-      <ButtonAddForm @newExerciseForm="addExcerciseForm()" type="Exercise" v-if="exerciseCount===0 && sessionName.length > 0 && !setsAndReps"/>
+  <div>
+    <MessageError v-if="error" :message="errorMessage" />
+    <div class="formContainer">
+      <div class="formCreateHeading">
+        <v-text-field
+          :class="{ 'custom-place-holder': !creatable }"
+          label="Session Name"
+          v-model="sessionName"
+          @input="updateSession"
+          :placeholder="placeHolderText"
+          required>   
+        </v-text-field>
+        <p v-if="deleteStatus" class="buttonDelete errorBackground"><v-icon dark>mdi-delete</v-icon></p>
+        <ButtonAddForm @newExerciseForm="addExcerciseForm()" type="Exercise" v-if="exerciseCount===0 && sessionName.length > 0 && !setsAndReps"/>
+      </div>
+      <div v-if="!creating">
+        <FormCreateExercise  v-if="!setsAndReps" v-for="exercise in session.coach_exercises" :key="exercise.id" :session="session" :allContent="setsAndReps"/>
+        <FormAssignExercise  v-if="setsAndReps" v-for="exercise in session.exercises" :key="getExerciseId(exercise)" :session="session" :allContent="setsAndReps"/>
+      </div>
+      <ButtonAddForm @newExerciseForm="addExcerciseForm()" type="Exercise" v-if="exerciseCount!==0 && !setsAndReps"/>
     </div>
-    <div v-if="!creating">
-      <FormCreateExercise  v-if="!setsAndReps" v-for="exercise in session.coach_exercises" :key="exercise.id" :session="session" :allContent="setsAndReps"/>
-      <FormAssignExercise  v-if="setsAndReps" v-for="exercise in session.exercises" :key="getExerciseId(exercise)" :session="session" :allContent="setsAndReps"/>
-    </div>
-    <ButtonAddForm @newExerciseForm="addExcerciseForm()" type="Exercise" v-if="exerciseCount!==0 && !setsAndReps"/>
   </div>
 </template>
 
@@ -28,11 +31,13 @@ const url = 'https://coach-easy-deploy.herokuapp.com';
 import ButtonAddForm from '~/components/ButtonAddForm'
 import FormCreateExercise from '~/components/FormCreateExercise'
 import FormAssignExercise from '~/components/FormAssignExercise'
+import MessageError from '~/components/MessageError'
 export default {
   components:{
     ButtonAddForm,
     FormCreateExercise,
-    FormAssignExercise
+    FormAssignExercise,
+    MessageError
   },
   props: {
     template: Object,
@@ -49,6 +54,8 @@ export default {
       deleteStatus: false,
       creatable: true,
       placeHolderText: "Name",
+      error: false,
+      errorMessage: ''
     }
   },
   methods: {
@@ -118,6 +125,7 @@ export default {
         this.fillFields(response.data);
       }).catch(error => {
         this.error = true;
+        this.errorMessage = 'Failed to get exercises in session.';
       })
     },
     getExerciseId: function(exercise) {

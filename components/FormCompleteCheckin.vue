@@ -62,10 +62,14 @@ export default {
     SpacerExtraSmall,
     FormCompleteSession,
     ButtonViewSession,
-    SpacerSmall,
-    ButtonFormSubmit
+    ButtonFormSubmit,
+    SpacerSmall
   },
   methods: {
+    completeSession: function() {
+      console.log("form complete check in emitting");
+      this.$emit('complete');
+    },
     completeCheckin: function() {
       let formData = new FormData()
       if (this.front !== null) {

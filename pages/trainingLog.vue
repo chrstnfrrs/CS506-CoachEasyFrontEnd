@@ -1,5 +1,7 @@
 <template>
   <div class="pageContent">
+    {{ trainingLog }}
+    {{ pageIndex }}
     <Loading v-if="loading" />
     <div v-if="!loading">
       <HeadingPage name="Training Log" />
@@ -9,6 +11,14 @@
         :key="s.id"
         :role="user.role"
         :session="s" />
+    </div>
+    <div v-if="!loading">
+      <button v-if="this.pageIndex > 1" class="actionBtn" @click="previousPage">
+        Previous
+      </button>
+      <button class="actionBtn" @click="nextPage">
+        Next
+      </button>
     </div>
   </div>
 </template>
@@ -34,7 +44,8 @@ export default {
     return {
       loading: true,
       trainingLog: undefined,
-      user: undefined
+      user: undefined,
+      pageIndex: undefined,
     }
   },
   methods: {
@@ -56,20 +67,39 @@ export default {
       const queryString = window.location.search;
       const urlParams = new URLSearchParams(queryString);
       const client_id = urlParams.get('client_id');
+      if (!this.pageIndex) {
+        this.pageIndex = urlParams.get('index');
+      }
       if(self.user.role === 'CLIENT'){
         reqID = self.user.id
       } else {
         reqID = client_id
       }
-      axios.get(`${url}/client/trainingLog?client_id=${reqID}`)
+      axios.get(`${url}/client/trainingLog?client_id=${reqID}&page=${this.pageIndex}&page_size=1`)
       .then(result => {
-        self.trainingLog = result.data
-        self.setLoading();
-        self.error = false;
+        if (!result.data.sessions.length > 0) {
+          alert("There is no next training log!");
+          this.previousPage();
+        } else {
+          self.trainingLog = result.data
+          self.setLoading();
+          self.error = false;
+        }
       }).catch(error => {
         self.error = true;
         console.log(error)
       });
+    },
+    previousPage: function() {
+      if (this.pageIndex > 1) {
+        this.pageIndex--;
+        this.getTrainingLog();
+      }
+   
+    },
+    nextPage: function() {
+      this.pageIndex++;
+      this.getTrainingLog();
     }
   },
   mounted() {

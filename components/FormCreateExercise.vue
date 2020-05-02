@@ -1,37 +1,40 @@
 <template>
-  <div class="embeddedForm">
-    <div v-if="!shouldCreateNew" class="formCreateExercise" >
-      <!-- Maybe move these v-selects to an ExerciseSelector componenet -->
-      <v-select
-        class="listExercises listCategories"
-        :items="categoryList"
-        label="Choose Category"
-        v-model="selectedCategory"
-        @change="filterExerciseList"
-        hide-selected
-      >
-      </v-select>
-      <v-select
-        class="listExercises"
-        :items="filteredExerciseList"
-        v-model="selectedExercise"
-        item-text="name"
-        label="Choose Exercise"
-        return-object
-        @change="updateExercise"
-        hide-selected
-      >
-      </v-select>
-      <button
-        v-if="!createdNewExercise"
-        class="actionBtn addForm"
-        @click="isCreatingNewExercise"
-      >
-        New
-      </button>
-    </div>
-    <div v-if="shouldCreateNew" >
-      <FormCreateNewExercise @return="notCreatingNew()" @newExerciseCreated="isCreatingNewExercise" />
+  <div>
+    <MessageError v-if="error" :message="errorMessage" />
+    <div class="embeddedForm">
+      <div v-if="!shouldCreateNew" class="formCreateExercise" >
+        <!-- Maybe move these v-selects to an ExerciseSelector componenet -->
+        <v-select
+          class="listExercises listCategories"
+          :items="categoryList"
+          label="Choose Category"
+          v-model="selectedCategory"
+          @change="filterExerciseList"
+          hide-selected
+        >
+        </v-select>
+        <v-select
+          class="listExercises"
+          :items="filteredExerciseList"
+          v-model="selectedExercise"
+          item-text="name"
+          label="Choose Exercise"
+          return-object
+          @change="updateExercise"
+          hide-selected
+        >
+        </v-select>
+        <button
+          v-if="!createdNewExercise"
+          class="actionBtn addForm"
+          @click="isCreatingNewExercise"
+        >
+          New
+        </button>
+      </div>
+      <div v-if="shouldCreateNew" >
+        <FormCreateNewExercise @return="notCreatingNew()" @newExerciseCreated="isCreatingNewExercise" />
+      </div>
     </div>
   </div>
 </template>
@@ -42,9 +45,11 @@ axios.defaults.withCredentials = true;
 const url = 'https://coach-easy-deploy.herokuapp.com';
 
 import FormCreateNewExercise from '~/components/FormCreateNewExercise'
+import MessageError from '~/components/MessageError'
 export default {
   components: {
     FormCreateNewExercise,
+    MessageError
   },
   props: {
     session: Object,
@@ -63,6 +68,8 @@ export default {
       categoryList: [],
       shouldCreateNew: false,
       createdNewExercise: false,
+      error: false,
+      errorMessage: ''
     }
   },
   methods: {
@@ -94,6 +101,7 @@ export default {
         this.getCategories();
       }).catch(error => {
         this.error = true;
+        this.errorMessage = 'Failed to load exercise list.';
       });
     },
     // gets individual categories from list of exercises
