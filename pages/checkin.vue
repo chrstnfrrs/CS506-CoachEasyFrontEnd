@@ -6,11 +6,10 @@
       <h3>{{checkin.check_in.start_date}} - {{checkin.check_in.end_date}}</h3>
       <SpacerSmall />
       <div v-if="!edit">
-        <ViewSession v-for="session in checkin.sessions" :key="session.id" :session="session" :role="role" />
+        <ViewCheckin :checkin="this.checkin" :role="role"/>
       </div>
       <div v-if="edit">
         <FormCompleteCheckin :checkin="this.checkin" />
-        <!-- <FormCompleteSession v-for="session in checkin.sessions" :key="session.id" :role="this.role"/> -->
       </div>
     </div>
   </div>
@@ -24,14 +23,14 @@ const url = 'https://coach-easy-deploy.herokuapp.com';
 import Loading from '~/components/Loading'
 import HeadingPage from '~/components/HeadingPage'
 import SpacerSmall from '~/components/SpacerSmall'
-import ViewSession from '~/components/ViewSession'
+import ViewCheckin from '~/components/ViewCheckin'
 import FormCompleteCheckin from '~/components/FormCompleteCheckin'
 
 export default {
   components: {
     Loading,
     HeadingPage,
-    ViewSession,
+    ViewCheckin,
     FormCompleteCheckin,
     SpacerSmall
   },

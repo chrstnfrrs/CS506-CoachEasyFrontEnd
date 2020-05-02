@@ -21,9 +21,6 @@ export default {
 </script>
 
 <style lang="scss">
-.flexColumn{
-  flex-direction: column;
-}
 .historyItem{
   text-decoration: underline !important;
   margin-bottom: 8px !important;

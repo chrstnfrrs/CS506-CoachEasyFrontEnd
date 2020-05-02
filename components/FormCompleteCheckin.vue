@@ -3,58 +3,34 @@
     <form>
       <h2>Check In Photos</h2>
       <SpacerExtraSmall />
-      <v-container>
-        <v-row>
-          <v-col cols="4">
+        <div class="formContainer">
             <v-file-input
               v-model="front"
               filled
               solo
               label="Front">
             </v-file-input>
-          </v-col>
-          <v-col cols="4">
+            <v-img v-if="checkin.check_in.front !== null" :src="checkin.check_in.front" aspect-ratio="1"></v-img>
             <v-file-input
               v-model="back"
               filled
               solo
               label="Back">
             </v-file-input>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col cols="4">
-            <v-img v-if="checkin.check_in.front !== null" :src="checkin.check_in.front" aspect-ratio="1"></v-img>
-          </v-col>
-          <v-col cols="4">
             <v-img v-if="checkin.check_in.back !== null" :src="checkin.check_in.back" aspect-ratio="1"></v-img>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col cols="4">
             <v-file-input
               v-model="sidea"
               filled
               solo
               label="SideA"></v-file-input>
-          </v-col>
-          <v-col cols="4">
+            <v-img v-if="checkin.check_in.side_a !== null" :src="checkin.check_in.side_a" aspect-ratio="1"></v-img>
             <v-file-input
               v-model="sideb"
               filled
               solo
               label="SideB"></v-file-input>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col cols="4">
-            <v-img v-if="checkin.check_in.side_a !== null" :src="checkin.check_in.side_a" aspect-ratio="1"></v-img>
-          </v-col>
-          <v-col cols="4">
             <v-img v-if="checkin.check_in.side_b !== null" :src="checkin.check_in.side_b" aspect-ratio="1"></v-img>
-          </v-col>
-        </v-row>
-      </v-container>
+      </div>
       <SpacerSmall />
       <v-text-field
         label="Check In Comment">

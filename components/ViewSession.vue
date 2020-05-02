@@ -3,7 +3,7 @@
     <HeadingSection :text="session.name" />
     <SpacerExtraSmall />
     <div class="mainDisplay">
-      <div v-if="session.client_weight != undefined" class="secondaryDisplay">
+      <div v-if="session.client_weight != undefined" class="secondaryDisplay flexCol">
         <strong>Weight</strong>
         <p>{{session.client_weight}} lbs</p>
       </div>
@@ -16,7 +16,7 @@
       <ViewClientExercise v-for="(exercise, index) in exerciseList" 
         :key="index"
         :exercise="exercise" />
-      <div v-if="session.comment != undefined && session.comment.length>0" class="secondaryDisplay">
+      <div v-if="session.comment != undefined && session.comment.length>0" class="secondaryDisplay flexCol">
         <strong>Comment</strong>
         <p>{{session.comment}}</p>
       </div>
@@ -83,6 +83,9 @@ export default {
 }
 .secondaryDisplay{
   margin: 8px 0px 8px 16px !important;
+}
+.flexCol{
+  flex-direction: column;
 }
 .exerciseClientGridHeader{
   height: 40px;
