@@ -119,11 +119,18 @@ export default {
   overflow: hidden;
 }
 .secondaryDisplay{
-  margin: 8px 0px 8px 16px !important;
+  display: flex;
+  margin: 8px 16px 8px 16px !important;
 }
 .exerciseClientGridHeader{
   p{
     font-weight: 500;
   }
+}
+.completedCheckbox{
+  justify-content: flex-end;
+}
+.v-input--selection-controls{
+  margin-top: 0px;
 }
 </style>
