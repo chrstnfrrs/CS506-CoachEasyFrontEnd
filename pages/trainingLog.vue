@@ -1,9 +1,8 @@
 <template>
   <div class="pageContent">
-    {{ trainingLog }}
-    {{ pageIndex }}
     <Loading v-if="loading" />
-    <div v-if="!loading">
+    <MessageError v-if="error" message="No Training Entries Found" />
+    <div v-if="!loading && !error">
       <HeadingPage name="Training Log" />
       <SpacerSmall />
       <ViewSession
@@ -12,14 +11,14 @@
         :role="user.role"
         :session="s" />
     </div>
-    <div v-if="!loading">
+    <!-- <div v-if="!loading && !error">
       <button v-if="this.pageIndex > 1" class="actionBtn" @click="previousPage">
         Previous
       </button>
       <button class="actionBtn" @click="nextPage">
         Next
       </button>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -32,6 +31,7 @@ import Loading from '~/components/Loading'
 import HeadingPage from '~/components/HeadingPage'
 import SpacerSmall from '~/components/SpacerSmall'
 import ViewSession from '~/components/ViewSession'
+import MessageError from '~/components/MessageError'
 
 export default {
   components: {
@@ -39,6 +39,7 @@ export default {
     HeadingPage,
     SpacerSmall,
     ViewSession,
+    MessageError
   },
   data() {
     return {
@@ -46,6 +47,7 @@ export default {
       trainingLog: undefined,
       user: undefined,
       pageIndex: undefined,
+      error: false,
     }
   },
   methods: {
@@ -75,17 +77,20 @@ export default {
       } else {
         reqID = client_id
       }
-      axios.get(`${url}/client/trainingLog?client_id=${reqID}&page=${this.pageIndex}&page_size=1`)
+      //&page=${this.pageIndex}&page_size=1
+      axios.get(`${url}/client/trainingLog?client_id=${reqID}`)
       .then(result => {
         if (!result.data.sessions.length > 0) {
-          alert("There is no next training log!");
-          this.previousPage();
+          self.setLoading();
+          self.error = true;
+          // this.previousPage();
         } else {
           self.trainingLog = result.data
           self.setLoading();
           self.error = false;
         }
       }).catch(error => {
+        self.loading = false;
         self.error = true;
         console.log(error)
       });

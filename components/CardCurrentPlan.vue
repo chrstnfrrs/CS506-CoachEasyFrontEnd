@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Loading v-if="!cardLoaded" />
+    <!-- <Loading v-if="!cardLoaded" /> -->
     <!-- <MessageError v-if="error" :message="errorMessage" /> -->
     <div v-if="cardLoaded">
       <nuxt-link :to="`/template/${template.slug}`">
