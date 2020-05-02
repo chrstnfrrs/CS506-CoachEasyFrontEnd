@@ -1,4 +1,5 @@
 <template>
+
   <div class="exerciseClientGrid">
     <div class="exerciseClientCol exerciseFirstCol"><p> {{exercise.name}} </p></div>
     <div class="exerciseClientCol"><p> {{exercise.sets}} </p></div>

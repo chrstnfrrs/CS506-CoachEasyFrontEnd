@@ -46,6 +46,12 @@ export default {
     FormCompleteSession,
     ButtonViewSession,
     SpacerSmall
+  },
+  methods: {
+    completeSession: function() {
+      console.log("form complete check in emitting");
+      this.$emit('complete');
+    }
   }
   
 }

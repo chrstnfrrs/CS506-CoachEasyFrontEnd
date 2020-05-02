@@ -82,7 +82,7 @@ export default {
       })
     },
     updateExerciseList: function() {
-      if(this.$props.session.training_entries){
+      if(this.$props.session.training_entries.length > 0){
         this.exerciseList = this.$props.session.training_entries
       } else if(this.$props.role === 'COACH'){
         this.exerciseList = this.$props.session.coach_exercises ;

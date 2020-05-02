@@ -9,7 +9,7 @@
         <ViewSession v-for="session in checkin.sessions" :key="session.id" :session="session" :role="role" />
       </div>
       <div v-if="edit">
-        <FormCompleteCheckin :checkin="this.checkin" />
+        <FormCompleteCheckin @complete="completeCheckin()" :checkin="this.checkin" />
         <!-- <FormCompleteSession v-for="session in checkin.sessions" :key="session.id" :role="this.role"/> -->
       </div>
     </div>
@@ -81,6 +81,11 @@ export default {
     editSession: function() {
       this.edit = !this.edit;
       this.editMessage = this.edit ? "Cancel" : "Start";
+    },
+    completeCheckin: function() {
+      this.edit = false;
+      this.getCheckin();
+      console.log('completing checkin');
     }
   },
   beforeRouteEnter(to, from, next) {
