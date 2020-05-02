@@ -24,7 +24,7 @@
         </button>
       </div>
     </v-card>
-  <div>
+  </div>
 </template>
 
 <script>

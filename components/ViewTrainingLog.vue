@@ -16,7 +16,7 @@ export default {
     MessageRedirect
   },
   props: {
-    id: Number
+    id: String
   }
 }
 </script>

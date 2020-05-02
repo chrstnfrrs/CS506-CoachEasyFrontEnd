@@ -1,7 +1,7 @@
 <template>
   <div>
     <Loading v-if="!cardLoaded" />
-    <MessageError v-if="error" :message="errorMessage" />
+    <!-- <MessageError v-if="error" :message="errorMessage" /> -->
     <div v-if="cardLoaded">
       <nuxt-link :to="`/template/${template.slug}`">
         <v-card 
@@ -54,7 +54,7 @@ export default {
         this.setList();
       }).catch(error => {
         self.error = true;
-        self.errorMessage = 'Failed to load current plan.'
+        // self.errorMessage = 'Failed to load current plan.'
         console.log(error)
       });
     },
