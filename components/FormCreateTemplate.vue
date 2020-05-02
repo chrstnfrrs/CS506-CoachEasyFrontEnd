@@ -1,5 +1,6 @@
 <template>
   <div>
+    <MessageError v-if="error" :message="errorMessage" />
     <div class="formCreateHeading">
       <v-text-field
         :class="{ 'custom-place-holder': !creatable }"
@@ -23,6 +24,8 @@
 import ButtonAddForm from '~/components/ButtonAddForm'
 import FormCreateSession from '~/components/FormCreateSession'
 import SpacerExtraSmall from '~/components/SpacerExtraSmall'
+import MessageError from '~/components/MessageError'
+
 export default {
   props:{
     type: String,
@@ -36,13 +39,16 @@ export default {
       creating: true,
       creatable: true,
       placeholderText: "Name",
-      assigning: false
+      assigning: false,
+      error: false,
+      errorMessage: ''
     }
   },
   components:{
     ButtonAddForm,
     FormCreateSession,
-    SpacerExtraSmall
+    SpacerExtraSmall,
+    MessageError
   },
   methods:{
     addForm: function(){

@@ -1,39 +1,43 @@
 <template>
   <div>
-    <HeadingSection :text="session.name" />
-    <SpacerExtraSmall />
-    <div class="mainDisplay">
-      <div class="secondaryDisplay">
-        <v-text-field
-          label="Body Weight"
-          v-model="session.client_weight">
-        </v-text-field>
+    <Loading v-if="loading" />
+    <MessageError v-if="error" :message="errorMessage" />
+    <div v-if="!loading">
+      <HeadingSection :text="session.name" />
+      <SpacerExtraSmall />
+      <div class="mainDisplay">
+        <div class="secondaryDisplay">
+          <v-text-field
+            label="Body Weight"
+            v-model="session.client_weight">
+          </v-text-field>
+        </div>
+        <div class="exerciseClientGrid exerciseClientGridHeader">
+          <p class="exerciseClientCol exerciseFirstCol">Name</p>
+          <p class="exerciseClientCol">Sets</p>
+          <p class="exerciseClientCol">Reps</p>
+          <p class="exerciseClientCol">Weight</p>
+        </div>
+        <FormClientExercise v-for="(exercise, index) in exerciseList" 
+          :single="!loading"
+          :key="index"
+          :exercise="exercise" 
+          :edit=true />
+        <div class="secondaryDisplay">
+          <v-text-field
+            label="Comment"
+            v-model="session.comment">
+          </v-text-field>
+        </div>
+        <div v-if="role==='COACH'">
+          <ViewCoachExercise v-for="(exercise, index) in exerciseList" 
+            :key="index" 
+            :exercise="exercise"  />
+        </div>
+        <ButtonViewSession v-if="type==='Session'" @complete="completeSession()" :session="this.session" action="Complete" />
       </div>
-      <div class="exerciseClientGrid exerciseClientGridHeader">
-        <p class="exerciseClientCol exerciseFirstCol">Name</p>
-        <p class="exerciseClientCol">Sets</p>
-        <p class="exerciseClientCol">Reps</p>
-        <p class="exerciseClientCol">Weight</p>
-      </div>
-      <FormClientExercise v-for="(exercise, index) in exerciseList" 
-        :single="!loading"
-        :key="index"
-        :exercise="exercise" 
-        :edit=true />
-      <div class="secondaryDisplay">
-        <v-text-field
-          label="Comment"
-          v-model="session.comment">
-        </v-text-field>
-      </div>
-      <div v-if="role==='COACH'">
-        <ViewCoachExercise v-for="(exercise, index) in exerciseList" 
-          :key="index" 
-          :exercise="exercise"  />
-      </div>
-      <ButtonViewSession v-if="type==='Session'" @complete="completeSession()" :session="this.session" action="Complete" />
+      <SpacerSmall />
     </div>
-    <SpacerSmall />
   </div>
 </template>
 
@@ -49,6 +53,8 @@ import FormClientExercise from '~/components/FormClientExercise'
 import ViewCoachExercise from '~/components/ViewCoachExercise'
 import ButtonViewSession from "~/components/ButtonViewSession"
 import SpacerSmall from "~/components/SpacerSmall"
+import Loading from "~/components/Loading"
+import MessageError from "~/components/MessageError"
 
 export default {
   props: {
@@ -61,7 +67,9 @@ export default {
     ViewCoachExercise,
     HeadingSection,
     ButtonViewSession,
-    SpacerSmall
+    SpacerSmall,
+    Loading,
+    MessageError
   },
   data() {
     return {

@@ -1,65 +1,68 @@
 <template>
-  <div class="embeddedForm">
-    <div v-if="!shouldCreateNew" class="formCreateExercise" >
-      <!-- Maybe move these v-selects to an ExerciseSelector componenet -->
-      <v-select
-        class="listExercises listCategories"
-        :items="categoryList"
-        label="Choose Category"
-        v-model="selectedCategory"
-        @change="filterExerciseList"
-        hide-selected
-      >
-      </v-select>
-      <v-select
-        class="listExercises"
-        :items="filteredExerciseList"
-        v-model="selectedExercise"
-        item-text="name"
-        label="Choose Exercise"
-        return-object
-        @change="updateExercise"
-        hide-selected
-      >
-      </v-select>
-      <button
-        v-if="!createdNewExercise"
-        class="actionBtn addForm"
-        @click="isCreatingNewExercise"
-      >
-        New
-      </button>
-      <v-text-field
-        v-if="setsAndReps"
-        label="Sets"
-        v-model="sets"
-        type="number"
-        class="formCreateItem smallItem"
-        :rules="setRules"
-        @input="updateExercise">
-      </v-text-field>
-      <v-text-field 
-        v-if="setsAndReps"
-        label="Reps"
-        v-model="reps"
-        type="number"
-        :rules="repRules"
-        class="formCreateItem smallItem"
-        @input="updateExercise">
-      </v-text-field>
-      <v-text-field 
-        v-if="setsAndReps"
-        label="Weight"
-        v-model="weight"
-        type="number"
-        :rules="repRules"
-        class="formCreateItem smallItem"
-        @input="updateExercise">
-      </v-text-field>
+  <div>
+    <MessageError v-if="error" :message="errorMessage" />
+    <div class="embeddedForm">
+      <div v-if="!shouldCreateNew" class="formCreateExercise" >
+        <!-- Maybe move these v-selects to an ExerciseSelector componenet -->
+        <v-select
+          class="listExercises listCategories"
+          :items="categoryList"
+          label="Choose Category"
+          v-model="selectedCategory"
+          @change="filterExerciseList"
+          hide-selected
+        >
+        </v-select>
+        <v-select
+          class="listExercises"
+          :items="filteredExerciseList"
+          v-model="selectedExercise"
+          item-text="name"
+          label="Choose Exercise"
+          return-object
+          @change="updateExercise"
+          hide-selected
+        >
+        </v-select>
+        <button
+          v-if="!createdNewExercise"
+          class="actionBtn addForm"
+          @click="isCreatingNewExercise"
+        >
+          New
+        </button>
+        <v-text-field
+          v-if="setsAndReps"
+          label="Sets"
+          v-model="sets"
+          type="number"
+          class="formCreateItem smallItem"
+          :rules="setRules"
+          @input="updateExercise">
+        </v-text-field>
+        <v-text-field 
+          v-if="setsAndReps"
+          label="Reps"
+          v-model="reps"
+          type="number"
+          :rules="repRules"
+          class="formCreateItem smallItem"
+          @input="updateExercise">
+        </v-text-field>
+        <v-text-field 
+          v-if="setsAndReps"
+          label="Weight"
+          v-model="weight"
+          type="number"
+          :rules="repRules"
+          class="formCreateItem smallItem"
+          @input="updateExercise">
+        </v-text-field>
+      </div>
+      <!-- <div v-if="shouldCreateNew" >
+        <FormCreateNewExercise @return="notCreatingNew()" @newExerciseCreated="isCreatingNewExercise" />
+      </div> -->
     </div>
-    <!-- <div v-if="shouldCreateNew" >
-      <FormCreateNewExercise @return="notCreatingNew()" @newExerciseCreated="isCreatingNewExercise" />
-    </div> -->
   </div>
 </template>
 
@@ -69,9 +72,11 @@ axios.defaults.withCredentials = true;
 const url = 'https://coach-easy-deploy.herokuapp.com';
 
 import FormCreateNewExercise from '~/components/FormCreateNewExercise'
+import MessageError from '~/components/MessageError'
 export default {
   components: {
     FormCreateNewExercise,
+    MessageError
   },
   props: {
     session: Object,
@@ -79,6 +84,8 @@ export default {
   },
   data() {
     return {
+      error: false,
+      errorMessage: '',
       selectedCategory: '',
       setsAndReps: this.allContent,
       exerciseName: "",
@@ -147,6 +154,7 @@ export default {
         }
       }).catch(error => {
         this.error = true;
+        this.errorMessage = 'Failed to load exercises.'
         console.log(error)
       });
     },
