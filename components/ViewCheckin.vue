@@ -1,6 +1,12 @@
 <template>
   <div>
-    <div class="fileContainer">
+    <div 
+    class="fileContainer" 
+    v-if="(checkin.check_in.front !== null) ||
+    (checkin.check_in.back !== null) ||
+    (checkin.check_in.side_a !== null)||
+    (checkin.check_in.side_b !== null)">
+      <strong>Checkin Images</strong>
       <v-img v-if="checkin.check_in.front !== null" :src="checkin.check_in.front" aspect-ratio="1"></v-img>
       <v-img v-if="checkin.check_in.back !== null" :src="checkin.check_in.back" aspect-ratio="1"></v-img>
       <v-img v-if="checkin.check_in.side_a !== null" :src="checkin.check_in.side_a" aspect-ratio="1"></v-img>
