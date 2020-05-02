@@ -81,11 +81,11 @@ export default {
         let self = this;
         let tSlug = this.$route.params.slug
         let sSlug = this.$route.params.sSlug
-        console.log(`${tSlug}/${sSlug}`)
+        // console.log(`${tSlug}/${sSlug}`)
         let arg = self.user.role == 'COACH' ? `/coach/session?coach_template_slug=${tSlug}&coach_session_slug=${sSlug}` : `/client/session?client_template_slug=${tSlug}&client_session_slug=${sSlug}`;
         axios.get(`${url}${arg}`).then(result => {
           if(self.user.role === 'COACH'){
-            console.log(result.data);
+            // console.log(result.data);
             self.exercises = result.data.coach_exercises
           } else {
             self.exercises = result.data.exercises
@@ -104,10 +104,10 @@ export default {
         this.session.coach_exercises[i].coach_session_id = this.session.id;
       }
       axios.put(`${url}/coach/session`, this.session).then(result => {
-        console.log(result);
+        // console.log(result);
         this.updateSession();
       }).catch(error => {
-        console.log(error);
+        // console.log(error);
       });
     },
     deleteExercise: function(id) {
@@ -116,8 +116,8 @@ export default {
   },
   beforeRouteEnter (to, from, next) { 
     next(vm => { 
-      console.log(vm.$route.params)
-      console.log("before Route Enter")
+      // console.log(vm.$route.params)
+      // console.log("before Route Enter")
       next();
     }) 
   } ,

@@ -47,12 +47,7 @@ export default {
   methods:{
     addForm: function(){
       this.sessionCount++;
-<<<<<<< HEAD
-      // console.log("Added session");
-      // console.log(this.template);
-=======
       this.template.sessions.push({});
->>>>>>> upstream/master
     },
     createTemplate: function() {
       this.template.name = this.templateName,

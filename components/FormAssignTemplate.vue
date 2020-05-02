@@ -69,15 +69,10 @@ export default {
     // not used because assigning a template is static
     addForm: function(){
       this.sessionCount++;
-<<<<<<< HEAD
-      // console.log("Added session");
-      // console.log(this.template);
-=======
       this.sessions.push({
         id: undefined,
         exercises: []
       });
->>>>>>> upstream/master
     },
     createTemplate: function() {
       this.template.name = this.templateName,
@@ -92,15 +87,9 @@ export default {
       this.sessionCount = 0;
       let result = this.templateList.filter(obj => {
         return obj.name === value
-<<<<<<< HEAD
-      })
-      this.assigning=true;
-      this.template=result;
-      // console.log(this.template)
-=======
       });
-      console.log('selected new template');
-      console.log(result);
+      // console.log('selected new template');
+      // console.log(result);
       this.template=result[0];
       this.sessions = this.template.sessions;
       if (this.template) {
@@ -137,7 +126,6 @@ export default {
         this.buttonMessage = "Assign";
         this.shouldAssignTemplate = false;
       }
->>>>>>> upstream/master
     }
   },
   mounted() {

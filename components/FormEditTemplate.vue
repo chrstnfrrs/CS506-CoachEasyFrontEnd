@@ -64,10 +64,10 @@ export default {
   },
   methods: {
     isTemplate: function(){
-      console.log(this.$router.currentRoute.name);
+      // console.log(this.$router.currentRoute.name);
       if(this.$router.currentRoute.name === 'template-slug' || this.$router.currentRoute.name === 'clients-id') {
         this.template = this.$props.templateList;
-        console.log(this.template);
+        // console.log(this.template);
         return true;
       } else {
         this.session = this.$props.templateList;
@@ -103,11 +103,6 @@ export default {
         index++;
       });
     },
-<<<<<<< HEAD
-    // updateReorderKey: function() {
-    //   this.reorderKey += 1;
-    // }
-=======
     updateReorderKey: function() {
       this.reorderKey += 1;
     },
@@ -130,7 +125,6 @@ export default {
         this.templateList.coach_exercises.splice(exerciseIndex, 1);
       }
     }
->>>>>>> upstream/master
   },
 
   mounted() {

@@ -15,6 +15,12 @@ import CardCurrentPlan from '@/components/CardCurrentPlan.vue'
 describe('CardCurrentPlan', () => {
   let wrapper;
 
+  beforeAll(() => {
+    axios.get.mockRejectedValue({
+      data : {}
+    })
+  })
+
   beforeEach(() => {
     const localVue = createLocalVue()
     localVue.use(Vuex)
@@ -33,5 +39,28 @@ describe('CardCurrentPlan', () => {
   test('can set cardLoaded to true', () => {
     wrapper.setData({cardLoaded: true})
     expect(wrapper.vm.$data.cardLoaded).toBe(true)
+  })
+
+  test('getCurrentTemplate gets the currently assigned template', async () => {
+    axios.get.mockResolvedValue({
+      data : {}
+    })
+
+    wrapper.vm.getCurrentTemplate()
+    await wrapper.vm.$nextTick()
+  
+    expect(wrapper.vm.$data.template).toMatchObject({})
+    expect(wrapper.vm.$data.cardLoaded).toBe(true)
+  })
+
+  test('getCurrentTemplate handles errors', async () => {
+    axios.get.mockRejectedValue({
+      data : {}
+    })
+
+    wrapper.vm.getCurrentTemplate()
+    await wrapper.vm.$nextTick()
+  
+    expect(wrapper.vm.$data.error).toBe(true)
   })
 })

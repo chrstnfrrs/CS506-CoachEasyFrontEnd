@@ -36,29 +36,6 @@ describe('FormCreateExercise', () => {
     localVue.use(Vuex)
   })
 
-  test('sets the correct default values', () => {
-    expect(typeof FormCreateExercise.data).toBe('function')
-    const defaultData = FormCreateExercise.data()
-    
-    expect(defaultData.exerciseName).toBe('')
-    expect(defaultData.selectedExercise).toMatchObject({})
-    expect(defaultData.exercise).toMatchObject({})
-    expect(defaultData.index).toBe(0)
-    expect(defaultData.creating).toBe(true)
-    expect(defaultData.exerciseList).toMatchObject([])
-
-    let testSession = {
-      name: 'TestSession',
-      order: 1, coach_exercises: [],
-    }
-    wrapper = shallowMount(FormCreateExercise, {localVue, propsData: { session: testSession}})
-    wrapper.setData({ exerciseList: [{sets: 3, reps: 10}] })
-
-    expect(defaultData.setRules).toBeTruthy()
-    expect(defaultData.repRules).toBeTruthy()
-    expect(defaultData.weightRules).toBeTruthy()
-  })
-
   test('takes session as a prop', () => {
     let testSession = {
       name: 'TestSession',

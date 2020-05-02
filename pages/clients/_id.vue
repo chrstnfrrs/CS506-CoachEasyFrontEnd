@@ -101,7 +101,7 @@ export default {
         }).then(result => {
           this.hasTemplate = true;
         }).catch(error => {
-          console.log(error);
+          // console.log(error);
         });
       } else {
         this.updateAssignedTemplate(template);
@@ -114,9 +114,9 @@ export default {
         sessions: template.sessions,
         name: template.name
       }).then(result => {
-        console.log(result);
+        // console.log(result);
       }).catch(error => {
-        console.log(error);
+        // console.log(error);
       });
     },
     getClientTemplate: function() {
@@ -129,14 +129,14 @@ export default {
           this.clientTemplateId = templateResult.data.id;
         }
       }).catch(error => {
-        console.log(error);
+        // console.log(error);
       })
     },
     getClientCheckIns: function() {
       axios.get(`${url}/client/checkins?client_id=${this.$route.params.id}`).then(result => {
         this.checkins = result.data;
       }).catch(error => {
-        console.log(error);
+        // console.log(error);
       })
     }
   },

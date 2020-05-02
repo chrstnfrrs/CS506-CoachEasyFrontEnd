@@ -26,6 +26,7 @@ export default {
     return {
       template: undefined,
       cardLoaded: false,
+      error: false
     }
   },
   mounted() {
@@ -41,7 +42,7 @@ export default {
         this.setList();
       }).catch(error => {
         self.error = true;
-        console.log(error)
+        // console.log(error)
       });
     },
   },

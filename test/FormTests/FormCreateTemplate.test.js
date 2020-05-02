@@ -5,6 +5,7 @@ import { shallowMount, createLocalVue } from '@vue/test-utils'
 import axios from 'axios'
 
 Vue.use(Vuetify) //Needed to prevent vuetify issues within testing, do not remove
+Vue.config.silent = true
 jest.mock("axios")
 delete window.location
 window.location = { assign: jest.fn() }
@@ -39,6 +40,7 @@ describe('FormCreateTemplate', () => {
     wrapper = shallowMount(FormCreateTemplate, { 
       store, localVue, propsData: {template: {name: "Test Template", sessions: [{name: "oldName"}]}}, mocks: { $route } 
     })
+    wrapper.setData({template: {name: "Test Template", sessions: [{name: "oldName"}]}})
   })
 
   test('sets the correct default data', () => {
@@ -52,6 +54,7 @@ describe('FormCreateTemplate', () => {
   })
 
   test('addForm increments sessionCount', async () => {
+    wrapper.setData({template: {name: "Test Template", sessions: [{name: "oldName"}]}})
     wrapper.vm.addForm()
     await wrapper.vm.$nextTick()
 

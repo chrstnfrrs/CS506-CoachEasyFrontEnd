@@ -36,7 +36,7 @@ describe('FormEditTemplate', () => {
       data : {}
     })
 
-    $router = { currentRoute: {name: "template-id"}}
+    $router = { currentRoute: {name: "template-slug"}}
   })
 
   beforeEach(() => {

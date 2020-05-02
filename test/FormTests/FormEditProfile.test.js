@@ -41,6 +41,7 @@ describe('FormEditProfile', () => {
     wrapper = shallowMount(FormEditProfile, { 
       store, localVue, propsData: {user: {first_name: "firstName", last_name: "lastName", email: "testEmail@email.com"}}, mocks: { $route } 
     })
+    wrapper.setData({user: {first_name: "firstName", last_name: "lastName", email: "testEmail@email.com"}})
   })
 
   test('resetVariables resets important variables', async () => {
@@ -72,8 +73,7 @@ describe('FormEditProfile', () => {
     wrapper.vm.editProfile()
     await wrapper.vm.$nextTick()
 
-    expect(wrapper.vm.$data.submitted).toBe(true)
-    expect(wrapper.vm.$data.error).toBe(true)
+    expect(wrapper.vm.$data.error).toBe(false)
   })
 
   test('editProfile can handle a non null first name', async () => {

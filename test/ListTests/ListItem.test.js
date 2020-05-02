@@ -30,7 +30,7 @@ describe('ListItem', () => {
     }
     store = new Vuex.Store({ state, mutations })
 
-    $route = { params : {sid : 1}, currentRoute : {name : "testRoute"}}
+    $route = { params : {sSlug : "test"}}
     wrapper = shallowMount(ListItem, {
       store, 
       localVue, 
@@ -40,6 +40,6 @@ describe('ListItem', () => {
   })
 
   test('isDisabled checks if the route is enabled or not', () => {
-    expect(wrapper.vm.isDisabled).toBe(1)
+    expect(wrapper.vm.isDisabled).toBe($route.params.sSlug)
   })
 })

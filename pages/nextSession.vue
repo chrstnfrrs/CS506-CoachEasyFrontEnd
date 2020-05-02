@@ -43,15 +43,6 @@ export default {
     };
   },
   methods: {
-<<<<<<< HEAD
-    getSessionEditRole: function(){
-      Promise.all([ this.$store.state.userData ]).then( () => {
-        this.id = this.$store.state.userData.id
-        this.getNextSession(this.$store.state.userData.id)
-      },() => {
-        // this.loadingFailed = true
-      })
-=======
     getSessionEditRole: function() {
       Promise.all([this.$store.state.userData]).then(
         () => {
@@ -73,7 +64,6 @@ export default {
         .catch(error => {
           console.log("error");
         });
->>>>>>> upstream/master
     },
     completeSession: function() {
       console.log('completing session');
@@ -103,11 +93,7 @@ export default {
         this.getNextSession();
         console.log(response);
       }).catch(error => {
-<<<<<<< HEAD
-        // console.log('error')
-=======
         console.log(error);
->>>>>>> upstream/master
       });
     },
     editSession: function() {
@@ -115,12 +101,7 @@ export default {
       this.editMessage = this.edit ? "Cancel" : "Start";
     }
   },
-<<<<<<< HEAD
-  mounted(){
-    // console.log('here')
-=======
   mounted() {
->>>>>>> upstream/master
     this.getSessionEditRole();
   }
 };

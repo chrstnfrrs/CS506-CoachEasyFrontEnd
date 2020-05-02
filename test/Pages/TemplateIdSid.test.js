@@ -9,7 +9,7 @@ jest.mock("axios")
 delete window.location
 window.location = { assign: jest.fn() }
 
-import TemplateIdSid from '@/pages/template/_id/_sid.vue'
+import TemplateIdSid from '@/pages/template/_slug/_sSlug.vue'
 
 describe('TemplateIdSid', () => {
   let mutations;
@@ -71,6 +71,10 @@ describe('TemplateIdSid', () => {
   test('saveRequest triggers setEdit as expected', async () => {
     const setEditMock = jest.fn()
     wrapper.setMethods({setEdit: setEditMock})
+    await wrapper.vm.$nextTick()
+
+    const addNewExercisesMock = jest.fn()
+    wrapper.setMethods({addNewExercises: addNewExercisesMock})
     await wrapper.vm.$nextTick()
 
     wrapper.vm.saveRequest()

@@ -55,18 +55,6 @@ export default {
     }
   },
   methods: {
-<<<<<<< HEAD
-    getSessionRole: function(){
-      Promise.all([ this.$store.state.userData ]).then( () => {
-        this.role = this.$store.state.userData.role
-        this.updateExerciseList();
-        // this.loading = false
-      },() => {
-        // this.loadingFailed = true
-      })
-    },
-=======
->>>>>>> upstream/master
     updateExerciseList: function() {
       if(this.$props.session.training_entries.length > 0){
         this.exerciseList = this.$props.session.training_entries

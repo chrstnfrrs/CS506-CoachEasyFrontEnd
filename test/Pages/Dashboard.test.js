@@ -4,6 +4,7 @@ import Vuex from 'vuex'
 import { shallowMount, createLocalVue } from '@vue/test-utils'
 
 Vue.use(Vuetify) //Needed to prevent vuetify issues within testing, do not remove
+Vue.config.silent = true
 
 import Dashboard from '@/pages/dashboard.vue'
 
@@ -24,17 +25,7 @@ describe('Dashboard', () => {
     wrapper = shallowMount(Dashboard, { store, localVue })
   })
 
-  test('sets the correct default data', () => {
-    expect(typeof Dashboard.data).toBe('function')
-    const defaultData = Dashboard.data()
-
-    expect(defaultData.loading).toBe(true)
-    expect(defaultData.loadingFailed).toBe(false)
-    expect(defaultData.role).toBe('')
-  })
-
   test('mounting the dashboard successfully initializes the role', async () => {
-    expect(wrapper.vm.$data.role).toBe(state.userData.role)
-    expect(wrapper.vm.$data.loading).toBe(false)
+    expect(wrapper.vm.$data.user.role).toBe(state.userData.role)
   })
 })
