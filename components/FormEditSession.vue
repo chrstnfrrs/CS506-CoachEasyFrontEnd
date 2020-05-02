@@ -7,7 +7,6 @@
 </template>
 
 <script>
-// ******* need axios request to get session data ********
 import axios from 'axios'
 axios.defaults.withCredentials = true;
 const url = 'https://coach-easy-deploy.herokuapp.com';
@@ -28,7 +27,7 @@ export default {
       exerciseList: [],
       role: '',
       loading: false,
-      loadingFailed: false,
+      // loadingFailed: false,
     }
   },
   methods: {
@@ -37,13 +36,16 @@ export default {
         this.role = this.$store.state.userData.role
         this.loading = false
       },() => {
-        this.loadingFailed = true
+        // this.loadingFailed = true
       })
+    },
+    componentSetup: function(){
+      this.getSessionEditRole();
+      this.exerciseList = (this.role == 'COACH') ? this.$props.session.coach_exercises : this.$props.session.client_exercises;
     }
   },
   mounted() {
-    this.getSessionEditRole();
-    this.exerciseList = (this.role == 'COACH') ? this.$props.session.coach_exercises : this.$props.session.client_exercises;
+    this.componentSetup()
   }
 }
 </script>

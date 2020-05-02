@@ -62,6 +62,7 @@ export default {
       selectedExercise: {},
       exercise: {},
       index: 0,
+      error: false,
       creating: true,
       filteredExerciseList: [],
       exerciseList: [],

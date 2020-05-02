@@ -12,35 +12,35 @@ function getMountedComponent(Component, propsData) {
 
 describe('ButtonHeading', () => {
   test('emits a sendRequest event when the message is Create', () => {
-    const wrapper = getMountedComponent(ButtonHeading, { message: 'Create' })
+    const wrapper = getMountedComponent(ButtonHeading, {active: true, message: 'Create' })
     wrapper.trigger('click')
     expect(wrapper.emitted().sendRequest).toBeTruthy()
     expect(wrapper.emitted().sendRequest.length).toBe(1)
   })
 
   test('emits a sendRequest event when the message is Edit', () => {
-    const wrapper = getMountedComponent(ButtonHeading, { message: 'Edit' })
+    const wrapper = getMountedComponent(ButtonHeading, {active: true, message: 'Edit' })
     wrapper.trigger('click')
     expect(wrapper.emitted().sendRequest).toBeTruthy()
     expect(wrapper.emitted().sendRequest.length).toBe(1)
   })
 
   test('emits a sendRequest event when the message is Done', () => {
-    const wrapper = getMountedComponent(ButtonHeading, { message: 'Done' })
+    const wrapper = getMountedComponent(ButtonHeading, {active: true, message: 'Done' })
     wrapper.trigger('click')
     expect(wrapper.emitted().sendRequest).toBeTruthy()
     expect(wrapper.emitted().sendRequest.length).toBe(1)
   })
 
   test('emits a sendRequest event when the message is Save', () => {
-    const wrapper = getMountedComponent(ButtonHeading, { message: 'Save' })
+    const wrapper = getMountedComponent(ButtonHeading, {active: true, message: 'Save' })
     wrapper.trigger('click')
     expect(wrapper.emitted().sendRequest).toBeTruthy()
     expect(wrapper.emitted().sendRequest.length).toBe(1)
   })
 
   test('emits a setStatus event when the message is set to anything else', () => {
-    const wrapper = getMountedComponent(ButtonHeading, { type: '' })
+    const wrapper = getMountedComponent(ButtonHeading, {active: true, type: '' })
     wrapper.trigger('click')
     expect(wrapper.emitted().setStatus).toBeTruthy()
     expect(wrapper.emitted().setStatus.length).toBe(1)

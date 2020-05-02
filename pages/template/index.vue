@@ -104,11 +104,10 @@ export default {
       Promise.all([ this.$store.state.userData ])
       .then( () => {
         this.user = this.$store.state.userData
-        console.log(this.user)
+        // console.log(this.user)
         this.loading = false
         this.updateTemplateList();
       },() => {
-        this.error = true
       })
     },
     updateTemplateList: function() {
@@ -129,7 +128,7 @@ export default {
         {
           "coach_template_id": template_id
         }).then(response => {
-          console.log(response);
+          // console.log(response);
           this.updateTemplateList();
         }).catch(error => {
           this.error = true;
@@ -139,7 +138,7 @@ export default {
       this.$store.commit('noEdit');
     },
     setCreatable: function() {
-      console.log("creatable is changing");
+      // console.log("creatable is changing");
       this.creatable = false;
     },
     isCreatable: function() {

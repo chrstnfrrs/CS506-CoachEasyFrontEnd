@@ -40,9 +40,11 @@ export default {
   },
   methods: {
     getHeader: function (header) {
-      let slicePoint = header.indexOf("Clients");
-      let str = header.slice(0, slicePoint);
-      return str.charAt(0).toUpperCase() + str.slice(1) + " Clients";
+      if(typeof(header) === 'string'){
+        let slicePoint = header.indexOf("Clients");
+        let str = header.slice(0, slicePoint);
+        return str.charAt(0).toUpperCase() + str.slice(1) + " Clients";
+      }
     },
     updateClientList: function(){
       let self = this;
@@ -52,7 +54,7 @@ export default {
         self.error = false;
       }).catch(error => {
         self.error = true;
-        console.log(error)
+        self.loading = false;
       });
     },
   },

@@ -88,8 +88,8 @@ export default {
       let result = this.templateList.filter(obj => {
         return obj.name === value
       });
-      console.log('selected new template');
-      console.log(result);
+      // console.log('selected new template');
+      // console.log(result);
       this.template=result[0];
       this.sessions = this.template.sessions;
       if (this.template) {

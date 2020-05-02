@@ -20,9 +20,9 @@ export default {
     getHeading: function(){
       if(this.user.approved){
         return 'Approved'
-      } else if(this.user.approved==false) {
+      } else if(this.user.approved===false) {
         return 'Potential'
-      } else if(this.user.approved==null) {
+      } else if(this.user.approved===null) {
         return 'Terminated'
       } else {
         return '';

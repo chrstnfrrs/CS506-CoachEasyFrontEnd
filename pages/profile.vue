@@ -45,7 +45,7 @@ export default {
       user: {},
       error: false,
       loading: true,
-      loadingFailed: false,
+      // loadingFailed: false,
     }
   },
   methods: {
@@ -54,7 +54,7 @@ export default {
         this.user = this.$store.state.userData
         this.loading = false
       },() => {
-        this.loadingFailed = true
+        // this.loadingFailed = true
       })
     }
   },

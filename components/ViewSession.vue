@@ -51,7 +51,7 @@ export default {
       loading: true,
       exerciseList: [],
       loading: true,
-      loadingFailed: false,
+      // loadingFailed: false,
     }
   },
   methods: {
